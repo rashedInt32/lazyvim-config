@@ -57,6 +57,7 @@ require("config.autocmds")
 require("config.keymaps")
 require("config.options")
 require("plugins.snacks")
+vim.cmd("colorscheme catppuccin")
 
 require("noice").setup({
   lsp = {

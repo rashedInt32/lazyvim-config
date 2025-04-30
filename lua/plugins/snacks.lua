@@ -5,20 +5,53 @@ return {
   opts = {
     bigfile = { enabled = true },
     dashboard = { enabled = true },
-    explorer = { enabled = true, width = 30 },
+    explorer = { 
+      enabled = true, 
+      width = 30, 
+    },
     indent = { enabled = true },
     input = { enabled = true },
     notifier = {
       enabled = true,
       timeout = 3000,
     },
-    picker = { enabled = true, 
+    picker = { 
+      enabled = true, 
+      exclude = {
+        "**dist/**",
+        "*.log",
+        "build/",
+        "**/README.md",
+        "**/node_modules/**",
+        "*.svg",
+        "*-lock.yaml",
+        "*-lock.json"
+      },
+      hidden = true,
       sources = {
         explorer = {
           layout = {
             layout = {
               width = 30,
             },
+          },
+        },
+        
+      },
+      formatters = {
+        file = {
+          filename_first = true, -- display filename before the file path
+        },
+      },
+      win = {
+        -- input window
+        input = {
+          keys = {
+            -- Close picker
+            ["<Esc>"] = { "close", mode = { "n", "i" } },
+            -- Hidden
+            ["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
+            ["<a-h"] = false,
           },
         },
       },
