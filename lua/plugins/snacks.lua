@@ -7,7 +7,6 @@ return {
     dashboard = { enabled = true },
     explorer = { 
       enabled = true, 
-      width = 30, 
     },
     indent = { enabled = true },
     input = { enabled = true },
@@ -30,19 +29,9 @@ return {
       hidden = true,
       sources = {
         explorer = {
-          hidden = false,
-          ignored = false,
-          filters = {
-            function(item)
-              if item.name == "node_modules" and item.is_dir then
-                return true
-              end
-              return not item.ignored
-            end,
-          },
           layout = {
             layout = {
-              width = 30,
+              width = 28,
             },
           },
         },

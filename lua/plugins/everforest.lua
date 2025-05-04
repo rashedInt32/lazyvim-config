@@ -8,7 +8,7 @@ local M = {
 function M.config()
   vim.o.background = "dark" -- required for everforest
   require("everforest").setup({
-    background = "medium",
+    background = "hard",
     transparent_background_level = 0,
     italics = true,
     disable_italic_comments = false,
