@@ -30,13 +30,22 @@ return {
       hidden = true,
       sources = {
         explorer = {
+          hidden = false, -- Do not show hidden files (e.g., .gitignore, .env)
+          ignored = false, -- Do not show all ignored files (e.g., other .gitignore entries)
+          filters = {
+            function(item)
+              if item.name == "node_modules" and item.is_dir then
+                return true
+              end
+              return not item.ignored
+            end,
+          },
           layout = {
             layout = {
               width = 30,
             },
           },
         },
-        
       },
       formatters = {
         file = {

@@ -39,3 +39,13 @@ vim.opt.guicursor = {
   "r-cr:hor20",          -- Replace mode: horizontal
   "o:hor50",             -- Operator pending
 }
+
+-- Override tab width for Go files (4 spaces)
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "go",
+  callback = function()
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.expandtab = false  -- Go generally uses tabs, not spaces
+  end,
+})
