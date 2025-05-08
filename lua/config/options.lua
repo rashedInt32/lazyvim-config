@@ -13,7 +13,6 @@ vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
-vim.opt.wrap = false
 
 vim.opt.swapfile = false
 vim.opt.backup = false
@@ -30,6 +29,8 @@ vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
+vim.opt.wrap = true 
+vim.opt.linebreak = true
 
 --vim.opt.colorcolumn = "80"
 
@@ -48,4 +49,14 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.shiftwidth = 4
     vim.opt_local.expandtab = false  -- Go generally uses tabs, not spaces
   end,
+})
+
+
+vim.diagnostic.config({
+  float = {
+    border = "rounded",
+    wrap = true, -- Enable wrapping
+    max_width = 80, -- Wrap at 80 characters
+    source = "always", -- Show the source (e.g., tsserver)
+  },
 })
