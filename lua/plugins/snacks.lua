@@ -32,6 +32,7 @@ return {
           layout = {
             layout = {
               width = 28,
+              position = "right"
             },
           },
         },
