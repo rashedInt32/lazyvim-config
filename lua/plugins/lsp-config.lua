@@ -2,7 +2,7 @@ return {
   -- Mason: Package manager for LSP servers
   {
     "williamboman/mason.nvim",
-    opts = {}
+    opts = {},
   },
 
   -- Mason-LSPConfig: Bridge between Mason and nvim-lspconfig
@@ -40,6 +40,27 @@ return {
             },
           },
         },
+        tailwindcss = {
+          -- optional config
+          filetypes = {
+            "html",
+            "css",
+            "scss",
+            "javascript",
+            "typescript",
+            "javascriptreact",
+            "typescriptreact",
+            "svelte",
+            "vue",
+          },
+          root_dir = require("lspconfig.util").root_pattern(
+            "tailwind.config.js",
+            "tailwind.config.ts",
+            "postcss.config.js",
+            "package.json",
+            ".git"
+          ),
+        },
       },
       setup = {
         vtsls = function(_, opts)
@@ -57,6 +78,7 @@ return {
       local lspconfig = require("lspconfig")
       lspconfig.lua_ls.setup({})
       lspconfig.tsserver.setup({})
-    end
-  }
+      lspconfig.tailwindcss.setup({})
+    end,
+  },
 }
