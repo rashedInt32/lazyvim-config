@@ -3,7 +3,7 @@ return {
   name = "catppuccin", 
   priority = 1000,
   opts = {
-    flavour = "frappe", -- latte, frappe, macchiato, mocha
+    flavour = "macchiato", -- latte, frappe, macchiato, mocha
     styles = {
       comments = { "italic" },
       conditionals = { "italic" },

@@ -24,7 +24,10 @@ return {
         "*next-env.d.ts",
         "build/",
         "**/README.md",
+        "**/.turbo",
+        "**/.vscode",
         "**/.DS_Store",
+        "**/.swp",
         "**/node_modules/**",
         "*.svg",
         "*-lock.yaml",
@@ -45,16 +48,13 @@ return {
       },
       formatters = {
         file = {
-          filename_first = true, -- display filename before the file path
+          filename_first = true,
         },
       },
       win = {
-        -- input window
         input = {
           keys = {
-            -- Close picker
             ["<Esc>"] = { "close", mode = { "n", "i" } },
-            -- Hidden
             ["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
             ["<a-h"] = false,
           },
@@ -74,7 +74,6 @@ return {
   },
 
   keys = {
-    -- Top Pickers & Explorer
     {
       "<leader><space>",
       function()
@@ -591,4 +590,3 @@ return {
     })
   end,
 }
-

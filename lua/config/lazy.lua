@@ -22,7 +22,7 @@ require("lazy").setup({
     { import = "plugins" },
     { import = "lazyvim.plugins.extras.lang.typescript" },
   },
-  
+
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
     -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
@@ -59,6 +59,7 @@ require("config.keymaps")
 require("config.options")
 require("plugins.snacks")
 --vim.cmd("colorscheme catppuccin")
+--vim.cmd("colorscheme gruvbox")
 vim.cmd("colorscheme everforest")
 
 require("noice").setup({
