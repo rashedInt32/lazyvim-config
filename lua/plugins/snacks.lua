@@ -489,6 +489,13 @@ return {
       desc = "Rename File",
     },
     {
+      "r",
+      function()
+        require("snacks.explorer").rename()
+      end,
+      desc = "Rename file/folder",
+    },
+    {
       "<leader>gB",
       function()
         Snacks.gitbrowse()
