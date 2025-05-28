@@ -11,6 +11,23 @@ vim.keymap.set("v", "B", "^")
 
 vim.api.nvim_set_keymap("n", "<leader>tf", "<Plug>PlenaryTestFile", { noremap = false, silent = false })
 
+vim.keymap.set("n", "<leader>fs", function()
+  local path = os.getenv("HOME") .. "/.config/.local/scripts/tmux-sessionizer"
+  local in_tmux = os.getenv("TMUX")
+
+  if in_tmux then
+    -- Already in a tmux session: just open a new window
+    vim.fn.system('tmux new-window -n sessionizer "' .. path .. '"')
+  else
+    -- Not in tmux: start a new session and run the script
+    -- This opens a terminal and runs tmux directly
+    vim.fn.jobstart({ "tmux", "new-session", path }, {
+      detach = true,
+    })
+    print("Started tmux with sessionizer")
+  end
+end, { desc = "Launch tmux-sessionizer" })
+
 vim.keymap.set("n", "J", "mzJ`z")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
