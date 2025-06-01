@@ -27,7 +27,6 @@ return {
       options = {
         theme = "tokyonight",
         section_separators = { left = "", right = "" },
-        --component_separators = { left = "", right = "" },
         component_separators = { left = "", right = "" },
         globalstatus = true,
         icons_enabled = true,
@@ -40,13 +39,14 @@ return {
           "filetype",
           {
             function()
-              return require("tmux-status").tmux_windows()
+              return require("tmux-status").tmux_session()
             end,
             cond = function()
               return require("tmux-status").show()
             end,
-            color = "LualineTmux",
-            padding = { left = 3, right = 3 },
+            --color = "LualineTmux",
+            color = { fg = "#7aa2f7", bg = "#1a1b26", gui = "bold" },
+            padding = { left = 3, right = 2 },
           },
         },
         --lualine_y = { "progress" },
