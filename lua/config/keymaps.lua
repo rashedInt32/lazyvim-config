@@ -11,6 +11,9 @@ vim.keymap.set("v", "B", "^")
 vim.keymap.set("n", "E", "$") -- end of line
 vim.keymap.set("n", "B", "^") -- beginning of line (non-whitespace)
 
+-- Delete end of the line while insert mode
+vim.keymap.set("i", "<C-k>", "<C-o>D", { desc = "Delete to end of line" })
+
 vim.api.nvim_set_keymap("n", "<leader>tf", "<Plug>PlenaryTestFile", { noremap = false, silent = false })
 
 vim.keymap.set("n", "<leader>fs", function()
