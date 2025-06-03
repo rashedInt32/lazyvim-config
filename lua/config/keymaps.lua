@@ -11,6 +11,13 @@ vim.keymap.set("v", "B", "^")
 vim.keymap.set("n", "E", "$") -- end of line
 vim.keymap.set("n", "B", "^") -- beginning of line (non-whitespace)
 
+-- Unmap <leader>l to prevent Lazy popup from interfering with <leader>ld
+-- Remap Lazy to <leader>L instead
+vim.keymap.set("n", "<leader>L", "<cmd>Lazy<cr>", { desc = "Lazy" })
+
+-- Map <leader>ld to open Trouble with diagnostics
+vim.keymap.set("n", "<leader>td", "<cmd>Trouble diagnostics toggle<cr>", { desc = "Diagnostics (Trouble)" })
+
 -- Delete end of the line while insert mode
 vim.keymap.set("i", "<C-k>", "<C-o>D", { desc = "Delete to end of line" })
 

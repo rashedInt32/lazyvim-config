@@ -13,7 +13,6 @@ vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
-
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
@@ -29,16 +28,16 @@ vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
-vim.opt.wrap = true 
+vim.opt.wrap = true
 vim.opt.linebreak = true
 
 --vim.opt.colorcolumn = "80"
 
 vim.opt.guicursor = {
-  "n-v-c:block",         -- Normal mode: block
-  "i-ci-ve:ver25",       -- Insert mode: vertical bar
-  "r-cr:hor20",          -- Replace mode: horizontal
-  "o:hor50",             -- Operator pending
+  "n-v-c:block", -- Normal mode: block
+  "i-ci-ve:ver25", -- Insert mode: vertical bar
+  "r-cr:hor20", -- Replace mode: horizontal
+  "o:hor50", -- Operator pending
 }
 
 -- Override tab width for Go files (4 spaces)
@@ -47,16 +46,16 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.opt_local.tabstop = 4
     vim.opt_local.shiftwidth = 4
-    vim.opt_local.expandtab = false  -- Go generally uses tabs, not spaces
+    vim.opt_local.expandtab = false -- Go generally uses tabs, not spaces
   end,
 })
 
-
 vim.diagnostic.config({
+  update_in_insert = false, -- Optional: don't show while typing
+  severity_sort = true,
   float = {
     border = "rounded",
-    wrap = true, -- Enable wrapping
-    max_width = 80, -- Wrap at 80 characters
-    source = "always", -- Show the source (e.g., tsserver)
+    source = "always",
   },
 })
+
