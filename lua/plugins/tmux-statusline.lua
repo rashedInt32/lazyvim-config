@@ -8,6 +8,7 @@ return {
     "nvim-lualine/lualine.nvim",
     dependencies = {
       "christopher-francisco/tmux-status.nvim",
+      "nvim-tree/nvim-web-devicons", -- Add this dependency explicitly
     },
     init = function()
       -- Set custom highlight before lualine loads
@@ -22,7 +23,6 @@ return {
         end,
       })
     end,
-
     opts = {
       options = {
         theme = "tokyonight",
@@ -36,7 +36,12 @@ return {
         lualine_b = { "branch" },
         lualine_c = { "filename" },
         lualine_x = {
-          "filetype",
+          {
+            "filetype",
+            icon_only = true, -- Show only the icon
+            colored = true, -- Enable colored icons
+            icon = { align = "right" }, -- Align the icon
+          },
           {
             function()
               return require("tmux-status").tmux_session()
@@ -44,13 +49,10 @@ return {
             cond = function()
               return require("tmux-status").show()
             end,
-            --color = "LualineTmux",
             color = { fg = "#7aa2f7", bg = "#1a1b26", gui = "bold" },
             padding = { left = 3, right = 2 },
           },
         },
-        --lualine_y = { "progress" },
-
         lualine_z = {
           {
             "diff",
