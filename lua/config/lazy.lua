@@ -61,6 +61,7 @@ require("plugins.snacks")
 --vim.cmd("colorscheme catppuccin")
 --vim.cmd("colorscheme gruvbox")
 vim.cmd("colorscheme everforest")
+--vim.cmd("colorscheme noctis_azureus")
 
 require("noice").setup({
   lsp = {
