@@ -5,7 +5,7 @@ return {
     event = "VeryLazy", -- Load with LazyVim
     opts = {
       open_mapping = [[<C-\>]], -- Toggle with Ctrl+\
-      direction = "float", -- Use floating terminal
+      direction = "tab", -- Use floating terminal
       size = 20, -- Height for float/horizontal
       start_in_insert = true, -- Enter insert mode on open
       close_on_exit = true, -- Close terminal when process exits
