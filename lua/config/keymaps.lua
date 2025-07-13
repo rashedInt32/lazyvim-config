@@ -94,6 +94,10 @@ vim.keymap.set("n", "<leader>ca", function()
   require("cellular-automaton").start_animation("make_it_rain")
 end)
 
+vim.keymap.set({ "n", "t" }, "<C-\\>", function()
+  require("snacks.terminal").toggle()
+end, { desc = "Toggle Terminal" })
+
 -- vim.keymap.set("n", "<leader><leader>", function()
 --     vim.cmd("so")
 -- end)

@@ -531,6 +531,7 @@ return {
       end,
       desc = "which_key_ignore",
     },
+    { "<C-e>", "<C-\\><C-n><C-w>p", mode = "t", desc = "Switch to Editor Window" },
     {
       "]]",
       function()
