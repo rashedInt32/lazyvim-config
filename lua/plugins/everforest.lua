@@ -1,4 +1,3 @@
-
 local M = {
   "neanias/everforest-nvim",
   lazy = false,
@@ -9,7 +8,7 @@ function M.config()
   vim.o.background = "dark" -- required for everforest
   require("everforest").setup({
     background = "hard",
-    transparent_background_level = 0,
+    transparent_background_level = 1,
     italics = true,
     disable_italic_comments = false,
     on_highlights = function(hl, _)
@@ -19,3 +18,4 @@ function M.config()
 end
 
 return M
+
