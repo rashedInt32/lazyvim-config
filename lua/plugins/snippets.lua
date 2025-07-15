@@ -1,2 +1,65 @@
 -- plugins/snippets.lua
-return {}
+return {
+  --   "hrsh7th/nvim-cmp",
+  --   enabled = true,
+  --   lazy = false, -- 👈 this is critical
+  --   dependencies = {
+  --     "hrsh7th/cmp-nvim-lsp",
+  --     "hrsh7th/cmp-buffer",
+  --     "hrsh7th/cmp-path",
+  --     "hrsh7th/cmp-cmdline",
+  --     { "L3MON4D3/LuaSnip", enabled = true },
+  --     { "saadparwaiz1/cmp_luasnip", enabled = true },
+  --     { "rafamadriz/friendly-snippets", enabled = true },
+  --   },
+  --   config = function()
+  --     local cmp = require("cmp")
+  --     local luasnip = require("luasnip")
+  --     require("luasnip.loaders.from_vscode").lazy_load()
+  --
+  --     cmp.setup({
+  --       snippet = {
+  --         expand = function(args)
+  --           luasnip.lsp_expand(args.body)
+  --         end,
+  --       },
+  --       mapping = {
+  --         ["<Esc>"] = cmp.mapping(function(fallback)
+  --           cmp.close()
+  --           fallback()
+  --         end, { "i" }),
+  --         ["<Tab>"] = cmp.mapping(function(fallback)
+  --           if cmp.visible() then
+  --             cmp.select_next_item()
+  --           elseif luasnip.expand_or_jumpable() then
+  --             luasnip.expand_or_jump()
+  --           else
+  --             fallback()
+  --           end
+  --         end, { "i", "s" }),
+  --         ["<S-Tab>"] = cmp.mapping(function(fallback)
+  --           if cmp.visible() then
+  --             cmp.select_prev_item()
+  --           elseif luasnip.jumpable(-1) then
+  --             luasnip.jump(-1)
+  --           else
+  --             fallback()
+  --           end
+  --         end, { "i", "s" }),
+  --         ["<CR>"] = cmp.mapping(function(fallback)
+  --           if cmp.visible() and cmp.get_selected_entry() then
+  --             cmp.confirm({ select = false })
+  --           else
+  --             fallback() -- insert newline or do default
+  --           end
+  --         end, { "i", "s" }),
+  --       },
+  --       sources = {
+  --         { name = "luasnip", group_index = 2 },
+  --         { name = "nvim_lsp", group_index = 2 },
+  --         { name = "buffer", group_index = 2 },
+  --         { name = "path", group_index = 2 },
+  --       },
+  --     })
+  --   end,
+}
