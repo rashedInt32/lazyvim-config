@@ -57,7 +57,6 @@ require("lazy").setup({
 require("config.autocmds")
 require("config.keymaps")
 require("config.options")
-require("plugins.snacks")
 --vim.cmd("colorscheme catppuccin")
 --vim.cmd("colorscheme gruvbox")
 vim.cmd("colorscheme everforest")
