@@ -31,8 +31,6 @@ vim.opt.updatetime = 50
 vim.opt.wrap = true
 vim.opt.linebreak = true
 
-vim.o.mouse = "a"
-
 --vim.opt.colorcolumn = "80"
 
 vim.opt.guicursor = {
