@@ -3,6 +3,7 @@ return {
   priority = 1000,
   event = "VeryLazy",
   opts = {
+    terminal = { enabled = false },
     bigfile = { enabled = true },
     dashboard = { enabled = true },
     explorer = {
@@ -42,6 +43,7 @@ return {
             layout = {
               width = 28,
               position = "right",
+              diagnostics = false,
             },
           },
         },
@@ -63,7 +65,12 @@ return {
     },
     quickfile = { enabled = true },
     scope = { enabled = true },
-    scroll = { enabled = true },
+    scroll = {
+      enabled = true,
+      smooth = true,
+      speed = 10,
+      delay = 50,
+    },
     statuscolumn = { enabled = true },
     words = { enabled = true },
     styles = {
