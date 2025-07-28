@@ -33,7 +33,7 @@ return {
         "**/node_modules/**",
         "*.svg",
         "*-lock.yaml",
-        "*-lock.json",
+        --"*-lock.json",
       },
       hidden = true,
       ignored = true, -- Optionally show Git-ignored files
