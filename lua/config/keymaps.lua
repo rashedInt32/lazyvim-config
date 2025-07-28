@@ -97,6 +97,24 @@ vim.keymap.set("n", "<leader>ca", function()
   require("cellular-automaton").start_animation("make_it_rain")
 end)
 
+vim.keymap.set("n", "]c", function()
+  if vim.wo.diff then
+    return "]c"
+  end
+  require("gitsigns").next_hunk()
+  return "<Ignore>"
+end, { expr = true })
+
+vim.keymap.set("n", "[c", function()
+  if vim.wo.diff then
+    return "[c"
+  end
+  require("gitsigns").prev_hunk()
+  return "<Ignore>"
+end, { expr = true })
+
+vim.keymap.set("n", "<leader>gs", ":Gitsigns stage_hunk<CR>")
+
 -- vim.keymap.set("n", "<leader><leader>", function()
 --     vim.cmd("so")
 -- end)

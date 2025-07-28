@@ -25,6 +25,11 @@ return {
     opts = {
       inlay_hints = { enabled = false },
       servers = {
+        eslint = {
+          settings = {
+            workingDirectory = { mode = "auto" },
+          },
+        },
         vtsls = {
           filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
           settings = {

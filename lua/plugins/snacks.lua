@@ -8,6 +8,7 @@ return {
     dashboard = { enabled = true },
     explorer = {
       enabled = true,
+      respect_gitignore = false,
     },
     indent = { enabled = true },
     input = { enabled = true },
