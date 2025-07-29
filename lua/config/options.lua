@@ -31,6 +31,10 @@ vim.opt.updatetime = 50
 vim.opt.wrap = true
 vim.opt.linebreak = true
 
+-- line number and relative line number
+vim.opt.number = false
+vim.opt.relativenumber = false
+
 --vim.opt.colorcolumn = "80"
 
 vim.opt.guicursor = {

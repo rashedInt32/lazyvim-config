@@ -5,7 +5,9 @@ return {
   opts = {},
   config = function()
     -- load the colorscheme here
-    require("night-owl").setup({})
+    require("night-owl").setup({
+      bold = false,
+    })
     vim.cmd("colorscheme night-owl")
 
     local hl = vim.api.nvim_set_hl
