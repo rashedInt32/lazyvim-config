@@ -14,14 +14,14 @@
 --     vim.api.nvim_set_hl(0, "Visual", { bg = "#2c313c" }) -- or whatever color you prefer
 --   end,
 -- })
-return {
-  {
-    event = "LspAttach",
-    opts = {
-      callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        client.server_capabilities.documentHighlightProvider = false
-      end,
-    },
-  },
-}
+-- return {
+--   {
+--     event = "LspAttach",
+--     opts = {
+--       callback = function(args)
+--         local client = vim.lsp.get_client_by_id(args.data.client_id)
+--         client.server_capabilities.documentHighlightProvider = false
+--       end,
+--     },
+--   },
+-- }
