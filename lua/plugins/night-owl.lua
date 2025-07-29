@@ -23,6 +23,10 @@ return {
     hl(0, "StatusLine", { bg = bg })
     hl(0, "TelescopeNormal", { bg = bg })
     hl(0, "TelescopeBorder", { bg = bg })
+
+    hl(0, "LspReferenceText", { bg = "NONE", underline = false })
+    hl(0, "LspReferenceRead", { bg = "NONE", underline = false })
+    hl(0, "LspReferenceWrite", { bg = "NONE", underline = false })
   end,
 }
 
