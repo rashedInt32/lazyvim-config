@@ -97,6 +97,8 @@ vim.keymap.set("n", "<leader>ca", function()
   require("cellular-automaton").start_animation("make_it_rain")
 end)
 
+vim.keymap.set("n", "<C-r>", "<C-r>", { desc = "Redo last change" })
+
 vim.keymap.set("n", "]c", function()
   if vim.wo.diff then
     return "]c"
