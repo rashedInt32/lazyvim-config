@@ -16,4 +16,5 @@ return {
       end,
     },
   },
+  vim.api.nvim_clear_autocmds({ event = { "FocusGained", "FocusLost" } }),
 }

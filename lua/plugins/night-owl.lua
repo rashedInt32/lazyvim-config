@@ -2,9 +2,7 @@ return {
   "oxfist/night-owl.nvim",
   lazy = false, -- load during startup as main colorscheme
   priority = 1000, -- load before other plugins
-  opts = {
-    transparent_background = true,
-  },
+  opts = {},
   config = function()
     -- load the colorscheme here
     require("night-owl").setup({})
