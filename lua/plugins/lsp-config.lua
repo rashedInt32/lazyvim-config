@@ -24,6 +24,7 @@ return {
     },
     opts = {
       inlay_hints = { enabled = false },
+      document_highlight = { enabled = false }, -- <--- ADD THIS LINE HERE
       servers = {
         vtsls = {
           filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
@@ -62,6 +63,10 @@ return {
           ),
         },
       },
+      -- The 'setup' key here is for configuring specific servers,
+      -- but the global document_highlight should be in the main opts.
+      -- You can remove this 'setup' table if you prefer to set up servers directly in `config`
+      -- or allow mason-lspconfig to handle the defaults.
       setup = {
         vtsls = function(_, opts)
           require("lspconfig").vtsls.setup(opts)
@@ -69,6 +74,9 @@ return {
       },
     },
     config = function()
+      -- These calls are fine, they ensure the servers are set up if Mason installs them.
+      -- If you want to customize options for these, you'd pass a table to setup().
+      -- However, the global `document_highlight = { enabled = false }` should cover it.
       require("mason").setup()
       require("mason-lspconfig").setup({
         -- Your mason-lspconfig setup here
@@ -76,9 +84,9 @@ return {
 
       -- Setup language servers
       local lspconfig = require("lspconfig")
-      lspconfig.lua_ls.setup({})
-      lspconfig.tsserver.setup({})
-      lspconfig.tailwindcss.setup({})
+      lspconfig.lua_ls.setup({}) -- Will now inherit the global document_highlight = false
+      lspconfig.tsserver.setup({}) -- Will now inherit the global document_highlight = false
+      lspconfig.tailwindcss.setup({}) -- Will now inherit the global document_highlight = false
     end,
   },
 }
