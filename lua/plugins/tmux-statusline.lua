@@ -8,16 +8,15 @@ return {
     "nvim-lualine/lualine.nvim",
     dependencies = {
       "christopher-francisco/tmux-status.nvim",
-      "nvim-tree/nvim-web-devicons", -- Add this dependency explicitly
+      "nvim-tree/nvim-web-devicons",
     },
     init = function()
-      -- Set custom highlight before lualine loads
       vim.api.nvim_create_autocmd("ColorScheme", {
         pattern = "*",
         callback = function()
           vim.api.nvim_set_hl(0, "LualineTmux", {
-            fg = "#7aa2f7", -- Tokyonight blue
-            bg = "#1a1b26", -- Tokyonight background
+            fg = "#82aaff", -- Night Owl blue
+            bg = "#011627", -- Night Owl background
             bold = true,
           })
         end,
@@ -25,7 +24,7 @@ return {
     end,
     opts = {
       options = {
-        theme = "tokyonight",
+        theme = "night-owl", -- let it adapt to colorscheme (or set manually)
         section_separators = { left = "", right = "" },
         component_separators = { left = "", right = "" },
         globalstatus = true,
@@ -38,9 +37,9 @@ return {
         lualine_x = {
           {
             "filetype",
-            icon_only = true, -- Show only the icon
-            colored = true, -- Enable colored icons
-            icon = { align = "right" }, -- Align the icon
+            icon_only = true,
+            colored = true,
+            icon = { align = "right" },
           },
           {
             function()
@@ -49,7 +48,7 @@ return {
             cond = function()
               return require("tmux-status").show()
             end,
-            color = { fg = "#7aa2f7", bg = "#1a1b26", gui = "bold" },
+            color = { fg = "#82aaff", bg = "#011627", gui = "bold" },
             padding = { left = 3, right = 2 },
           },
         },
@@ -59,9 +58,9 @@ return {
             symbols = { added = " ", modified = " ", removed = " " },
             colored = true,
             diff_color = {
-              added = { fg = "#9ece6a", bg = "#1a1b26" }, -- greenish
-              modified = { fg = "#e0af68", bg = "#1a1b26" }, -- yellow-orange
-              removed = { fg = "#f7768e", bg = "#1a1b26" }, -- redish
+              added = { fg = "#22da6e", bg = "#011627" }, -- Night Owl green
+              modified = { fg = "#c7925b", bg = "#011627" }, -- Night Owl yellow-orange
+              removed = { fg = "#ef5350", bg = "#011627" }, -- Night Owl red
             },
           },
           {
@@ -75,10 +74,10 @@ return {
               hint = " ",
             },
             diagnostics_color = {
-              error = { fg = "#f7768e", bg = "#1a1b26" },
-              warn = { fg = "#e0af68", bg = "#1a1b26" },
-              info = { fg = "#7aa2f7", bg = "#1a1b26" },
-              hint = { fg = "#9ece6a", bg = "#1a1b26" },
+              error = { fg = "#ef5350", bg = "#011627" }, -- red
+              warn = { fg = "#c7925b", bg = "#011627" }, -- yellow-orange
+              info = { fg = "#82aaff", bg = "#011627" }, -- blue
+              hint = { fg = "#22da6e", bg = "#011627" }, -- green
             },
             update_in_insert = false,
             always_visible = true,
