@@ -25,6 +25,10 @@ return {
     hl(0, "LspReferenceText", { bg = "NONE", underline = false })
     hl(0, "LspReferenceRead", { bg = "NONE", underline = false })
     hl(0, "LspReferenceWrite", { bg = "NONE", underline = false })
+
+    -- Fix the background mismatch
+    vim.api.nvim_set_hl(0, "Normal", { bg = "#011627" })
+    vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "#011627" })
   end,
 }
 
