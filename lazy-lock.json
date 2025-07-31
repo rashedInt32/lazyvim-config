@@ -3,7 +3,7 @@
   "SchemaStore.nvim": { "branch": "main", "commit": "3cd1c7267282b4d89618674de36a6d866981347e" },
   "blink.cmp": { "branch": "main", "commit": "bae4bae0eedd1fa55f34b685862e94a222d5c6f8" },
   "bufferline.nvim": { "branch": "main", "commit": "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3" },
-  "catppuccin": { "branch": "main", "commit": "94f6e8a06b6bb7b8e5529cf9f93adb4654534241" },
+  "catppuccin": { "branch": "main", "commit": "cb5665990a797b102715188e73c44c3931b3b42e" },
   "conform.nvim": { "branch": "master", "commit": "973f3cb73887d510321653044791d7937c7ec0fa" },
   "copilot.lua": { "branch": "master", "commit": "f22d869b9544fce7b25fdc7dd2e3a9b760485154" },
   "everforest-nvim": { "branch": "main", "commit": "2eb7c348f880ba93de4d98cae049c9441f5d4d49" },

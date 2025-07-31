@@ -24,7 +24,8 @@ return {
     end,
     opts = {
       options = {
-        theme = "night-owl", -- let it adapt to colorscheme (or set manually)
+        --theme = "night-owl", -- let it adapt to colorscheme (or set manually)
+        theme = "tokyonight", -- let it adapt to colorscheme (or set manually)
         section_separators = { left = "", right = "" },
         component_separators = { left = "", right = "" },
         globalstatus = true,
