@@ -2,6 +2,14 @@ return {
   "folke/snacks.nvim",
   priority = 1000,
   event = "VeryLazy",
+  lsp = {
+    hover = false,
+    diagnostics = {
+      virtual_text = true,
+      underline = true,
+      float = false, -- 🚫 disable floating diagnostic popups
+    },
+  },
   opts = {
     terminal = { enabled = false },
     bigfile = { enabled = true },

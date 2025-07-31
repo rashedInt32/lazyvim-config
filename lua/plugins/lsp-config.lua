@@ -25,6 +25,25 @@ return {
     opts = {
       inlay_hints = { enabled = false },
       document_highlight = { enabled = false }, -- <--- ADD THIS LINE HERE
+      -- This is the crucial part for diagnostics display
+      diagnostics = {
+        -- Set virtual_text to false to prevent inline diagnostic messages
+        -- from overlapping with hover information.
+        virtual_text = false,
+        -- Ensure signs (the red 'E' symbol) are enabled
+        signs = true,
+        -- Underlines for diagnostics
+        underline = true,
+        -- Customize how diagnostics are shown in floats (like <leader>cd)
+        float = {
+          focusable = false,
+          style = "minimal",
+          border = "rounded",
+          source = "always",
+          header = "",
+          prefix = "",
+        },
+      },
       servers = {
         vtsls = {
           filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
