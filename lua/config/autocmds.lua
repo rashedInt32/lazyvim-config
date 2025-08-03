@@ -14,14 +14,41 @@
 --     vim.api.nvim_set_hl(0, "Visual", { bg = "#2c313c" }) -- or whatever color you prefer
 --   end,
 -- })
--- return {
---   {
---     event = "LspAttach",
---     opts = {
---       callback = function(args)
---         local client = vim.lsp.get_client_by_id(args.data.client_id)
---         client.server_capabilities.documentHighlightProvider = false
---       end,
---     },
---   },
--- }
+
+return {
+  -- Disable LSP document highlight provider
+  {
+    event = "LspAttach",
+    opts = {
+      callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        client.server_capabilities.documentHighlightProvider = false
+      end,
+    },
+  },
+
+  -- Override Night Owl Visual highlight focus behavior
+  {
+    event = "ColorScheme",
+    pattern = "night-owl",
+    opts = {
+      callback = function()
+        local group = vim.api.nvim_create_augroup("MyOverrideVisual", { clear = true })
+
+        local function force_active_visual()
+          vim.cmd("hi! link Visual @nowl.visual.active")
+        end
+
+        -- Apply immediately
+        force_active_visual()
+
+        -- Re-apply on focus changes
+        vim.api.nvim_create_autocmd({ "FocusGained", "FocusLost" }, {
+          pattern = "*",
+          callback = force_active_visual,
+          group = group,
+        })
+      end,
+    },
+  },
+}
