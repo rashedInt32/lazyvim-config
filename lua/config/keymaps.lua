@@ -117,6 +117,7 @@ end, { expr = true })
 
 vim.keymap.set("n", "<leader>gs", ":Gitsigns stage_hunk<CR>")
 
+vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Show signature help" })
 -- vim.keymap.set("n", "<leader><leader>", function()
 --     vim.cmd("so")
 -- end)

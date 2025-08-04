@@ -1,21 +1,18 @@
 return {
-  -- Mason: Package manager for LSP servers
   {
     "williamboman/mason.nvim",
     opts = {},
   },
 
-  -- Mason-LSPConfig: Bridge between Mason and nvim-lspconfig
   {
     "williamboman/mason-lspconfig.nvim",
     dependencies = { "williamboman/mason.nvim" },
     opts = {
-      ensure_installed = { "lua_ls", "tsserver" }, -- Example servers
+      ensure_installed = { "lua_ls", "vtsls", "tailwindcss" },
       automatic_installation = true,
     },
   },
 
-  -- nvim-lspconfig
   {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -24,17 +21,11 @@ return {
     },
     opts = {
       inlay_hints = { enabled = false },
-      document_highlight = { enabled = false }, -- <--- ADD THIS LINE HERE
-      -- This is the crucial part for diagnostics display
+      document_highlight = { enabled = false },
       diagnostics = {
-        -- Set virtual_text to false to prevent inline diagnostic messages
-        -- from overlapping with hover information.
         virtual_text = false,
-        -- Ensure signs (the red 'E' symbol) are enabled
         signs = true,
-        -- Underlines for diagnostics
         underline = true,
-        -- Customize how diagnostics are shown in floats (like <leader>cd)
         float = {
           focusable = false,
           style = "minimal",
@@ -59,9 +50,9 @@ return {
               },
             },
           },
+          -- No need to call setup here manually
         },
         tailwindcss = {
-          -- optional config
           filetypes = {
             "html",
             "css",
@@ -81,31 +72,47 @@ return {
             ".git"
           ),
         },
+        lua_ls = {},
       },
-      -- The 'setup' key here is for configuring specific servers,
-      -- but the global document_highlight should be in the main opts.
-      -- You can remove this 'setup' table if you prefer to set up servers directly in `config`
-      -- or allow mason-lspconfig to handle the defaults.
       setup = {
+        -- Just set on_attach here, no manual setup call
         vtsls = function(_, opts)
-          require("lspconfig").vtsls.setup(opts)
+          opts.on_attach = function(client, bufnr)
+            client.server_capabilities.signatureHelpProvider = false
+            vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "LSP Hover (type info)" })
+            vim.keymap.set(
+              "n",
+              "<leader>D",
+              vim.lsp.buf.type_definition,
+              { buffer = bufnr, desc = "Go to type definition" }
+            )
+          end
+        end,
+        ["*"] = function(_, opts)
+          opts.on_attach = function(client, bufnr)
+            client.server_capabilities.signatureHelpProvider = false
+            vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "LSP Hover (type info)" })
+            vim.keymap.set(
+              "n",
+              "<leader>D",
+              vim.lsp.buf.type_definition,
+              { buffer = bufnr, desc = "Go to type definition" }
+            )
+          end
         end,
       },
     },
-    config = function()
-      -- These calls are fine, they ensure the servers are set up if Mason installs them.
-      -- If you want to customize options for these, you'd pass a table to setup().
-      -- However, the global `document_highlight = { enabled = false }` should cover it.
+    config = function(_, opts)
+      -- Disable all automatic signature help popups globally
+      vim.lsp.handlers["textDocument/signatureHelp"] = function() end
+
       require("mason").setup()
       require("mason-lspconfig").setup({
-        -- Your mason-lspconfig setup here
+        ensure_installed = { "lua_ls", "vtsls", "tailwindcss" },
       })
 
-      -- Setup language servers
-      local lspconfig = require("lspconfig")
-      lspconfig.lua_ls.setup({}) -- Will now inherit the global document_highlight = false
-      lspconfig.tsserver.setup({}) -- Will now inherit the global document_highlight = false
-      lspconfig.tailwindcss.setup({}) -- Will now inherit the global document_highlight = false
+      -- DO NOT manually call lspconfig setup here!
+      -- LazyVim does that for you using opts.servers and opts.setup
     end,
   },
 }
