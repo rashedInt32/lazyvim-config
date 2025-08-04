@@ -38,6 +38,7 @@ return {
       servers = {
         vtsls = {
           filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+          root_dir = require("lspconfig.util").root_pattern("package.json", "tsconfig.json", ".git"),
           settings = {
             typescript = {
               inlayHints = {
@@ -50,7 +51,6 @@ return {
               },
             },
           },
-          -- No need to call setup here manually
         },
         tailwindcss = {
           filetypes = {
@@ -111,8 +111,18 @@ return {
         ensure_installed = { "lua_ls", "vtsls", "tailwindcss" },
       })
 
-      -- DO NOT manually call lspconfig setup here!
-      -- LazyVim does that for you using opts.servers and opts.setup
+      -- Manually setup vtsls with options from opts.servers.vtsls
+      local lspconfig = require("lspconfig")
+      if opts.servers.vtsls then
+        -- Inject on_attach from opts.setup.vtsls if present
+        local vtsls_opts = vim.tbl_deep_extend("force", opts.servers.vtsls, {})
+        if opts.setup.vtsls then
+          opts.setup.vtsls(nil, vtsls_opts)
+        end
+        lspconfig.vtsls.setup(vtsls_opts)
+      end
+
+      -- You can still let LazyVim handle other servers automatically
     end,
   },
 }
