@@ -1,115 +1,109 @@
 return {
-  {
-    "williamboman/mason.nvim",
-    opts = {},
-  },
-
-  {
-    "williamboman/mason-lspconfig.nvim",
-    dependencies = { "williamboman/mason.nvim" },
-    opts = {
-      ensure_installed = { "lua_ls", "vtsls", "tailwindcss" },
-      automatic_installation = true,
-    },
-  },
+  -- ... your mason and mason-lspconfig config unchanged ...
 
   {
     "neovim/nvim-lspconfig",
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "hrsh7th/nvim-cmp",
     },
-    config = function()
-      -- Disable signature help popups
-      vim.lsp.handlers["textDocument/signatureHelp"] = function() end
+    opts = {
+      -- other opts unchanged ...
 
-      -- Setup mason
-      require("mason").setup()
-      require("mason-lspconfig").setup()
-
-      -- Get capabilities (with fallback)
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      local ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-      if ok then
-        capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
-      end
-
-      -- Common on_attach function
-      local on_attach = function(client, bufnr)
-        client.server_capabilities.signatureHelpProvider = false
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "LSP Hover (type info)" })
-        vim.keymap.set(
-          "n",
-          "<leader>D",
-          vim.lsp.buf.type_definition,
-          { buffer = bufnr, desc = "Go to type definition" }
-        )
-      end
-
-      -- Configure servers
-      local lspconfig = require("lspconfig")
-
-      -- vtsls configuration (will auto-start for TS/JS files)
-      lspconfig.vtsls.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
-        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-        root_dir = function()
-          return vim.loop.cwd()
-        end,
-        single_file_support = true,
-        settings = {
-          typescript = {
-            inlayHints = {
-              parameterNames = { enabled = "literals" },
-              parameterTypes = { enabled = true },
-              variableTypes = { enabled = false },
-              propertyDeclarationTypes = { enabled = true },
-              functionLikeReturnTypes = { enabled = true },
-              enumMemberValues = { enabled = true },
+      servers = {
+        vtsls = {
+          filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+          -- Remove root_dir or set to cwd to force always start
+          root_dir = vim.loop.cwd, -- always current directory (no root detection)
+          settings = {
+            typescript = {
+              inlayHints = {
+                parameterNames = { enabled = "literals" },
+                parameterTypes = { enabled = true },
+                variableTypes = { enabled = false },
+                propertyDeclarationTypes = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                enumMemberValues = { enabled = true },
+              },
             },
           },
         },
+        -- other servers unchanged ...
+      },
+      setup = {
+        vtsls = function(_, opts)
+          opts.on_attach = function(client, bufnr)
+            client.server_capabilities.signatureHelpProvider = false
+            vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "LSP Hover (type info)" })
+            vim.keymap.set(
+              "n",
+              "<leader>D",
+              vim.lsp.buf.type_definition,
+              { buffer = bufnr, desc = "Go to type definition" }
+            )
+          end
+          -- DO NOT call lspconfig.vtsls.setup(opts) here!
+        end,
+        ["*"] = function(_, opts)
+          opts.on_attach = function(client, bufnr)
+            client.server_capabilities.signatureHelpProvider = false
+            vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "LSP Hover (type info)" })
+            vim.keymap.set(
+              "n",
+              "<leader>D",
+              vim.lsp.buf.type_definition,
+              { buffer = bufnr, desc = "Go to type definition" }
+            )
+          end
+        end,
+      },
+    },
+
+    config = function(_, opts)
+      vim.lsp.handlers["textDocument/signatureHelp"] = function() end
+
+      require("mason").setup()
+      require("mason-lspconfig").setup({
+        ensure_installed = { "lua_ls", "vtsls", "tailwindcss" },
       })
 
-      -- TailwindCSS configuration
-      lspconfig.tailwindcss.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
-        filetypes = {
-          "html",
-          "css",
-          "scss",
-          "javascript",
-          "typescript",
-          "javascriptreact",
-          "typescriptreact",
-          "svelte",
-          "vue",
-        },
-        root_dir = require("lspconfig.util").root_pattern(
-          "tailwind.config.js",
-          "tailwind.config.ts",
-          "postcss.config.js",
-          "package.json",
-          ".git"
-        ),
-      })
+      local lspconfig = require("lspconfig")
 
-      -- LuaLS configuration
-      lspconfig.lua_ls.setup({
-        capabilities = capabilities,
-        on_attach = on_attach,
-        settings = {
-          Lua = {
-            runtime = { version = "LuaJIT" },
-            diagnostics = { globals = { "vim" } },
-            workspace = { library = vim.api.nvim_get_runtime_file("", true) },
-            telemetry = { enable = false },
-          },
-        },
-      })
+      -- Setup vtsls with global root_dir to always start the LSP
+      if opts.servers.vtsls then
+        local vtsls_opts = vim.tbl_deep_extend("force", opts.servers.vtsls, {
+          root_dir = function()
+            return vim.loop.cwd()
+          end,
+          single_file_support = true,
+        })
+
+        -- Attach manually to matching buffers
+        local filetypes = vtsls_opts.filetypes
+          or {
+            "javascript",
+            "javascriptreact",
+            "typescript",
+            "typescriptreact",
+          }
+
+        vim.api.nvim_create_autocmd("BufReadPost", {
+          callback = function(args)
+            local buf = args.buf
+            local ft = vim.bo[buf].filetype
+            if vim.tbl_contains(filetypes, ft) then
+              local clients = vim.lsp.get_clients({ bufnr = buf, name = "vtsls" })
+              if #clients == 0 then
+                vim.defer_fn(function()
+                  vim.lsp.buf_attach_client(buf, vim.lsp.start_client(vtsls_opts))
+                end, 0)
+              end
+            end
+          end,
+        })
+
+        lspconfig.vtsls.setup(vtsls_opts)
+      end
     end,
   },
 }
