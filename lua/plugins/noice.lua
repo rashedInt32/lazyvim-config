@@ -16,21 +16,21 @@ return {
       },
       lsp = {
         signature = {
-          enabled = false, -- Unchanged: Prevents noice.nvim from rendering signature help
+          enabled = false,
         },
         hover = {
-          enabled = false, -- Unchanged: Allows noice.nvim to handle hover popups
-          silent = true, -- Added: Prevents hover popup from stealing focus
+          enabled = false,
+          silent = true,
           opts = {
-            border = "rounded", -- Added: Rounded border for hover popup
-            max_width = 80, -- Added: Limits popup width
-            max_height = 20, -- Added: Limits popup height
-            focusable = false, -- Added: Ensures popup is not focusable
+            border = "rounded",
+            max_width = 80,
+            max_height = 20,
+            focusable = false,
           },
         },
         -- Added: Override LSP hover handler to strip diagnostics
         override = {
-          ["vim.lsp.buf.hover"] = false, -- Ensures noice.nvim handles hover
+          ["vim.lsp.buf.hover"] = false,
         },
       },
     },
