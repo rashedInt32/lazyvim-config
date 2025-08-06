@@ -19,7 +19,7 @@ return {
           enabled = false, -- Unchanged: Prevents noice.nvim from rendering signature help
         },
         hover = {
-          enabled = true, -- Unchanged: Allows noice.nvim to handle hover popups
+          enabled = false, -- Unchanged: Allows noice.nvim to handle hover popups
           silent = true, -- Added: Prevents hover popup from stealing focus
           opts = {
             border = "rounded", -- Added: Rounded border for hover popup
@@ -30,7 +30,7 @@ return {
         },
         -- Added: Override LSP hover handler to strip diagnostics
         override = {
-          ["vim.lsp.buf.hover"] = true, -- Ensures noice.nvim handles hover
+          ["vim.lsp.buf.hover"] = false, -- Ensures noice.nvim handles hover
         },
       },
     },

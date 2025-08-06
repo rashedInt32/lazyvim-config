@@ -10,22 +10,11 @@ return {
       "christopher-francisco/tmux-status.nvim",
       "nvim-tree/nvim-web-devicons",
     },
-    init = function()
-      vim.api.nvim_create_autocmd("ColorScheme", {
-        pattern = "*",
-        callback = function()
-          vim.api.nvim_set_hl(0, "LualineTmux", {
-            fg = "#82aaff", -- Night Owl blue
-            bg = "#011627", -- Night Owl background
-            bold = true,
-          })
-        end,
-      })
-    end,
     opts = {
       options = {
         --theme = "night-owl", -- let it adapt to colorscheme (or set manually)
-        theme = "tokyonight", -- let it adapt to colorscheme (or set manually)
+        theme = "powerline",
+        --theme = "tokyonight", -- let it adapt to colorscheme (or set manually)
         section_separators = { left = "", right = "" },
         component_separators = { left = "", right = "" },
         globalstatus = true,
@@ -49,8 +38,7 @@ return {
             cond = function()
               return require("tmux-status").show()
             end,
-            color = { fg = "#82aaff", bg = "#011627", gui = "bold" },
-            padding = { left = 3, right = 2 },
+            padding = { left = 2, right = 2 },
           },
         },
         lualine_z = {
@@ -65,8 +53,9 @@ return {
             },
           },
           {
+
             "diagnostics",
-            sources = { "nvim_lsp" },
+            --sources = { "nvim_lsp" },
             sections = { "error", "warn", "info", "hint" },
             symbols = {
               error = " ",
