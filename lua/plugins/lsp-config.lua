@@ -1,6 +1,4 @@
 return {
-  -- ... your mason and mason-lspconfig config unchanged ...
-
   {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -8,13 +6,31 @@ return {
       "williamboman/mason-lspconfig.nvim",
     },
     opts = {
-      -- other opts unchanged ...
+      inlay_hints = { enabled = false },
+      document_highlight = { enabled = false },
+      -- diagnostics = {
+      --   virtual_text = false,
+      --   signs = true,
+      --   underline = true,
+      --   float = {
+      --     focusable = false,
+      --     style = "minimal",
+      --     border = "rounded",
+      --     source = "always",
+      --     header = "",
+      --     prefix = "Error",
+      --   },
+      -- },
 
       servers = {
         vtsls = {
-          filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
-          -- Remove root_dir or set to cwd to force always start
-          root_dir = vim.loop.cwd, -- always current directory (no root detection)
+          filetypes = {
+            "javascript",
+            "javascriptreact",
+            "typescript",
+            "typescriptreact",
+          },
+          root_dir = vim.loop.cwd, -- Force LSP to use cwd
           settings = {
             typescript = {
               inlayHints = {
@@ -28,32 +44,44 @@ return {
             },
           },
         },
-        -- other servers unchanged ...
+
+        tailwindcss = {
+          filetypes = {
+            "html",
+            "css",
+            "scss",
+            "javascript",
+            "typescript",
+            "javascriptreact",
+            "typescriptreact",
+            "svelte",
+            "vue",
+          },
+          root_dir = require("lspconfig.util").root_pattern(
+            "tailwind.config.js",
+            "tailwind.config.ts",
+            "postcss.config.js",
+            "package.json",
+            ".git"
+          ),
+        },
+
+        lua_ls = {},
       },
+
       setup = {
         vtsls = function(_, opts)
           opts.on_attach = function(client, bufnr)
             client.server_capabilities.signatureHelpProvider = false
             vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "LSP Hover (type info)" })
-            vim.keymap.set(
-              "n",
-              "<leader>D",
-              vim.lsp.buf.type_definition,
-              { buffer = bufnr, desc = "Go to type definition" }
-            )
           end
-          -- DO NOT call lspconfig.vtsls.setup(opts) here!
+          -- DO NOT call setup here
         end,
+
         ["*"] = function(_, opts)
           opts.on_attach = function(client, bufnr)
             client.server_capabilities.signatureHelpProvider = false
             vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "LSP Hover (type info)" })
-            vim.keymap.set(
-              "n",
-              "<leader>D",
-              vim.lsp.buf.type_definition,
-              { buffer = bufnr, desc = "Go to type definition" }
-            )
           end
         end,
       },
@@ -69,7 +97,6 @@ return {
 
       local lspconfig = require("lspconfig")
 
-      -- Setup vtsls with global root_dir to always start the LSP
       if opts.servers.vtsls then
         local vtsls_opts = vim.tbl_deep_extend("force", opts.servers.vtsls, {
           root_dir = function()
@@ -78,7 +105,9 @@ return {
           single_file_support = true,
         })
 
-        -- Attach manually to matching buffers
+        lspconfig.vtsls.setup(vtsls_opts)
+
+        -- Safe auto-attach for JS/TS filetypes
         local filetypes = vtsls_opts.filetypes
           or {
             "javascript",
@@ -94,15 +123,11 @@ return {
             if vim.tbl_contains(filetypes, ft) then
               local clients = vim.lsp.get_clients({ bufnr = buf, name = "vtsls" })
               if #clients == 0 then
-                vim.defer_fn(function()
-                  vim.lsp.buf_attach_client(buf, vim.lsp.start_client(vtsls_opts))
-                end, 0)
+                lspconfig.vtsls.manager.try_add_wrapper(buf)
               end
             end
           end,
         })
-
-        lspconfig.vtsls.setup(vtsls_opts)
       end
     end,
   },

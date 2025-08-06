@@ -3,11 +3,20 @@ return {
   priority = 1000,
   event = "VeryLazy",
   lsp = {
-    hover = false,
+    enabled = true, -- snacks handles LSP
     diagnostics = {
-      virtual_text = true,
-      underline = true,
-      float = false, -- 🚫 disable floating diagnostic popups
+      enabled = true, -- ✅ let snacks handle diagnostic popups
+      insert = false, -- ❌ do not show in insert mode
+      virtual_text = false, -- ❌ disable inline text (vim.diagnostic)
+      signs = false, -- ❌ disable signs (gutter markers)
+      underline = false, -- ❌ disable underline
+      update_in_insert = false,
+    },
+    hover = {
+      enabled = true,
+    },
+    signature = {
+      enabled = true,
     },
   },
   opts = {
@@ -600,6 +609,9 @@ return {
         Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
         Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
         Snacks.toggle.diagnostics():map("<leader>ud")
+        vim.keymap.set("n", "<leader>ud", function()
+          vim.cmd("ToggleDiagnostics")
+        end, { desc = "Toggle Diagnostics (Insert Sensitive)", silent = true })
         Snacks.toggle.line_number():map("<leader>ul")
         Snacks.toggle
           .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
