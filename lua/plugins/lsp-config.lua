@@ -8,19 +8,19 @@ return {
     opts = {
       inlay_hints = { enabled = false },
       document_highlight = { enabled = false },
-      -- diagnostics = {
-      --   virtual_text = false,
-      --   signs = true,
-      --   underline = true,
-      --   float = {
-      --     focusable = false,
-      --     style = "minimal",
-      --     border = "rounded",
-      --     source = "always",
-      --     header = "",
-      --     prefix = "Error",
-      --   },
-      -- },
+      diagnostics = {
+        virtual_text = false,
+        signs = true,
+        underline = true,
+        float = {
+          focusable = false,
+          style = "minimal",
+          border = "rounded",
+          source = "always",
+          header = "",
+          prefix = "Error",
+        },
+      },
 
       servers = {
         vtsls = {
@@ -66,12 +66,15 @@ return {
           ),
         },
 
+        prismals = {},
+
         lua_ls = {},
       },
 
       setup = {
         vtsls = function(_, opts)
           opts.on_attach = function(client, bufnr)
+            client.server_capabilities.documentHighlightProvider = false -- <- Add this
             client.server_capabilities.signatureHelpProvider = false
             vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "LSP Hover (type info)" })
           end
@@ -80,6 +83,7 @@ return {
 
         ["*"] = function(_, opts)
           opts.on_attach = function(client, bufnr)
+            client.server_capabilities.documentHighlightProvider = false -- <- Add this
             client.server_capabilities.signatureHelpProvider = false
             vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "LSP Hover (type info)" })
           end
@@ -88,11 +92,28 @@ return {
     },
 
     config = function(_, opts)
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          client.server_capabilities.documentHighlightProvider = false
+        end,
+      })
       vim.lsp.handlers["textDocument/signatureHelp"] = function() end
 
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "vtsls", "tailwindcss" },
+        ensure_installed = { "lua_ls", "vtsls", "tailwindcss", "prismals" },
+      })
+
+      vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+        pattern = "*.prisma",
+        callback = function()
+          vim.bo.filetype = "prisma"
+        end,
+      })
+
+      require("lspconfig").prismals.setup({
+        filetypes = { "prisma" },
       })
 
       local lspconfig = require("lspconfig")
