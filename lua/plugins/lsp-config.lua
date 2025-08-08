@@ -110,6 +110,19 @@ return {
         end,
       })
 
+      vim.api.nvim_create_autocmd({ "InsertEnter" }, {
+        callback = function()
+          vim.diagnostic.disable(0)
+        end,
+      })
+
+      -- ✅ Re-enable diagnostics when exiting Insert mode
+      vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+        callback = function()
+          vim.diagnostic.enable(0)
+        end,
+      })
+
       -- 🔌 Prisma LSP (manual setup)
       require("lspconfig").prismals.setup({
         filetypes = { "prisma" },

@@ -22,6 +22,12 @@ return {
     pattern = "night-owl",
     opts = {
       callback = function()
+        vim.cmd([[
+          highlight Normal guibg=NONE
+          highlight NormalNC guibg=NONE
+          highlight EndOfBuffer guibg=NONE
+        ]])
+
         local group = vim.api.nvim_create_augroup("MyOverrideVisual", { clear = true })
 
         local function force_active_visual()

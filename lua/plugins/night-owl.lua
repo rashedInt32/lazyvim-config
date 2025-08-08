@@ -6,12 +6,9 @@ return {
   config = function()
     -- load the colorscheme here
     require("night-owl").setup({
-      --transparent_background = true,
+      transparent_background = true,
     })
     --vim.cmd("colorscheme night-owl")
-
-    local hl = vim.api.nvim_set_hl
-    local bg = "NONE"
 
     -- -- Transparent backgrounds
     -- hl(0, "Normal", { bg = bg })
