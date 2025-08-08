@@ -30,7 +30,7 @@ return {
             "typescript",
             "typescriptreact",
           },
-          root_dir = vim.loop.cwd, -- Force LSP to use cwd
+          root_dir = vim.loop.cwd,
           settings = {
             typescript = {
               inlayHints = {
@@ -72,19 +72,9 @@ return {
       },
 
       setup = {
-        vtsls = function(_, opts)
-          opts.on_attach = function(client, bufnr)
-            client.server_capabilities.documentHighlightProvider = false -- <- Add this
-            client.server_capabilities.signatureHelpProvider = false
-            vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "LSP Hover (type info)" })
-          end
-          -- DO NOT call setup here
-        end,
-
         ["*"] = function(_, opts)
           opts.on_attach = function(client, bufnr)
-            client.server_capabilities.documentHighlightProvider = false -- <- Add this
-            client.server_capabilities.signatureHelpProvider = false
+            -- Only basic hover keymap
             vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "LSP Hover (type info)" })
           end
         end,
@@ -92,19 +82,27 @@ return {
     },
 
     config = function(_, opts)
+      -- 🔁 Global LSP tweaks on attach
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
-          client.server_capabilities.documentHighlightProvider = false
+          if client then
+            client.server_capabilities.documentHighlightProvider = false
+            client.server_capabilities.signatureHelpProvider = false
+          end
         end,
       })
+
+      -- 🧼 Disable signatureHelp popup globally
       vim.lsp.handlers["textDocument/signatureHelp"] = function() end
 
+      -- 🔧 Setup Mason + LSPs
       require("mason").setup()
       require("mason-lspconfig").setup({
         ensure_installed = { "lua_ls", "vtsls", "tailwindcss", "prismals" },
       })
 
+      -- 📝 Filetype override for *.prisma
       vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
         pattern = "*.prisma",
         callback = function()
@@ -112,44 +110,14 @@ return {
         end,
       })
 
+      -- 🔌 Prisma LSP (manual setup)
       require("lspconfig").prismals.setup({
         filetypes = { "prisma" },
       })
 
+      -- 🚀 vtsls setup (with opts only, no inline on_attach)
       local lspconfig = require("lspconfig")
-
-      if opts.servers.vtsls then
-        local vtsls_opts = vim.tbl_deep_extend("force", opts.servers.vtsls, {
-          root_dir = function()
-            return vim.loop.cwd()
-          end,
-          single_file_support = true,
-        })
-
-        lspconfig.vtsls.setup(vtsls_opts)
-
-        -- Safe auto-attach for JS/TS filetypes
-        local filetypes = vtsls_opts.filetypes
-          or {
-            "javascript",
-            "javascriptreact",
-            "typescript",
-            "typescriptreact",
-          }
-
-        vim.api.nvim_create_autocmd("BufReadPost", {
-          callback = function(args)
-            local buf = args.buf
-            local ft = vim.bo[buf].filetype
-            if vim.tbl_contains(filetypes, ft) then
-              local clients = vim.lsp.get_clients({ bufnr = buf, name = "vtsls" })
-              if #clients == 0 then
-                lspconfig.vtsls.manager.try_add_wrapper(buf)
-              end
-            end
-          end,
-        })
-      end
+      lspconfig.vtsls.setup(opts.servers.vtsls)
     end,
   },
 }
