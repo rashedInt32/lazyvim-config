@@ -70,15 +70,6 @@ return {
 
         lua_ls = {},
       },
-
-      setup = {
-        ["*"] = function(_, opts)
-          opts.on_attach = function(client, bufnr)
-            -- Only basic hover keymap
-            vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr, desc = "LSP Hover (type info)" })
-          end
-        end,
-      },
     },
 
     config = function(_, opts)
@@ -107,19 +98,6 @@ return {
         pattern = "*.prisma",
         callback = function()
           vim.bo.filetype = "prisma"
-        end,
-      })
-
-      vim.api.nvim_create_autocmd({ "InsertEnter" }, {
-        callback = function()
-          vim.diagnostic.disable(0)
-        end,
-      })
-
-      -- ✅ Re-enable diagnostics when exiting Insert mode
-      vim.api.nvim_create_autocmd({ "InsertLeave" }, {
-        callback = function()
-          vim.diagnostic.enable(0)
         end,
       })
 

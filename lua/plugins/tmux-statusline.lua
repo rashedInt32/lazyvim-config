@@ -2,7 +2,15 @@ return {
   {
     "christopher-francisco/tmux-status.nvim",
     lazy = true,
-    opts = {},
+    opts = {
+      separator = "",
+      colors = {
+        window_active = { fg = "#e69875", bg = "#011627" },
+        window_inactive = { fg = "#859289", bg = "#011627" },
+        window_inactive_recent = { fg = "#3f5865", bg = "#011627" },
+        session = { fg = "#a7c080", bg = "#011627" },
+      },
+    },
   },
   {
     "nvim-lualine/lualine.nvim",
@@ -30,15 +38,6 @@ return {
             icon_only = true,
             colored = true,
             icon = { align = "right" },
-          },
-          {
-            function()
-              return require("tmux-status").tmux_session()
-            end,
-            cond = function()
-              return require("tmux-status").show()
-            end,
-            padding = { left = 2, right = 2 },
           },
         },
         lualine_z = {
@@ -71,6 +70,18 @@ return {
             },
             update_in_insert = false,
             always_visible = true,
+          },
+          {
+            function()
+              local str = require("tmux-status").tmux_session()
+              return str:gsub("%%#.-#", "") -- remove %#hlgroup#
+              --return require("tmux-status").tmux_session()
+            end,
+            cond = function()
+              return require("tmux-status").show()
+            end,
+            padding = { left = 2, right = 2 },
+            color = { fg = "#a7c080", bg = "#011627" }, -- Here's the match
           },
         },
       },

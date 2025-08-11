@@ -61,9 +61,8 @@ require("config.options")
 --vim.cmd("colorscheme gruvbox")
 --vim.cmd("colorscheme everforest")
 --vim.cmd("colorscheme noctis_azureus")
---vim.cmd.colorscheme("night-owl")
-
-vim.cmd("colorscheme night-owl")
+require("night-owl").setup()
+vim.cmd.colorscheme("night-owl")
 
 require("noice").setup({
   lsp = {
