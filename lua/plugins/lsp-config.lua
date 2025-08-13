@@ -109,6 +109,7 @@ return {
       -- 🚀 vtsls setup (with opts only, no inline on_attach)
       local lspconfig = require("lspconfig")
       lspconfig.vtsls.setup(opts.servers.vtsls)
+      lspconfig.tailwindcss.setup(opts.servers.tailwindcss)
     end,
   },
 }
