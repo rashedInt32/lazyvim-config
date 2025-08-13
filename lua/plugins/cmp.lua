@@ -1,5 +1,7 @@
 return {
   "saghen/blink.cmp",
+  -- optional: provides snippets for the snippet source
+  dependencies = { "rafamadriz/friendly-snippets" },
   opts = {
     keymap = {
       ["<Tab>"] = {
@@ -14,8 +16,16 @@ return {
         "fallback",
       },
     },
+    appearance = {
+      nerd_font_variant = "mono",
+    },
+
+    completion = { documentation = { auto_show = false } },
+    sources = {
+      default = { "lsp", "path", "snippets", "buffer" },
+    },
   },
+  opts_extend = { "sources.default" },
 }
 
 -- Some  example line to mess with
-
