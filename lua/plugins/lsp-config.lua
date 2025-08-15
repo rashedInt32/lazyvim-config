@@ -69,6 +69,19 @@ return {
         prismals = {},
 
         lua_ls = {},
+        emmet_language_server = {
+          filetypes = {
+            "html",
+            "css",
+            "scss",
+            "javascript",
+            "typescript",
+            "javascriptreact",
+            "typescriptreact",
+            "svelte",
+            "vue",
+          },
+        },
       },
     },
 
@@ -110,6 +123,7 @@ return {
       local lspconfig = require("lspconfig")
       lspconfig.vtsls.setup(opts.servers.vtsls)
       lspconfig.tailwindcss.setup(opts.servers.tailwindcss)
+      lspconfig.emmet_language_server.setup(opts.servers.emmet_language_server)
     end,
   },
 }
