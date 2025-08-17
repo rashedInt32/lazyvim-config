@@ -11,6 +11,12 @@ vim.keymap.set("v", "B", "^")
 vim.keymap.set("n", "E", "$") -- end of line
 vim.keymap.set("n", "B", "^") -- beginning of line (non-whitespace)
 
+-- safe delete and change
+vim.keymap.set("n", "<leader>d", '"_d', { noremap = true })
+vim.keymap.set("n", "<leader>c", '"_c', { noremap = true })
+vim.keymap.set("x", "<leader>d", '"_d', { noremap = true })
+vim.keymap.set("x", "<leader>c", '"_c', { noremap = true })
+
 -- Unmap <leader>l to prevent Lazy popup from interfering with <leader>ld
 -- Remap Lazy to <leader>L instead
 vim.keymap.set("n", "<leader>L", "<cmd>Lazy<cr>", { desc = "Lazy" })
