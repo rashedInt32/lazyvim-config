@@ -5,13 +5,13 @@ return {
     event = "VeryLazy", -- Load with LazyVim
     opts = {
       open_mapping = [[<C-\>]], -- Toggle with Ctrl+\
-      direction = "tab", -- Use floating terminal
+      direction = "float", -- Use floating terminal
       size = 20, -- Height for float/horizontal
       start_in_insert = true, -- Enter insert mode on open
       close_on_exit = true, -- Close terminal when process exits
       hide_numbers = true, -- Hide line numbers
       persist_size = true, -- Persist terminal size
-      persist_mode = true, -- Persist insert/normal mode
+      persist_mode = false, -- Persist insert/normal mode
       float_opts = {
         border = "curved", -- Border style
         width = math.floor(vim.o.columns * 0.9), -- 90% of window width
