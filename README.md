@@ -54,5 +54,8 @@ For a full list of keymaps, see `lua/config/keymaps.lua`.
 ## 📸 Screenshots
 
 *(Space to add screenshots of the configuration in action)*
-![](screenshots/1.png)
-![](screenshots/2.png)
+![Normal](screenshots/1.png)
+![Insert](screenshots/2.png)
+![Visual](screenshots/3.png)
+![Prisma](screenshots/4.png)
+![Lua](screenshots/5.png)
