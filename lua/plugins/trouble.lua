@@ -23,17 +23,17 @@ return {
   config = function(_, opts)
     require("trouble").setup(opts)
 
-    -- Float diagnostic window after jumping from Trouble
-    vim.api.nvim_create_autocmd("BufWinEnter", {
-      pattern = "*",
-      callback = function()
-        -- Defer a bit so cursor lands on the diagnostic first
-        vim.defer_fn(function()
-          if vim.bo.filetype ~= "Trouble" then
-            vim.diagnostic.open_float(nil, { focus = false, scope = "cursor" })
-          end
-        end, 50)
-      end,
-    })
+    -- -- Float diagnostic window after jumping from Trouble
+    -- vim.api.nvim_create_autocmd("BufWinEnter", {
+    --   pattern = "*",
+    --   callback = function()
+    --     -- Defer a bit so cursor lands on the diagnostic first
+    --     vim.defer_fn(function()
+    --       if vim.bo.filetype ~= "Trouble" then
+    --         vim.diagnostic.open_float(nil, { focus = false, scope = "cursor" })
+    --       end
+    --     end, 50)
+    --   end,
+    -- })
   end,
 }
