@@ -19,7 +19,7 @@ return {
           enabled = false,
         },
         hover = {
-          enabled = false,
+          enabled = true,
           silent = true,
           opts = {
             border = "rounded",
@@ -28,30 +28,12 @@ return {
             focusable = false,
           },
         },
-        -- Added: Override LSP hover handler to strip diagnostics
-        override = {
-          ["vim.lsp.buf.hover"] = false,
-        },
+        -- REMOVED: override = { ["vim.lsp.buf.hover"] = false } to simplify, handled in lsp-config.lua
       },
     },
     config = function(_, opts)
       require("noice").setup(opts)
-      -- Added: Filter diagnostics from hover content
-      local original_hover = vim.lsp.buf.hover
-      vim.lsp.buf.hover = function(...)
-        local bufnr, winnr = original_hover(...)
-        if bufnr and winnr then
-          local contents = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-          local filtered = {}
-          for _, line in ipairs(contents) do
-            if not line:match("^%s*diagnostics:%s*$") and not line:match("^%s*- %w+:") then
-              table.insert(filtered, line)
-            end
-          end
-          vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, filtered)
-        end
-        return bufnr, winnr
-      end
+      -- REMOVED: Custom vim.lsp.buf.hover function to simplify, handled in lsp-config.lua
     end,
   },
 }

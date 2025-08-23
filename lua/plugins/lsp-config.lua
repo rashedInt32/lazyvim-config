@@ -8,20 +8,7 @@ return {
     opts = {
       inlay_hints = { enabled = false },
       document_highlight = { enabled = false },
-      diagnostics = {
-        virtual_text = false,
-        signs = true,
-        underline = true,
-        float = {
-          focusable = false,
-          style = "minimal",
-          border = "rounded",
-          source = "always",
-          header = "",
-          prefix = "Error",
-        },
-      },
-
+      -- REMOVED: diagnostics table to defer to options.lua
       servers = {
         vtsls = {
           filetypes = {
@@ -44,7 +31,6 @@ return {
             },
           },
         },
-
         tailwindcss = {
           filetypes = {
             "html",
@@ -65,9 +51,7 @@ return {
             ".git"
           ),
         },
-
         prismals = {},
-
         lua_ls = {},
         emmet_language_server = {
           filetypes = {
@@ -82,9 +66,7 @@ return {
         },
       },
     },
-
     config = function(_, opts)
-      -- 🔁 Global LSP tweaks on attach
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -92,36 +74,36 @@ return {
             client.server_capabilities.documentHighlightProvider = false
             client.server_capabilities.signatureHelpProvider = false
           end
+          -- CHANGED: Added keymap for manual floating diagnostics
+          vim.keymap.set("n", "<leader>cd", function()
+            vim.diagnostic.open_float(nil, {
+              scope = "cursor",
+              border = "rounded",
+              source = "always",
+              focus = false,
+            })
+          end, { buffer = args.buf, desc = "Open floating diagnostics" })
         end,
       })
-
-      -- 🧼 Disable signatureHelp popup globally
       vim.lsp.handlers["textDocument/signatureHelp"] = function() end
-
-      -- 🔧 Setup Mason + LSPs
+      -- CHANGED: Added to suppress hover diagnostics globally
+      vim.lsp.handlers["textDocument/hover"] = function()
+        return
+      end
       require("mason").setup()
       require("mason-lspconfig").setup({
         ensure_installed = { "lua_ls", "vtsls", "tailwindcss", "prismals" },
       })
-
-      -- 📝 Filetype override for *.prisma
       vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
         pattern = "*.prisma",
         callback = function()
           vim.bo.filetype = "prisma"
         end,
       })
-
-      -- 🔌 Prisma LSP (manual setup)
-      require("lspconfig").prismals.setup({
-        filetypes = { "prisma" },
-      })
-
-      -- 🚀 vtsls setup (with opts only, no inline on_attach)
-      local lspconfig = require("lspconfig")
-      lspconfig.vtsls.setup(opts.servers.vtsls)
-      lspconfig.tailwindcss.setup(opts.servers.tailwindcss)
-      lspconfig.emmet_language_server.setup(opts.servers.emmet_language_server)
+      require("lspconfig").prismals.setup({ filetypes = { "prisma" } })
+      require("lspconfig").vtsls.setup(opts.servers.vtsls)
+      require("lspconfig").tailwindcss.setup(opts.servers.tailwindcss)
+      require("lspconfig").emmet_language_server.setup(opts.servers.emmet_language_server)
     end,
   },
 }

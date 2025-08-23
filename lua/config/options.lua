@@ -55,10 +55,11 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.diagnostic.config({
-  update_in_insert = false, -- Optional: don't show while typing
+  update_in_insert = false,
   severity_sort = true,
-  float = {
-    border = "rounded",
-    source = "always",
-  },
+  float = false,
+  virtual_text = false,
+  signs = true,
+  underline = true,
+  jump = { float = false, wrap = true },
 })
