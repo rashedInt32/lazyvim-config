@@ -75,6 +75,7 @@ return {
               "**/.DS_Store",
               "**/.swp",
               "**/node_modules/**",
+              "*.woff",
               "*.svg",
               "*.ico",
               "*.jpg",
