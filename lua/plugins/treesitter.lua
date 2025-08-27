@@ -12,7 +12,7 @@ return {
       incremental_selection = { enable = false },
       textobjects = { enable = false },
       -- Ensure parsers are installed for your languages
-      ensure_installed = { "lua", "vim", "python", "prisma" }, -- Adjust based on your needs
+      ensure_installed = { "lua", "vim", "python", "prisma", "elixir", "heex", "eex" }, -- Adjust based on your needs
     })
   end,
 }

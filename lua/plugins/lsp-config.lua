@@ -53,6 +53,19 @@ return {
         },
         prismals = {},
         lua_ls = {},
+
+        elixirls = {
+          cmd = { vim.fn.stdpath("data") .. "/mason/packages/elixir-ls/language_server.sh" },
+          filetypes = { "elixir", "eelixir", "heex" },
+          root_dir = require("lspconfig.util").root_pattern("mix.exs", ".git"),
+          settings = {
+            elixirLS = {
+              dialyzerEnabled = false,
+              fetchDeps = false,
+            },
+          },
+        },
+
         emmet_language_server = {
           filetypes = {
             "html",
@@ -92,7 +105,7 @@ return {
       end
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "vtsls", "tailwindcss", "prismals" },
+        ensure_installed = { "lua_ls", "vtsls", "tailwindcss", "prismals", "elixirls" },
       })
       vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
         pattern = "*.prisma",
@@ -104,6 +117,7 @@ return {
       require("lspconfig").vtsls.setup(opts.servers.vtsls)
       require("lspconfig").tailwindcss.setup(opts.servers.tailwindcss)
       require("lspconfig").emmet_language_server.setup(opts.servers.emmet_language_server)
+      require("lspconfig").elixirls.setup(opts.servers.elixirls)
     end,
   },
 }

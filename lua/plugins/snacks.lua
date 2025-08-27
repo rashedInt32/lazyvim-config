@@ -53,6 +53,21 @@ return {
         ignored = true,
         respect_gitignore = false,
         sources = {
+          grep = {
+            cmd = "rg",
+            args = {
+              "--vimgrep",
+              "--no-heading",
+              "--smart-case",
+              "--hidden",
+              "-g",
+              "!generated",
+              "-g",
+              "!node_modules/**", -- Exclude node_modules
+              "-g",
+              "!.git/**", -- Optionally exclude .git folder
+            },
+          },
           files = {
             exclude = {
               "**/dist/**",
@@ -93,6 +108,7 @@ return {
             },
           },
         },
+
         formatters = {
           file = {
             filename_first = true,
