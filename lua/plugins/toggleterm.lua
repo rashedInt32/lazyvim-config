@@ -1,26 +1,25 @@
 return {
   {
     "akinsho/toggleterm.nvim",
-    version = "*", -- Use latest version
-    event = "VeryLazy", -- Load with LazyVim
+    event = "VeryLazy",
+    version = "*",
     opts = {
-      open_mapping = [[<C-\>]], -- Toggle with Ctrl+\
-      direction = "float", -- Use floating terminal
-      size = 20, -- Height for float/horizontal
-      start_in_insert = true, -- Enter insert mode on open
-      close_on_exit = true, -- Close terminal when process exits
-      hide_numbers = true, -- Hide line numbers
-      persist_size = true, -- Persist terminal size
-      persist_mode = false, -- Persist insert/normal mode
+      open_mapping = [[<C-\>]],
+      direction = "float",
+      size = 20,
+      start_in_insert = true,
+      close_on_exit = true,
+      hide_numbers = true,
+      persist_size = true,
+      persist_mode = false,
       float_opts = {
-        border = "curved", -- Border style
-        width = math.floor(vim.o.columns * 0.9), -- 90% of window width
-        height = 20, -- Fixed height
-        winblend = 0, -- Opaque background
-        -- Position at the bottom
-        row = vim.o.lines - 20 - 3, -- Adjust for bottom placement (accounts for border/statusline)
-        col = math.floor((vim.o.columns - math.floor(vim.o.columns * 0.9)) / 2), -- Center horizontally
-        anchor = "SW", -- Anchor to bottom-left (South-West)
+        border = "curved",
+        width = math.floor(vim.o.columns * 0.95), -- 90% of editor width
+        height = math.floor(vim.o.lines * 0.95), -- 90% of editor height
+        winblend = 0,
+        row = math.floor((vim.o.lines - math.floor(vim.o.lines * 0.95)) / 2), -- center vertically
+        col = math.floor((vim.o.columns - math.floor(vim.o.columns * 0.95)) / 2), -- center horizontally
+        anchor = "NW", -- anchor top-left since we center both row/col
       },
     },
   },
