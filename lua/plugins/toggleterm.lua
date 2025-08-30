@@ -19,7 +19,8 @@ return {
         winblend = 0,
         row = math.floor((vim.o.lines - math.floor(vim.o.lines * 0.95)) / 2), -- center vertically
         col = math.floor((vim.o.columns - math.floor(vim.o.columns * 0.95)) / 2), -- center horizontally
-        anchor = "NW", -- anchor top-left since we center both row/col
+        anchor = "NW",
+        zindex = 20,
       },
     },
   },

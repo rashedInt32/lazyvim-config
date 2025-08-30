@@ -12,4 +12,13 @@ return {
       })
     end,
   }),
+  vim.api.nvim_create_autocmd({ "WinLeave", "BufLeave" }, {
+    pattern = "*",
+    callback = function()
+      local term = require("toggleterm.terminal").get_current()
+      if term and term.direction == "float" then
+        term:close()
+      end
+    end,
+  }),
 }
