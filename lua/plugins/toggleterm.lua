@@ -14,13 +14,12 @@ return {
       persist_mode = false,
       float_opts = {
         border = "curved",
-        width = math.floor(vim.o.columns * 0.95), -- 90% of editor width
-        height = math.floor(vim.o.lines * 0.95), -- 90% of editor height
+        width = math.floor(vim.o.columns * 0.85), -- 90% of editor width
+        height = math.floor(vim.o.lines * 0.85), -- 90% of editor height
         winblend = 0,
-        row = math.floor((vim.o.lines - math.floor(vim.o.lines * 0.95)) / 2), -- center vertically
-        col = math.floor((vim.o.columns - math.floor(vim.o.columns * 0.95)) / 2), -- center horizontally
+        row = math.floor((vim.o.lines - math.floor(vim.o.lines * 0.85)) / 2), -- center vertically
+        col = math.floor((vim.o.columns - math.floor(vim.o.columns * 0.85)) / 2), -- center horizontally
         anchor = "NW",
-        zindex = 20,
       },
     },
   },
