@@ -77,6 +77,18 @@ return {
             "vue",
           },
         },
+        intelephense = {
+          filetypes = { "php" }, -- Ensure Blade isn't included
+          settings = {
+            intelephense = {
+              format = {
+                enable = false, -- Disable Intelephense formatting to let blade-formatter handle it
+                tabSize = 4,
+                insertSpaces = true,
+              },
+            },
+          },
+        },
       },
     },
     config = function(_, opts)

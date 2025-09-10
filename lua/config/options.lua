@@ -36,6 +36,12 @@ vim.opt.number = false
 vim.opt.relativenumber = false
 
 --vim.opt.colorcolumn = "80"
+--
+vim.filetype.add({
+  extension = {
+    ["blade.php"] = "blade",
+  },
+})
 
 vim.opt.guicursor = {
   "n-v-c:block", -- Normal mode: block

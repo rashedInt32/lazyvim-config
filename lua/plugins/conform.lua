@@ -6,6 +6,7 @@ return {
       typescript = { "prettierd", "prettier", "biome" },
       javascriptreact = { "prettierd", "prettier", "biome" },
       typescriptreact = { "prettierd", "prettier", "biome" },
+      blade = { "blade-formatter" }, -- Add this line
       prisma = { "prisma" },
       -- fallback
       ["_"] = { "trim_whitespace" },
@@ -15,6 +16,11 @@ return {
         command = "npx",
         args = { "prisma", "format", "--schema", "$FILENAME" },
         stdin = false, -- Required for npx prisma format
+      },
+      ["blade-formatter"] = {
+        command = "blade-formatter",
+        args = { "--stdin", "--indent-size", "4", "--wrap-attributes" },
+        stdin = true,
       },
     },
   },
