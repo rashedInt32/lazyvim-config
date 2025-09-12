@@ -17,9 +17,12 @@ return {
       lsp = {
         signature = {
           enabled = false,
+          auto_open = {
+            enabled = false, -- Add this to disable auto-triggering
+          },
         },
         hover = {
-          enabled = true,
+          enabled = false,
           silent = true,
           opts = {
             border = "rounded",

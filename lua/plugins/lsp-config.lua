@@ -4,6 +4,7 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
+      -- Assuming lsp_signature is added separately as per previous instructions
     },
     opts = {
       inlay_hints = { enabled = false },
@@ -51,9 +52,10 @@ return {
             ".git"
           ),
         },
-        prismals = {},
+        prismals = {
+          filetypes = { "prisma" }, -- Moved here for consistency
+        },
         lua_ls = {},
-
         elixirls = {
           cmd = { vim.fn.stdpath("data") .. "/mason/packages/elixir-ls/language_server.sh" },
           filetypes = { "elixir", "eelixir", "heex" },
@@ -65,7 +67,6 @@ return {
             },
           },
         },
-
         emmet_language_server = {
           filetypes = {
             "html",
@@ -92,13 +93,36 @@ return {
       },
     },
     config = function(_, opts)
+      -- allowing lsp_signature.nvim to be the sole handler.
+      vim.lsp.handlers["textDocument/signatureHelp"] = function() end
+      -- CHANGED: Added to suppress hover diagnostics globally
+      vim.lsp.handlers["textDocument/hover"] = function() end
+
+      -- Shared on_attach for all servers: Integrate lsp_signature for signature help control
+      local lsp_signature = require("lsp_signature")
+      local on_attach = function(client, bufnr)
+        -- lsp_signature integration (positions float above cursor, no duplicates)
+        lsp_signature.on_attach({
+          floating_window_off_y = -1, -- 1 row above cursor (tweak if needed)
+        }, bufnr)
+      end
+
+      -- Helper to merge on_attach with server opts
+      local function setup_server(server_name, server_opts)
+        local full_opts = vim.tbl_deep_extend("force", { on_attach = on_attach }, server_opts or {})
+        require("lspconfig")[server_name].setup(full_opts)
+      end
+
+      -- Global LspAttach autocmd (your existing logic + on_attach)
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
           if client then
             client.server_capabilities.documentHighlightProvider = false
-            --client.server_capabilities.signatureHelpProvider = false
+            -- Optional: client.server_capabilities.signatureHelpProvider = false  -- Uncomment to fully disable for a client
           end
+          on_attach(client, args.buf) -- Call plugin integration here
+
           -- CHANGED: Added keymap for manual floating diagnostics
           vim.keymap.set("n", "<leader>cd", function()
             vim.diagnostic.open_float(nil, {
@@ -110,26 +134,46 @@ return {
           end, { buffer = args.buf, desc = "Open floating diagnostics" })
         end,
       })
-      vim.lsp.handlers["textDocument/signatureHelp"] = function() end
-      -- CHANGED: Added to suppress hover diagnostics globally
-      vim.lsp.handlers["textDocument/hover"] = function()
-        return
-      end
+
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "vtsls", "tailwindcss", "prismals", "elixirls" },
+        ensure_installed = { "lua_ls", "vtsls", "tailwindcss", "prismals", "elixirls", "emmet_language_server" },
       })
+
+      -- Prisma filetype autocmd (your existing)
       vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
         pattern = "*.prisma",
         callback = function()
           vim.bo.filetype = "prisma"
         end,
       })
-      require("lspconfig").prismals.setup({ filetypes = { "prisma" } })
-      require("lspconfig").vtsls.setup(opts.servers.vtsls)
-      require("lspconfig").tailwindcss.setup(opts.servers.tailwindcss)
-      require("lspconfig").emmet_language_server.setup(opts.servers.emmet_language_server)
-      require("lspconfig").elixirls.setup(opts.servers.elixirls)
+
+      -- Setup all servers consistently with on_attach (from mason-lspconfig + manual)
+      require("mason-lspconfig").setup_handlers({
+        -- Default handler for mason-installed servers (e.g., lua_ls)
+        function(server_name)
+          setup_server(server_name, opts.servers[server_name])
+        end,
+        -- Override for servers with custom setup (e.g., non-mason or extra opts)
+        ["prismals"] = function()
+          setup_server("prismals", opts.servers.prismals)
+        end,
+        ["vtsls"] = function()
+          setup_server("vtsls", opts.servers.vtsls)
+        end,
+        ["tailwindcss"] = function()
+          setup_server("tailwindcss", opts.servers.tailwindcss)
+        end,
+        ["emmet_language_server"] = function()
+          setup_server("emmet_language_server", opts.servers.emmet_language_server)
+        end,
+        ["elixirls"] = function()
+          setup_server("elixirls", opts.servers.elixirls)
+        end,
+        ["intelephense"] = function()
+          setup_server("intelephense", opts.servers.intelephense)
+        end,
+      })
     end,
   },
 }
