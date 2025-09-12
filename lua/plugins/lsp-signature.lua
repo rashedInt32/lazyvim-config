@@ -1,1 +1,29 @@
-return {}
+return {
+  -- "ray-x/lsp_signature.nvim",
+  -- event = "BufReadPre",
+  -- opts = {
+  --   bind = true,
+  --   debug = false,
+  --   floating_window = true,
+  --
+  --   -- Let plugin auto decide placement, but push away from cursor
+  --   floating_window_above_cur_line = nil, -- auto choose top/bottom
+  --   floating_window_off_y = 1, -- ensures below cursor if possible
+  --   floating_window_off_x = 0,
+  --
+  --   -- Make sure float stays *behind* cursor text
+  --   zindex = 50, -- lower than cursor (default 200+ blocks cursor)
+  --
+  --   floating_window_close_timeout = 4000,
+  --   handler_opts = {
+  --     border = "rounded",
+  --   },
+  --
+  --   extra_keymaps = function()
+  --     return {
+  --       select_signature_key = "<C-s>",
+  --       close_signature_key = "<C-e>",
+  --     }
+  --   end,
+  -- },
+}

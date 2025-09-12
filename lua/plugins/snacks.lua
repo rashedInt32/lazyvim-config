@@ -17,7 +17,7 @@ return {
         enabled = false, -- CHANGED: Disabled to prevent hover diagnostics
       },
       signature = {
-        enabled = true,
+        enabled = false,
       },
     },
     opts = {

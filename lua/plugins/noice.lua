@@ -25,14 +25,13 @@ return {
         },
         lsp = {
           signature = {
-            enabled = true,
+            enabled = false,
             auto_open = {
               enabled = true,
               trigger = true,
               throttle = 50,
             },
             opts = {
-              border = "rounded",
               max_width = math.floor(columns * 0.8),
               max_height = math.floor(lines * 0.6),
               wrap = true,
@@ -45,7 +44,7 @@ return {
             },
           },
           hover = {
-            enabled = true,
+            enabled = false,
             silent = false,
             opts = {
               border = "rounded",
@@ -62,7 +61,7 @@ return {
           override = {
             ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
             ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = true,
+            ["cmp.entry.get_documentation"] = false,
           },
         },
         views = {

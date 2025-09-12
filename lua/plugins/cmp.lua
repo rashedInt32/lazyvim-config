@@ -19,8 +19,31 @@ return {
     appearance = {
       nerd_font_variant = "mono",
     },
-
-    completion = { documentation = { auto_show = false } },
+    signature = {
+      enabled = true,
+      window = {
+        border = "rounded", -- rounded corners like completion menu
+        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
+        zindex = 50, -- same layer as completion
+        max_height = 8, -- avoid taking too much space
+        max_width = 80,
+        scrolloff = 1,
+      },
+    },
+    completion = {
+      documentation = {
+        auto_show = true,
+        window = {
+          border = "rounded",
+          winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
+          zindex = 50,
+          max_height = 15,
+          max_width = 100,
+          scrolloff = 1,
+        },
+      }, -- show docs with panda popup
+      --signature_help = { enabled = true }, -- Blink handles signature help },
+    },
     sources = {
       default = { "lsp", "path", "snippets", "buffer" },
     },
