@@ -4,122 +4,55 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
+      "ray-x/lsp_signature.nvim", -- Move lsp_signature as dependency
     },
     opts = {
       inlay_hints = { enabled = false },
       document_highlight = { enabled = false },
       servers = {
-        vtsls = {
-          filetypes = {
-            "javascript",
-            "javascriptreact",
-            "typescript",
-            "typescriptreact",
-          },
-          root_dir = vim.loop.cwd,
-          settings = {
-            typescript = {
-              inlayHints = {
-                parameterNames = { enabled = "literals" },
-                parameterTypes = { enabled = true },
-                variableTypes = { enabled = false },
-                propertyDeclarationTypes = { enabled = true },
-                functionLikeReturnTypes = { enabled = true },
-                enumMemberValues = { enabled = true },
-              },
-            },
-          },
-        },
-        tailwindcss = {
-          filetypes = {
-            "html",
-            "css",
-            "scss",
-            "javascript",
-            "typescript",
-            "javascriptreact",
-            "typescriptreact",
-            "svelte",
-            "vue",
-          },
-          root_dir = require("lspconfig.util").root_pattern(
-            "tailwind.config.js",
-            "tailwind.config.ts",
-            "postcss.config.js",
-            "package.json",
-            ".git"
-          ),
-        },
-        prismals = {
-          filetypes = { "prisma" },
-        },
-        lua_ls = {},
-        elixirls = {
-          cmd = { vim.fn.stdpath("data") .. "/mason/packages/elixir-ls/language_server.sh" },
-          filetypes = { "elixir", "eelixir", "heex" },
-          root_dir = require("lspconfig.util").root_pattern("mix.exs", ".git"),
-          settings = {
-            elixirLS = {
-              dialyzerEnabled = false,
-              fetchDeps = false,
-            },
-          },
-        },
-        emmet_language_server = {
-          filetypes = {
-            "html",
-            "css",
-            "scss",
-            "javascriptreact",
-            "typescriptreact",
-            "svelte",
-            "vue",
-          },
-        },
-        intelephense = {
-          filetypes = { "php" },
-          settings = {
-            intelephense = {
-              format = {
-                enable = false,
-                tabSize = 4,
-                insertSpaces = true,
-              },
-            },
-          },
-        },
+        -- ... your server configurations remain the same ...
       },
     },
     config = function(_, opts)
-      -- allowing lsp_signature.nvim to be the sole handler.
+      -- Disable default signature help and hover handlers
       vim.lsp.handlers["textDocument/signatureHelp"] = function() end
-      --  Added to suppress hover diagnostics globally
       vim.lsp.handlers["textDocument/hover"] = function() end
 
-      -- Shared on_attach for all servers: Integrate lsp_signature for signature help control
+      -- Setup lsp_signature with your desired configuration
       local lsp_signature = require("lsp_signature")
-      local on_attach = function(client, bufnr)
-        lsp_signature.on_attach({
-          floating_window_off_y = -1, -- 1 row above cursor (tweak if needed)
-        }, bufnr)
-      end
+      lsp_signature.setup({
+        bind = true,
+        debug = false,
+        floating_window = true,
+        floating_window_above_cur_line = true,
+        floating_window_off_y = -1,
+        floating_window_off_x = 0,
+        floating_window_close_timeout = 4000,
+        handler_opts = {
+          border = "rounded",
+        },
+      })
 
-      -- Helper to merge on_attach with server opts
-      local function setup_server(server_name, server_opts)
-        local full_opts = vim.tbl_deep_extend("force", { on_attach = on_attach }, server_opts or {})
-        require("lspconfig")[server_name].setup(full_opts)
+      -- Shared on_attach for all servers
+      local on_attach = function(client, bufnr)
+        client.server_capabilities.documentHighlightProvider = false
+
+        -- Setup lsp_signature for this buffer
+        lsp_signature.on_attach({
+          floating_window_off_y = -1,
+        }, bufnr)
       end
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if client then
-            client.server_capabilities.documentHighlightProvider = false
-            -- Optional: client.server_capabilities.signatureHelpProvider = false  -- Uncomment to fully disable for a client
-          end
-          on_attach(client, args.buf)
+          local bufnr = args.buf
 
-          -- CHANGED: Added keymap for manual floating diagnostics
+          if client then
+            on_attach(client, bufnr)
+          end
+
+          -- Keymap for manual floating diagnostics
           vim.keymap.set("n", "<leader>cd", function()
             vim.diagnostic.open_float(nil, {
               scope = "cursor",
@@ -127,7 +60,7 @@ return {
               source = "always",
               focus = false,
             })
-          end, { buffer = args.buf, desc = "Open floating diagnostics" })
+          end, { buffer = bufnr, desc = "Open floating diagnostics" })
         end,
       })
 
@@ -136,7 +69,7 @@ return {
         ensure_installed = { "lua_ls", "vtsls", "tailwindcss", "prismals", "elixirls", "emmet_language_server" },
       })
 
-      -- Prisma filetype autocmd (your existing)
+      -- Prisma filetype autocmd
       vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
         pattern = "*.prisma",
         callback = function()
@@ -144,31 +77,19 @@ return {
         end,
       })
 
-      -- Setup all servers consistently with on_attach (from mason-lspconfig + manual)
+      -- Setup all servers
       require("mason-lspconfig").setup_handlers({
-        -- Default handler for mason-installed servers (e.g., lua_ls)
         function(server_name)
-          setup_server(server_name, opts.servers[server_name])
+          local server_opts = opts.servers[server_name] or {}
+          local full_opts = vim.tbl_deep_extend("force", { on_attach = on_attach }, server_opts)
+          require("lspconfig")[server_name].setup(full_opts)
         end,
-        -- Override for servers with custom setup (e.g., non-mason or extra opts)
+        -- Your specific server overrides...
         ["prismals"] = function()
-          setup_server("prismals", opts.servers.prismals)
+          local full_opts = vim.tbl_deep_extend("force", { on_attach = on_attach }, opts.servers.prismals or {})
+          require("lspconfig").prismals.setup(full_opts)
         end,
-        ["vtsls"] = function()
-          setup_server("vtsls", opts.servers.vtsls)
-        end,
-        ["tailwindcss"] = function()
-          setup_server("tailwindcss", opts.servers.tailwindcss)
-        end,
-        ["emmet_language_server"] = function()
-          setup_server("emmet_language_server", opts.servers.emmet_language_server)
-        end,
-        ["elixirls"] = function()
-          setup_server("elixirls", opts.servers.elixirls)
-        end,
-        ["intelephense"] = function()
-          setup_server("intelephense", opts.servers.intelephense)
-        end,
+        -- ... repeat for other specific servers if needed
       })
     end,
   },

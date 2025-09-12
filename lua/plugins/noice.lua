@@ -13,25 +13,34 @@ return {
       },
       presets = {
         command_palette = false,
+        lsp_doc_border = true, -- Move this here from the second setup call
+        bottom_search = true,
+        long_message_to_split = true,
+        inc_rename = false,
       },
       lsp = {
+        -- COMPLETELY DISABLE Noice's signature handling
         signature = {
           enabled = false,
           auto_open = {
-            enabled = false, -- Add this to disable auto-triggering
+            enabled = false,
           },
         },
+        -- Disable hover as well since you're handling it elsewhere
         hover = {
           enabled = false,
           silent = true,
-          opts = {
-            border = "rounded",
-            max_width = 80,
-            max_height = 20,
-            focusable = false,
-          },
         },
-        -- REMOVED: override = { ["vim.lsp.buf.hover"] = false } to simplify, handled in lsp-config.lua
+        -- This is crucial: disable message override for signature help
+        message = {
+          enabled = false, -- Disable all LSP messages from Noice
+        },
+        override = {
+          -- Explicitly disable signature help override
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = false,
+          ["vim.lsp.util.stylize_markdown"] = false,
+          ["cmp.entry.get_documentation"] = false,
+        },
       },
       routes = {
         {
@@ -41,11 +50,27 @@ return {
           },
           opts = { skip = true },
         },
+        -- Add route to filter out any remaining signature messages
+        {
+          filter = {
+            event = "lsp",
+            kind = "signature_help",
+          },
+          opts = { skip = true },
+        },
       },
     },
     config = function(_, opts)
       require("noice").setup(opts)
-      -- REMOVED: Custom vim.lsp.buf.hover function to simplify, handled in lsp-config.lua
+
+      -- Additional safety: manually disable Noice's LSP handlers
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "NoiceEnabled",
+        callback = function()
+          -- Ensure Noice doesn't interfere with signature help
+          package.loaded["noice.lsp.signature"] = nil
+        end,
+      })
     end,
   },
 }
