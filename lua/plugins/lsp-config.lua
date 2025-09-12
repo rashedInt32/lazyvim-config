@@ -97,7 +97,7 @@ return {
           local client = vim.lsp.get_client_by_id(args.data.client_id)
           if client then
             client.server_capabilities.documentHighlightProvider = false
-            client.server_capabilities.signatureHelpProvider = false
+            --client.server_capabilities.signatureHelpProvider = false
           end
           -- CHANGED: Added keymap for manual floating diagnostics
           vim.keymap.set("n", "<leader>cd", function()
