@@ -4,12 +4,10 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      -- Assuming lsp_signature is added separately as per previous instructions
     },
     opts = {
       inlay_hints = { enabled = false },
       document_highlight = { enabled = false },
-      -- REMOVED: diagnostics table to defer to options.lua
       servers = {
         vtsls = {
           filetypes = {
@@ -53,7 +51,7 @@ return {
           ),
         },
         prismals = {
-          filetypes = { "prisma" }, -- Moved here for consistency
+          filetypes = { "prisma" },
         },
         lua_ls = {},
         elixirls = {
@@ -79,11 +77,11 @@ return {
           },
         },
         intelephense = {
-          filetypes = { "php" }, -- Ensure Blade isn't included
+          filetypes = { "php" },
           settings = {
             intelephense = {
               format = {
-                enable = false, -- Disable Intelephense formatting to let blade-formatter handle it
+                enable = false,
                 tabSize = 4,
                 insertSpaces = true,
               },
@@ -95,13 +93,12 @@ return {
     config = function(_, opts)
       -- allowing lsp_signature.nvim to be the sole handler.
       vim.lsp.handlers["textDocument/signatureHelp"] = function() end
-      -- CHANGED: Added to suppress hover diagnostics globally
+      --  Added to suppress hover diagnostics globally
       vim.lsp.handlers["textDocument/hover"] = function() end
 
       -- Shared on_attach for all servers: Integrate lsp_signature for signature help control
       local lsp_signature = require("lsp_signature")
       local on_attach = function(client, bufnr)
-        -- lsp_signature integration (positions float above cursor, no duplicates)
         lsp_signature.on_attach({
           floating_window_off_y = -1, -- 1 row above cursor (tweak if needed)
         }, bufnr)
@@ -113,7 +110,6 @@ return {
         require("lspconfig")[server_name].setup(full_opts)
       end
 
-      -- Global LspAttach autocmd (your existing logic + on_attach)
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -121,7 +117,7 @@ return {
             client.server_capabilities.documentHighlightProvider = false
             -- Optional: client.server_capabilities.signatureHelpProvider = false  -- Uncomment to fully disable for a client
           end
-          on_attach(client, args.buf) -- Call plugin integration here
+          on_attach(client, args.buf)
 
           -- CHANGED: Added keymap for manual floating diagnostics
           vim.keymap.set("n", "<leader>cd", function()
