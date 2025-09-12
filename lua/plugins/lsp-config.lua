@@ -4,43 +4,108 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "ray-x/lsp_signature.nvim", -- Move lsp_signature as dependency
+      -- REMOVED: "ray-x/lsp_signature.nvim"
     },
     opts = {
       inlay_hints = { enabled = false },
       document_highlight = { enabled = false },
       servers = {
-        -- ... your server configurations remain the same ...
+        vtsls = {
+          filetypes = {
+            "javascript",
+            "javascriptreact",
+            "typescript",
+            "typescriptreact",
+          },
+          root_dir = vim.loop.cwd,
+          settings = {
+            typescript = {
+              inlayHints = {
+                parameterNames = { enabled = "literals" },
+                parameterTypes = { enabled = true },
+                variableTypes = { enabled = false },
+                propertyDeclarationTypes = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                enumMemberValues = { enabled = true },
+              },
+            },
+          },
+        },
+        tailwindcss = {
+          filetypes = {
+            "html",
+            "css",
+            "scss",
+            "javascript",
+            "typescript",
+            "javascriptreact",
+            "typescriptreact",
+            "svelte",
+            "vue",
+          },
+          root_dir = require("lspconfig.util").root_pattern(
+            "tailwind.config.js",
+            "tailwind.config.ts",
+            "postcss.config.js",
+            "package.json",
+            ".git"
+          ),
+        },
+        prismals = {
+          filetypes = { "prisma" },
+        },
+        lua_ls = {},
+        elixirls = {
+          cmd = { vim.fn.stdpath("data") .. "/mason/packages/elixir-ls/language_server.sh" },
+          filetypes = { "elixir", "eelixir", "heex" },
+          root_dir = require("lspconfig.util").root_pattern("mix.exs", ".git"),
+          settings = {
+            elixirLS = {
+              dialyzerEnabled = false,
+              fetchDeps = false,
+            },
+          },
+        },
+        emmet_language_server = {
+          filetypes = {
+            "html",
+            "css",
+            "scss",
+            "javascriptreact",
+            "typescriptreact",
+            "svelte",
+            "vue",
+          },
+        },
+        intelephense = {
+          filetypes = { "php" },
+          settings = {
+            intelephense = {
+              format = {
+                enable = false,
+                tabSize = 4,
+                insertSpaces = true,
+              },
+            },
+          },
+        },
       },
     },
     config = function(_, opts)
-      -- Disable default signature help and hover handlers
-      vim.lsp.handlers["textDocument/signatureHelp"] = function() end
-      vim.lsp.handlers["textDocument/hover"] = function() end
+      -- REMOVED: Disabling default handlers - let Noice handle them
+      -- vim.lsp.handlers["textDocument/signatureHelp"] = function() end
+      -- vim.lsp.handlers["textDocument/hover"] = function() end
 
-      -- Setup lsp_signature with your desired configuration
-      local lsp_signature = require("lsp_signature")
-      lsp_signature.setup({
-        bind = true,
-        debug = false,
-        floating_window = true,
-        floating_window_above_cur_line = true,
-        floating_window_off_y = -1,
-        floating_window_off_x = 0,
-        floating_window_close_timeout = 4000,
-        handler_opts = {
-          border = "rounded",
-        },
-      })
+      -- REMOVED: lsp_signature setup
+      -- local lsp_signature = require("lsp_signature")
+      -- lsp_signature.setup({...})
 
       -- Shared on_attach for all servers
       local on_attach = function(client, bufnr)
         client.server_capabilities.documentHighlightProvider = false
 
-        -- Setup lsp_signature for this buffer
-        lsp_signature.on_attach({
-          floating_window_off_y = -1,
-        }, bufnr)
+        -- REMOVED: lsp_signature on_attach
+        -- lsp_signature.on_attach({...}, bufnr)
       end
 
       vim.api.nvim_create_autocmd("LspAttach", {
@@ -84,12 +149,31 @@ return {
           local full_opts = vim.tbl_deep_extend("force", { on_attach = on_attach }, server_opts)
           require("lspconfig")[server_name].setup(full_opts)
         end,
-        -- Your specific server overrides...
         ["prismals"] = function()
           local full_opts = vim.tbl_deep_extend("force", { on_attach = on_attach }, opts.servers.prismals or {})
           require("lspconfig").prismals.setup(full_opts)
         end,
-        -- ... repeat for other specific servers if needed
+        ["vtsls"] = function()
+          local full_opts = vim.tbl_deep_extend("force", { on_attach = on_attach }, opts.servers.vtsls or {})
+          require("lspconfig").vtsls.setup(full_opts)
+        end,
+        ["tailwindcss"] = function()
+          local full_opts = vim.tbl_deep_extend("force", { on_attach = on_attach }, opts.servers.tailwindcss or {})
+          require("lspconfig").tailwindcss.setup(full_opts)
+        end,
+        ["emmet_language_server"] = function()
+          local full_opts =
+            vim.tbl_deep_extend("force", { on_attach = on_attach }, opts.servers.emmet_language_server or {})
+          require("lspconfig").emmet_language_server.setup(full_opts)
+        end,
+        ["elixirls"] = function()
+          local full_opts = vim.tbl_deep_extend("force", { on_attach = on_attach }, opts.servers.elixirls or {})
+          require("lspconfig").elixirls.setup(full_opts)
+        end,
+        ["intelephense"] = function()
+          local full_opts = vim.tbl_deep_extend("force", { on_attach = on_attach }, opts.servers.intelephense or {})
+          require("lspconfig").intelephense.setup(full_opts)
+        end,
       })
     end,
   },
