@@ -42,7 +42,17 @@ return {
           scrolloff = 1,
         },
       }, -- show docs with panda popup
-      --signature_help = { enabled = true }, -- Blink handles signature help },
+      signature_help = {
+        enabled = true,
+        window = {
+          border = "rounded",
+          winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
+          zindex = 50,
+          max_height = 15,
+          max_width = 100,
+          scrolloff = 1,
+        },
+      }, -- Blink handles signature help },
     },
     sources = {
       default = { "lsp", "path", "snippets", "buffer" },
