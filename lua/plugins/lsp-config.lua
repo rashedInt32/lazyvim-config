@@ -4,6 +4,7 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
+      { "folke/lazydev.nvim", ft = "lua" },
       -- REMOVED: "ray-x/lsp_signature.nvim"
     },
     opts = {
