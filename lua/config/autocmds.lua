@@ -32,3 +32,10 @@ vim.api.nvim_create_autocmd({ "WinLeave", "BufLeave" }, {
     end
   end,
 })
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "BlinkLoaded",
+  callback = function()
+    vim.api.nvim_del_keymap("i", "<C-F>")
+  end,
+})

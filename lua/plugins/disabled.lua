@@ -1,4 +1,4 @@
 -- plugins/disabled.lua
 return {
-  { "echasnovski/mini.starter", enabled = false },
+  { "nvim-mini/mini.starter", enabled = false },
 }
