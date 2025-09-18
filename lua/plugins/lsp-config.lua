@@ -6,7 +6,7 @@ return {
       "mason-org/mason-lspconfig.nvim", -- Corrected mason-lspconfig dependency
     },
     event = { "BufReadPre", "BufNewFile" },
-    lazy = false,
+    lazy = true,
     opts = {
       inlay_hints = { enabled = false },
       document_highlight = { enabled = false },
@@ -117,7 +117,7 @@ return {
           "emmet_ls", -- Corrected server name
           "intelephense",
         },
-        automatic_installation = true,
+        automatic_enable = false,
       })
 
       -- Shared on_attach for all servers
