@@ -1,20 +1,14 @@
 return {
   "saghen/blink.cmp",
-  -- optional: provides snippets for the snippet source
-  dependencies = { "rafamadriz/friendly-snippets" },
+  dependencies = {
+    "rafamadriz/friendly-snippets",
+    "zbirenbaum/copilot.lua", -- Copilot
+  },
   opts = {
     keymap = {
-      ["<Tab>"] = {
-        function(cmp)
-          if cmp.snippet_active() then
-            return cmp.accept()
-          else
-            return cmp.select_and_accept()
-          end
-        end,
-        "snippet_forward",
-        "fallback",
-      },
+      -- Blink only accepts predefined commands here
+      ["<Tab>"] = { "snippet_forward", "select_and_accept", "fallback" },
+      ["<S-Tab>"] = { "snippet_backward", "fallback" },
     },
     appearance = {
       nerd_font_variant = "mono",
@@ -22,10 +16,10 @@ return {
     signature = {
       enabled = true,
       window = {
-        border = "rounded", -- rounded corners like completion menu
+        border = "rounded",
         winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
-        zindex = 50, -- same layer as completion
-        max_height = 8, -- avoid taking too much space
+        zindex = 50,
+        max_height = 8,
         max_width = 80,
         scrolloff = 1,
       },
@@ -41,7 +35,7 @@ return {
           max_width = 100,
           scrolloff = 1,
         },
-      }, -- show docs with panda popup
+      },
       signature_help = {
         enabled = true,
         window = {
@@ -52,13 +46,33 @@ return {
           max_width = 100,
           scrolloff = 1,
         },
-      }, -- Blink handles signature help },
+      },
     },
     sources = {
       default = { "lsp", "path", "snippets", "buffer" },
     },
   },
   opts_extend = { "sources.default" },
-}
+  config = function(_, opts)
+    -- Setup Blink
+    require("blink.cmp").setup(opts)
 
--- Some  example line to mess with
+    -- Setup Copilot
+    require("copilot").setup({
+      suggestion = { enabled = true, auto_trigger = true },
+      panel = { enabled = false },
+    })
+
+    -- Copilot + Blink <C-F>
+    local copilot = require("copilot.suggestion")
+    vim.keymap.set("i", "<C-F>", function()
+      if copilot.is_visible() then
+        copilot.accept()
+      else
+        -- fallback to Blink's <C-F> if mapped
+        local blink = require("blink.cmp.keymap")
+        blink.accept() -- or blink.fallback(), depending on your preference
+      end
+    end, { silent = true })
+  end,
+}
