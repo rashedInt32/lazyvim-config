@@ -6,7 +6,6 @@ return {
   },
   opts = {
     keymap = {
-      -- Blink only accepts predefined commands here
       ["<Tab>"] = { "snippet_forward", "select_and_accept", "fallback" },
       ["<S-Tab>"] = { "snippet_backward", "fallback" },
     },
@@ -18,10 +17,8 @@ return {
       window = {
         border = "rounded",
         winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
-        zindex = 50,
         max_height = 8,
         max_width = 80,
-        scrolloff = 1,
       },
     },
     completion = {
@@ -30,21 +27,8 @@ return {
         window = {
           border = "rounded",
           winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
-          zindex = 50,
           max_height = 15,
           max_width = 100,
-          scrolloff = 1,
-        },
-      },
-      signature_help = {
-        enabled = true,
-        window = {
-          border = "rounded",
-          winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
-          zindex = 50,
-          max_height = 15,
-          max_width = 100,
-          scrolloff = 1,
         },
       },
     },
@@ -54,6 +38,9 @@ return {
   },
   opts_extend = { "sources.default" },
   config = function(_, opts)
+    if opts.sources and opts.sources.compat then
+      opts.sources.compat = nil
+    end
     -- Setup Blink
     require("blink.cmp").setup(opts)
 
@@ -69,10 +56,9 @@ return {
       if copilot.is_visible() then
         copilot.accept()
       else
-        -- fallback to Blink's <C-F> if mapped
         local blink = require("blink.cmp.keymap")
-        blink.accept() -- or blink.fallback(), depending on your preference
+        blink.accept() -- fallback to Blink accept
       end
-    end, { silent = true })
+    end, { silent = true, desc = "Copilot or Blink accept" })
   end,
 }
