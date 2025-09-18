@@ -6,7 +6,7 @@ return {
       "mason-org/mason-lspconfig.nvim", -- Corrected mason-lspconfig dependency
     },
     event = { "BufReadPre", "BufNewFile" },
-    lazy = true,
+    lazy = false,
     opts = {
       inlay_hints = { enabled = false },
       document_highlight = { enabled = false },
