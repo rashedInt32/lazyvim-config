@@ -8,6 +8,15 @@ return {
     keymap = {
       ["<Tab>"] = { "snippet_forward", "select_and_accept", "fallback" },
       ["<S-Tab>"] = { "snippet_backward", "fallback" },
+      ["<CR>"] = { "fallback" },
+    },
+    default = { "path", "lsp", "copilot", "buffer", "snippets", "emmet" },
+    providers = {
+      path = { name = "path", score_offset = 110 },
+      emmet = { name = "emmet", score_offset = 60 },
+      lsp = { name = "lsp", score_offset = 90 },
+      snippets = { name = "snippets", score_offset = 50 },
+      buffer = { name = "buffer", score_offset = 80 },
     },
     appearance = {
       nerd_font_variant = "mono",
@@ -33,7 +42,7 @@ return {
       },
     },
     sources = {
-      default = { "lsp", "path", "snippets", "buffer" },
+      default = { "path", "lsp", "buffer", "snippets" },
     },
   },
   opts_extend = { "sources.default" },
