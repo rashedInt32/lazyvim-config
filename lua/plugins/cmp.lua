@@ -10,14 +10,6 @@ return {
       ["<S-Tab>"] = { "snippet_backward", "fallback" },
       ["<CR>"] = { "fallback" },
     },
-    default = { "path", "lsp", "copilot", "buffer", "snippets", "emmet" },
-    providers = {
-      path = { name = "path", score_offset = 110 },
-      emmet = { name = "emmet", score_offset = 60 },
-      lsp = { name = "lsp", score_offset = 90 },
-      snippets = { name = "snippets", score_offset = 50 },
-      buffer = { name = "buffer", score_offset = 80 },
-    },
     appearance = {
       nerd_font_variant = "mono",
     },
@@ -43,8 +35,15 @@ return {
     },
     sources = {
       default = { "path", "lsp", "buffer", "snippets" },
+      providers = {
+        path = { score_offset = 110 },
+        lsp = { score_offset = 90 },
+        snippets = { score_offset = 50 },
+        buffer = { score_offset = 80 },
+      },
     },
   },
+
   opts_extend = { "sources.default" },
   config = function(_, opts)
     if opts.sources and opts.sources.compat then
