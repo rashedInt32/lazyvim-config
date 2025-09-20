@@ -2,8 +2,9 @@ return {
   "saghen/blink.cmp",
   dependencies = {
     "rafamadriz/friendly-snippets",
-    "zbirenbaum/copilot.lua", -- Copilot
+    "giuxtaposition/blink-cmp-copilot",
   },
+  event = "InsertEnter",
   opts = {
     keymap = {
       ["<Tab>"] = { "snippet_forward", "select_and_accept", "fallback" },
@@ -34,12 +35,18 @@ return {
       },
     },
     sources = {
-      default = { "path", "lsp", "buffer", "snippets" },
+      default = { "copilot", "path", "lsp", "buffer", "snippets" }, -- No Copilot or Emmet
       providers = {
         path = { score_offset = 110 },
         lsp = { score_offset = 90 },
         snippets = { score_offset = 50 },
         buffer = { score_offset = 80 },
+        copilot = {
+          name = "copilot",
+          module = "blink-cmp-copilot",
+          score_offset = 120,
+          async = true,
+        },
       },
     },
   },
@@ -52,21 +59,15 @@ return {
     -- Setup Blink
     require("blink.cmp").setup(opts)
 
-    -- Setup Copilot
-    require("copilot").setup({
-      suggestion = { enabled = true, auto_trigger = true },
-      panel = { enabled = false },
-    })
-
-    -- Copilot + Blink <C-F>
-    local copilot = require("copilot.suggestion")
+    -- Optional: Custom keymap for <C-F> to ensure it only handles Copilot
     vim.keymap.set("i", "<C-F>", function()
+      local copilot = require("copilot.suggestion")
       if copilot.is_visible() then
         copilot.accept()
       else
-        local blink = require("blink.cmp.keymap")
-        blink.accept() -- fallback to Blink accept
+        -- Fallback to default <C-F> behavior (e.g., move cursor right)
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-F>", true, false, true), "n", false)
       end
-    end, { silent = true, desc = "Copilot or Blink accept" })
+    end, { silent = true, desc = "Accept Copilot suggestion" })
   end,
 }

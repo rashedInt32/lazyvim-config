@@ -5,6 +5,7 @@ return {
     cmd = "Copilot",
     enabled = true,
     event = "InsertEnter",
+    copilot_model = "claude-3.5-sonnet",
     opts = {
       suggestion = {
         enabled = true,
