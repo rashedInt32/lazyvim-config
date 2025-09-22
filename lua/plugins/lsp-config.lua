@@ -46,18 +46,24 @@ return {
             "svelte",
             "vue",
           },
-          root_dir = function()
-            return require("lspconfig.util").root_pattern(
-              "tailwind.config.js",
-              "tailwind.config.ts",
-              "postcss.config.js",
-              "package.json",
-              ".git"
-            )(vim.fn.getcwd())
+          root_dir = require("lspconfig.util").root_pattern(
+            "tailwind.config.js",
+            "tailwind.config.ts",
+            "postcss.config.js",
+            "package.json",
+            ".git"
+          ),
+          on_attach = function(client, bufnr)
+            if vim.bo[bufnr].filetype == "sql" then
+              client.stop()
+            end
           end,
         },
         prismals = {
           filetypes = { "prisma" },
+        },
+        postgres_lsp = {
+          filetypes = { "sql" },
         },
         lua_ls = {
           settings = {
@@ -104,6 +110,7 @@ return {
         },
       },
     },
+
     config = function(_, opts)
       -- Ensure Mason is set up first
       require("mason").setup()
@@ -114,14 +121,24 @@ return {
           "tailwindcss",
           "prismals",
           "elixirls",
-          "emmet_ls", -- Corrected server name
+          "emmet_ls",
           "intelephense",
+          "sqls", -- add sqls if you want generic SQL
         },
         automatic_enable = false,
       })
 
       -- Shared on_attach for all servers
       local on_attach = function(client, bufnr)
+        -- Prevent unwanted LSPs on SQL buffers
+        local ft = vim.bo[bufnr].filetype
+        if ft == "sql" and client.name ~= "postgres_lsp" and client.name ~= "sqls" then
+          vim.schedule(function()
+            client.stop()
+          end)
+          return
+        end
+
         client.server_capabilities.documentHighlightProvider = false
       end
 
@@ -152,6 +169,14 @@ return {
         end,
       })
 
+      -- SQL filetype autocmd (force correct ft detection)
+      vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+        pattern = "*.sql",
+        callback = function()
+          vim.bo.filetype = "sql"
+        end,
+      })
+
       -- Get lspconfig safely
       local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
       if not lspconfig_ok then
@@ -160,7 +185,6 @@ return {
       end
 
       -- Setup each server
-      -- Setup each server safely
       for server_name, server_opts in pairs(opts.servers) do
         local server = lspconfig[server_name]
         if server then
