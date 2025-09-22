@@ -64,6 +64,7 @@ return {
         },
         postgres_lsp = {
           filetypes = { "sql" },
+          root_dir = require("lspconfig.util").root_pattern("*.sql", ".git"),
         },
         lua_ls = {
           settings = {
