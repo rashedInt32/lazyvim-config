@@ -185,14 +185,13 @@ return {
         return
       end
 
-      -- Setup each server
       for server_name, server_opts in pairs(opts.servers) do
         local server = lspconfig[server_name]
-        if server then
+        if server and server.setup then
           local full_opts = vim.tbl_deep_extend("force", { on_attach = on_attach }, server_opts)
           server.setup(full_opts)
         else
-          vim.notify("LSP server not found in lspconfig: " .. server_name, vim.log.levels.WARN)
+          vim.notify("LSP server setup not available for: " .. server_name, vim.log.levels.WARN)
         end
       end
     end,
