@@ -44,7 +44,6 @@ Here are some of the custom keymaps:
 | `<leader>L`     | Open the Lazy package manager             |
 | `<leader>td`    | Toggle diagnostics with Trouble           |
 | `<C-s>`         | Save the current file                     |
-| `<leader>x`     | Make the current file executable          |
 | `<leader>gd`    | Go to definition (LSP)                    |
 | `<leader>y`     | Yank to system clipboard                  |
 | `]c`/`[c`       | Go to next/previous git hunk              |
