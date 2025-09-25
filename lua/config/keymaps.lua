@@ -57,6 +57,9 @@ vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>")
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
 
+-- example: show diagnostics instead of chmod
+vim.keymap.set("n", "<leader>x", "<Cmd>Trouble diagnostics toggle<CR>", { desc = "Diagnostics (Trouble)" })
+
 -- vim.keymap.set("n", "<C-n>", ":bnext<CR>", { desc = "Next buffer" })
 -- vim.keymap.set("n", "<C-p>", ":bprev<CR>", { desc = "Previous buffer" })
 
