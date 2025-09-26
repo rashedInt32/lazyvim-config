@@ -10,6 +10,17 @@ return {
       ["<Tab>"] = { "select_and_accept", "fallback" },
       ["<S-Tab>"] = { "fallback" },
       ["<CR>"] = { "fallback" },
+      ["<C-f>"] = {
+        function(cmp)
+          local copilot = require("copilot.suggestion")
+          if copilot.is_visible() then
+            copilot.accept()
+            return true
+          end
+          return false
+        end,
+        "fallback"
+      },
     },
     appearance = {
       nerd_font_variant = "mono",
@@ -35,18 +46,13 @@ return {
       },
     },
     sources = {
-      default = { "copilot", "path", "lsp", "buffer", "snippets" }, -- No Copilot or Emmet
+      default = { "copilot", "snippets", "lsp", "buffer", "path" },
       providers = {
+        copilot = { name = "copilot", module = "blink-cmp-copilot", score_offset = 250, async = true },
+        snippets = { score_offset = 200, module = "blink.cmp.sources.snippets" },
         lsp = { score_offset = 150 },
-        copilot = {
-          name = "copilot",
-          module = "blink-cmp-copilot",
-          score_offset = 120,
-          async = true,
-        },
-        path = { score_offset = 110 },
-        buffer = { score_offset = 80 },
-        snippets = { score_offset = 50, module = "blink.cmp.sources.snippets" },
+        buffer = { score_offset = 100 },
+        path = { score_offset = 50 },
       },
     },
   },
@@ -56,20 +62,9 @@ return {
     if opts.sources and opts.sources.compat then
       opts.sources.compat = nil
     end
-    -- Ensure blink-cmp-copilot is loaded
     require("blink-cmp-copilot")
-    -- Setup Blink
     require("blink.cmp").setup(opts)
 
-    -- Custom keymap for <C-F> to accept Copilot suggestion
-    vim.keymap.set("i", "<C-f>", function()
-      local copilot = require("copilot.suggestion")
-      if copilot.is_visible() then
-        copilot.accept()
-      else
-        -- Fallback to move cursor right
-        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Right>", true, false, true), "n", false)
-      end
-    end, { silent = true, desc = "Accept Copilot suggestion or move right" })
+
   end,
 }
