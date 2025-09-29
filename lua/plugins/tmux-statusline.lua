@@ -46,9 +46,9 @@ return {
             symbols = { added = " ", modified = " ", removed = " " },
             colored = true,
             diff_color = {
-              added = { fg = "#22da6e", bg = "#011627" }, -- Night Owl green
-              modified = { fg = "#c7925b", bg = "#011627" }, -- Night Owl yellow-orange
-              removed = { fg = "#ef5350", bg = "#011627" }, -- Night Owl red
+              added = { fg = "#22da6e", bg = "#3c3836" }, -- Night Owl green
+              modified = { fg = "#c7925b", bg = "#3c3836" }, -- Night Owl yellow-orange
+              removed = { fg = "#ef5350", bg = "#3c3836" }, -- Night Owl red
             },
           },
           {
@@ -63,10 +63,10 @@ return {
               hint = " ",
             },
             diagnostics_color = {
-              error = { fg = "#ef5350", bg = "#011627" }, -- red
-              warn = { fg = "#c7925b", bg = "#011627" }, -- yellow-orange
-              info = { fg = "#82aaff", bg = "#011627" }, -- blue
-              hint = { fg = "#22da6e", bg = "#011627" }, -- green
+              error = { fg = "#ef5350", bg = "#2d2d30" }, -- red
+              warn = { fg = "#c7925b", bg = "#2d2d30" }, -- yellow-orange
+              info = { fg = "#82aaff", bg = "#2d2d30" }, -- blue
+              hint = { fg = "#22da6e", bg = "#2d2d30" }, -- green
             },
             update_in_insert = false,
             always_visible = true,
@@ -81,7 +81,7 @@ return {
               return require("tmux-status").show()
             end,
             padding = { left = 2, right = 2 },
-            color = { fg = "#a7c080", bg = "#011627" }, -- Here's the match
+            color = { fg = "#a7c080", bg = "#2d2d30" }, -- Here's the match
           },
         },
       },
