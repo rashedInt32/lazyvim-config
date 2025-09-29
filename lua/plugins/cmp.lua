@@ -19,7 +19,7 @@ return {
           end
           return false
         end,
-        "fallback"
+        "fallback",
       },
     },
     appearance = {
@@ -46,11 +46,11 @@ return {
       },
     },
     sources = {
-      default = { "copilot", "snippets", "lsp", "buffer", "path" },
+      default = { "copilot", "lsp", "snippets", "buffer", "path" },
       providers = {
         copilot = { name = "copilot", module = "blink-cmp-copilot", score_offset = 250, async = true },
-        snippets = { score_offset = 200, module = "blink.cmp.sources.snippets" },
-        lsp = { score_offset = 150 },
+        lsp = { score_offset = 200 },
+        snippets = { score_offset = 150, module = "blink.cmp.sources.snippets" },
         buffer = { score_offset = 100 },
         path = { score_offset = 50 },
       },
@@ -64,7 +64,5 @@ return {
     end
     require("blink-cmp-copilot")
     require("blink.cmp").setup(opts)
-
-
   end,
 }
