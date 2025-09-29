@@ -3,7 +3,7 @@ return {
     "christopher-francisco/tmux-status.nvim",
     lazy = true,
     opts = {
-      separator = "",
+      separator = "",
       colors = {
         window_active = { fg = "#e69875", bg = "#011627" },
         window_inactive = { fg = "#859289", bg = "#011627" },
@@ -23,7 +23,7 @@ return {
         --theme = "night-owl", -- let it adapt to colorscheme (or set manually)
         theme = "powerline",
         --theme = "tokyonight", -- let it adapt to colorscheme (or set manually)
-        section_separators = { left = "", right = "" },
+        section_separators = { left = "", right = "" },
         component_separators = { left = "", right = "" },
         globalstatus = true,
         icons_enabled = true,
