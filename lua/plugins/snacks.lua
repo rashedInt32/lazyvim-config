@@ -66,6 +66,12 @@ return {
               "!node_modules/**", -- Exclude node_modules
               "-g",
               "!.git/**", -- Optionally exclude .git folder
+              "-g",
+              "!**/README.md",
+              "-g",
+              "!**/.next",
+              "-g",
+              "!**/.gitignore",
             },
           },
           files = {
