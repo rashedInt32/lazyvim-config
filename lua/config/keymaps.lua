@@ -4,12 +4,17 @@
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
+vim.keymap.set("n", "<C-y>", "<C-r>")
+
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("v", "E", "$")
 vim.keymap.set("v", "B", "^")
 vim.keymap.set("n", "E", "$") -- end of line
 vim.keymap.set("n", "B", "^") -- beginning of line (non-whitespace)
+
+-- some comment
+-- Another comment
 
 -- safe delete and change
 vim.keymap.set("n", "<leader>d", '"_d', { noremap = true })
@@ -105,8 +110,6 @@ vim.keymap.set("n", "<leader>el", 'oif err != nil {<CR>}<Esc>O.logger.Error("err
 vim.keymap.set("n", "<leader>ca", function()
   require("cellular-automaton").start_animation("make_it_rain")
 end)
-
-vim.keymap.set("n", "<C-r>", "<C-r>", { desc = "Redo last change" })
 
 vim.keymap.set("n", "]c", function()
   if vim.wo.diff then

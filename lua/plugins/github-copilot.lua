@@ -38,19 +38,6 @@ return {
         return "<Esc>"
       end, { expr = true, noremap = true })
 
-      -- Toggle Copilot with <leader>ct
-      local copilot_enabled = true
-      vim.keymap.set("n", "<leader>ct", function()
-        copilot_enabled = not copilot_enabled
-        if copilot_enabled then
-          vim.cmd("Copilot enable")
-          print("Copilot enabled")
-        else
-          vim.cmd("Copilot disable")
-          print("Copilot disabled")
-        end
-      end, { desc = "Toggle Copilot" })
-
       -- 🔥 Reapply Ctrl+F mapping to ensure CopilotChat doesn't override it
       vim.api.nvim_set_keymap("i", "<C-f>", 'copilot#Accept("<CR>")', { expr = true, silent = true })
     end,
