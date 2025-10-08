@@ -157,6 +157,41 @@ return {
               border = "rounded",
               source = "always",
               focus = false,
+              max_width = 80,
+              max_height = 20,
+              wrap = true,
+              format = function(diagnostic)
+                local code = diagnostic.code
+                local message = diagnostic.message
+                local source = diagnostic.source
+                
+                local header = ""
+                if code then
+                  header = string.format("[%s]", code)
+                  if source then
+                    header = string.format("[%s: %s]", source, code)
+                  end
+                end
+                
+                if header ~= "" then
+                  return string.format("%s\n%s", header, message)
+                end
+                
+                return message
+              end,
+              prefix = function(diagnostic, i, total)
+                local icon = "●"
+                if diagnostic.severity == vim.diagnostic.severity.ERROR then
+                  icon = "✗"
+                elseif diagnostic.severity == vim.diagnostic.severity.WARN then
+                  icon = "⚠"
+                elseif diagnostic.severity == vim.diagnostic.severity.HINT then
+                  icon = "💡"
+                elseif diagnostic.severity == vim.diagnostic.severity.INFO then
+                  icon = "ℹ"
+                end
+                return string.format("%s ", icon), "DiagnosticFloatingPrefix"
+              end,
             })
           end, { buffer = bufnr, desc = "Open floating diagnostics" })
         end,
