@@ -6,11 +6,34 @@ vim.api.nvim_create_autocmd({ "BufEnter", "LspAttach" }, {
     vim.diagnostic.config({
       update_in_insert = false,
       severity_sort = true,
-      float = false,
+      float = {
+        border = "rounded",
+        source = "always",
+        header = "",
+        prefix = "",
+        suffix = function(diagnostic)
+          if diagnostic.code then
+            return string.format(" [%s]", diagnostic.code), "DiagnosticFloatingSuffix"
+          end
+          return "", ""
+        end,
+        format = function(diagnostic)
+          local ok, formatter = pcall(require, "format-ts-errors")
+          if ok and diagnostic.code then
+            local format_func = formatter[diagnostic.code]
+            if format_func and type(format_func) == "function" then
+              local formatted_message = format_func(diagnostic.message)
+              if formatted_message and formatted_message ~= "" then
+                return formatted_message
+              end
+            end
+          end
+          return diagnostic.message
+        end,
+      },
       virtual_text = false,
       signs = true,
       underline = true,
-      jump = { float = false, wrap = true },
     })
   end,
 })
