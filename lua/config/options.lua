@@ -30,6 +30,7 @@ vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
 vim.opt.wrap = true
 vim.opt.linebreak = true
+vim.opt.breakindent = true
 
 -- line number and relative line number
 vim.opt.number = false
