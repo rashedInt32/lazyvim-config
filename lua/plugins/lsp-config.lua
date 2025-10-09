@@ -43,6 +43,7 @@ return {
           filetypes = { "sql" },
           root_dir = require("lspconfig.util").root_pattern("*.sql", ".git"),
         },
+
         lua_ls = {
           enable = false,
           settings = {
@@ -102,8 +103,6 @@ return {
           "emmet_ls",
           "intelephense",
           "sqls",
-          "stylua",
-          "biome", -- Add this (for the next step)
         },
         automatic_enable = false,
       })

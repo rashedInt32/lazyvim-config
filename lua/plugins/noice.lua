@@ -106,6 +106,13 @@ return {
           },
           {
             filter = {
+              event = "notify",
+              find = 'lspconfig.*"stylua".*not found',
+            },
+            opts = { skip = true },
+          },
+          {
+            filter = {
               event = "msg_show",
               min_height = 10,
             },
