@@ -8,6 +8,8 @@ return {
       typescriptreact = { "prettierd", "prettier", "biome" },
       blade = { "blade-formatter" }, -- Add this line
       prisma = { "prisma" },
+      lua = { "stylua" },
+      fish = {}, -- Disable Fish formatting
       -- fallback
       ["_"] = { "trim_whitespace" },
     },

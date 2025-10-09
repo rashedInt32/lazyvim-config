@@ -81,6 +81,7 @@ vim.diagnostic.config({
         if format_func and type(format_func) == "function" then
           local formatted_message = format_func(diagnostic.message)
           if formatted_message and formatted_message ~= "" then
+            formatted_message = formatted_message:gsub("```typescript\n", ""):gsub("```ts\n", ""):gsub("\n```", "")
             return formatted_message
           end
         end

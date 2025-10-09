@@ -11,29 +11,6 @@ return {
       inlay_hints = { enabled = false },
       document_highlight = { enabled = false },
       servers = {
-        vtsls = {
-          filetypes = {
-            "javascript",
-            "javascriptreact",
-            "typescript",
-            "typescriptreact",
-          },
-          root_dir = function()
-            return vim.loop.cwd()
-          end, -- Fixed: use function
-          settings = {
-            typescript = {
-              inlayHints = {
-                parameterNames = { enabled = "literals" },
-                parameterTypes = { enabled = true },
-                variableTypes = { enabled = false },
-                propertyDeclarationTypes = { enabled = true },
-                functionLikeReturnTypes = { enabled = true },
-                enumMemberValues = { enabled = true },
-              },
-            },
-          },
-        },
         tailwindcss = {
           filetypes = {
             "html",
@@ -67,6 +44,7 @@ return {
           root_dir = require("lspconfig.util").root_pattern("*.sql", ".git"),
         },
         lua_ls = {
+          enable = false,
           settings = {
             Lua = {
               runtime = { version = "LuaJIT" },
@@ -124,6 +102,8 @@ return {
           "emmet_ls",
           "intelephense",
           "sqls",
+          "stylua",
+          "biome", -- Add this (for the next step)
         },
         automatic_enable = false,
       })
