@@ -2,14 +2,33 @@ return {
   "folke/sidekick.nvim",
   opts = {
     -- add any options here
+    nes = { enabled = true },
     cli = {
       mux = {
         backend = "tmux",
-        enabled = true,
+        enabled = false,
         create = "terminal",
       },
       win = {
-        -- Window navigation is handled globally in keymaps.lua
+        -- Double escape to exit terminal mode (like snacks terminal)
+        keys = {
+          term_normal = {
+            "<esc>",
+            function(self)
+              self.esc_timer = self.esc_timer or (vim.uv or vim.loop).new_timer()
+              if self.esc_timer:is_active() then
+                self.esc_timer:stop()
+                vim.cmd("stopinsert")
+              else
+                self.esc_timer:start(200, 0, function() end)
+                return "<esc>"
+              end
+            end,
+            mode = "t",
+            expr = true,
+            desc = "Double escape to normal mode",
+          },
+        },
       },
     },
   },
@@ -26,21 +45,14 @@ return {
       desc = "Goto/Apply Next Edit Suggestion",
     },
     {
-      "<c-;>",
+      "<C-_>",
       function()
         -- Exit terminal-mode first so the toggle runs reliably from the chat input
-        local ok, mode = pcall(vim.api.nvim_get_mode)
-        if ok and mode and mode.mode == "t" then
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true), "n", false)
-          vim.schedule(function()
-            require("sidekick.cli").toggle({ focus = true })
-          end)
-        else
-          require("sidekick.cli").toggle({ focus = true })
-        end
+        require("sidekick.cli").focus({ focus = true })
       end,
       desc = "Sidekick Toggle (focus)",
       mode = { "n", "t", "i", "x" },
+      silent = true,
     },
     {
       "<leader>aa",

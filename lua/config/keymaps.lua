@@ -71,6 +71,9 @@ vim.keymap.set("t", "<C-l>", function()
   vim.cmd("wincmd l")
 end, { desc = "Move to right window from terminal" })
 
+-- Allow <C-w> window commands from terminal (e.g., <C-w>h/j/k/l/w)
+vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], { desc = "Window command from terminal", noremap = true })
+
 -- vim.keymap.set("n", "<C-n>", ":bnext<CR>", { desc = "Next buffer" })
 -- vim.keymap.set("n", "<C-p>", ":bprev<CR>", { desc = "Previous buffer" })
 
