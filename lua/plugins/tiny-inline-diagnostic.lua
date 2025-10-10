@@ -33,7 +33,7 @@ return {
 
         -- Background color for diagnostics
         -- Can be a highlight group or a hexadecimal color (#RRGGBB)
-        background = "CursorLine",
+        background = "None",
 
         -- Color blending option for the diagnostic background
         -- Use "None" or a hexadecimal color (#RRGGBB) to blend with another color
