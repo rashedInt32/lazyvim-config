@@ -62,6 +62,15 @@ vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>")
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
 
+-- Terminal mode window navigation - exit terminal mode first, then navigate
+vim.keymap.set("t", "<C-h>", function()
+  vim.cmd("wincmd h")
+end, { desc = "Move to left window from terminal" })
+
+vim.keymap.set("t", "<C-l>", function()
+  vim.cmd("wincmd l")
+end, { desc = "Move to right window from terminal" })
+
 -- vim.keymap.set("n", "<C-n>", ":bnext<CR>", { desc = "Next buffer" })
 -- vim.keymap.set("n", "<C-p>", ":bprev<CR>", { desc = "Previous buffer" })
 
