@@ -118,7 +118,14 @@ return {
         -- Custom format function for diagnostic messages
         -- Function receives a diagnostic object and should return a string
         -- Example: function(diagnostic) return diagnostic.message .. " [" .. diagnostic.source .. "]" end
-        format = nil,
+        format = function(diagnostic)
+          local max_length = 400 -- Adjust this to your preference
+          local message = diagnostic.message
+          if #message > max_length then
+            return string.format("🎬 Scene too long (%d chars). Director's cut at the cinema.", #message)
+          end
+          return message
+        end,
 
         -- Virtual text display configuration
         virt_texts = {
