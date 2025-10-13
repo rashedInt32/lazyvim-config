@@ -8,7 +8,7 @@ return {
     copilot_model = "claude-3.5-sonnet",
     opts = {
       suggestion = {
-        enabled = true, -- Disable to avoid conflicts with blink-cmp-copilot
+        enabled = false, -- Disable to avoid conflicts with blink-cmp-copilot
         auto_trigger = true,
         debounce = 75,
         keymap = {

@@ -10,17 +10,6 @@ return {
       ["<Tab>"] = { "select_and_accept", "fallback" },
       ["<S-Tab>"] = { "fallback" },
       ["<CR>"] = { "fallback" },
-      ["<C-f>"] = {
-        function(cmp)
-          local copilot = require("copilot.suggestion")
-          if copilot.is_visible() then
-            copilot.accept()
-            return true
-          end
-          return false
-        end,
-        "fallback",
-      },
     },
     appearance = {
       nerd_font_variant = "mono",
