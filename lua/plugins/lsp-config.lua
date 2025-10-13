@@ -88,6 +88,50 @@ return {
             },
           },
         },
+        vtsls = {
+          filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+          single_file_support = false,
+          root_dir = require("lspconfig.util").root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
+          settings = {
+            typescript = {
+              suggest = {
+                completeFunctionCalls = true,
+              },
+              inlayHints = {
+                parameterNames = { enabled = "literals" },
+                parameterTypes = { enabled = false },
+                variableTypes = { enabled = false },
+                propertyDeclarationTypes = { enabled = false },
+                functionLikeReturnTypes = { enabled = false },
+                enumMemberValues = { enabled = false },
+              },
+              preferences = {
+                importModuleSpecifier = "non-relative",
+                quoteStyle = "single",
+              },
+            },
+            javascript = {
+              suggest = {
+                completeFunctionCalls = true,
+              },
+              inlayHints = {
+                parameterNames = { enabled = "literals" },
+                parameterTypes = { enabled = false },
+                variableTypes = { enabled = false },
+                propertyDeclarationTypes = { enabled = false },
+                functionLikeReturnTypes = { enabled = false },
+                enumMemberValues = { enabled = false },
+              },
+              preferences = {
+                importModuleSpecifier = "non-relative",
+                --quoteStyle = "single",
+              },
+            },
+            vtsls = {
+              autoUseWorkspaceTsdk = true,
+            },
+          },
+        },
       },
     },
 
@@ -103,6 +147,7 @@ return {
           "emmet_ls",
           "intelephense",
           "sqls",
+          "vtsls",
         },
         automatic_enable = false,
       })
