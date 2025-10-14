@@ -10,6 +10,7 @@ return {
       prisma = { "prisma" },
       lua = { "stylua" },
       fish = {}, -- Disable Fish formatting
+      sql = { "sql-formatter" },
       -- fallback
       ["_"] = { "trim_whitespace" },
     },

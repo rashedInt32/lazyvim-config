@@ -38,10 +38,10 @@ return {
       default = { "copilot", "lsp", "buffer", "path", "snippets" },
       providers = {
         copilot = { name = "copilot", module = "blink-cmp-copilot", score_offset = 250, async = true },
-        snippets = { score_offset = 150, module = "blink.cmp.sources.snippets" },
         lsp = { score_offset = 200 },
         buffer = { score_offset = 100 },
         path = { score_offset = 50 },
+        snippets = { score_offset = 150, module = "blink.cmp.sources.snippets" },
       },
     },
   },
