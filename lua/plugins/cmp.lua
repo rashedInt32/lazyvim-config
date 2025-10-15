@@ -2,7 +2,7 @@ return {
   "saghen/blink.cmp",
   dependencies = {
     "rafamadriz/friendly-snippets",
-    "giuxtaposition/blink-cmp-copilot",
+    "fang2hou/blink-copilot",
   },
   event = "InsertEnter",
   opts = {
@@ -10,6 +10,17 @@ return {
       ["<Tab>"] = { "select_and_accept", "fallback" },
       ["<S-Tab>"] = { "fallback" },
       ["<CR>"] = { "fallback" },
+      ["<C-f>"] = {
+        function(cmp)
+          local copilot = require("copilot.suggestion")
+          if copilot.is_visible() then
+            copilot.accept()
+            return true
+          end
+          return false
+        end,
+        "fallback",
+      },
     },
     appearance = {
       nerd_font_variant = "mono",
@@ -37,7 +48,7 @@ return {
     sources = {
       default = { "copilot", "lsp", "buffer", "path", "snippets" },
       providers = {
-        copilot = { name = "copilot", module = "blink-cmp-copilot", score_offset = 250, async = true },
+        copilot = { name = "copilot", module = "blink-copilot", score_offset = 250, async = true },
         lsp = { score_offset = 200 },
         buffer = { score_offset = 100 },
         path = { score_offset = 50 },
@@ -51,7 +62,6 @@ return {
     if opts.sources and opts.sources.compat then
       opts.sources.compat = nil
     end
-    require("blink-cmp-copilot")
     require("blink.cmp").setup(opts)
   end,
 }

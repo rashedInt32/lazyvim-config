@@ -5,10 +5,10 @@ return {
     cmd = "Copilot",
     enabled = true,
     event = "InsertEnter",
-    copilot_model = "claude-3.5-sonnet",
+    copilot_model = "claude-sonnet-4.5",
     opts = {
       suggestion = {
-        enabled = false, -- Disable to avoid conflicts with blink-cmp-copilot
+        enabled = true, -- Disable to avoid conflicts with blink-cmp-copilot
         auto_trigger = true,
         debounce = 75,
         keymap = {
@@ -18,6 +18,25 @@ return {
           accept_line = false,
           next = "<M-]>",
           prev = "<M-[>",
+        },
+        filetypes = {
+          javascript = true,
+          typescript = true,
+          javascriptreact = true,
+          typescriptreact = true,
+          lua = true,
+          python = true,
+          ruby = true,
+          go = true,
+          rust = true,
+          html = true,
+          css = true,
+          scss = true,
+          vue = true,
+          svelte = true,
+          elixir = true,
+          heex = true,
+          ["*"] = false, -- Disable for other filetypes
         },
       },
       panel = {

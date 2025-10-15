@@ -113,6 +113,13 @@ return {
           },
           {
             filter = {
+              event = "notify",
+              find = 'lspconfig.*"copilot".*not found',
+            },
+            opts = { skip = true },
+          },
+          {
+            filter = {
               event = "msg_show",
               min_height = 10,
             },
