@@ -11,10 +11,6 @@ return {
       inlay_hints = { enabled = false },
       document_highlight = { enabled = false },
       servers = {
-        copilot = {
-          cmd = { "copilot", "lsp" },
-          root_dir = require("lspconfig.util").root_pattern(".git", vim.fn.getcwd()),
-        },
         tailwindcss = {
           filetypes = {
             "html",
@@ -152,7 +148,6 @@ return {
           "intelephense",
           "sqls",
           "vtsls",
-          "copilot",
         },
         automatic_enable = false,
       })
