@@ -2,6 +2,12 @@ return {
   -- Copilot Lua
   {
     "zbirenbaum/copilot.lua",
+    dependencies = {
+      "copilotlsp-nvim/copilot-lsp", -- (optional) for NES functionality
+      init = function()
+        vim.g.copilot_nes_debounce = 500
+      end,
+    },
     cmd = "Copilot",
     enabled = true,
     event = "InsertEnter",
@@ -26,17 +32,24 @@ return {
           typescriptreact = true,
           lua = true,
           python = true,
-          ruby = true,
           go = true,
-          rust = true,
           html = true,
           css = true,
-          scss = true,
           vue = true,
           svelte = true,
           elixir = true,
           heex = true,
           ["*"] = false, -- Disable for other filetypes
+        },
+        nes = {
+          enabled = true, -- Enable NES (Next Edit Suggestion) feature
+          auto_trigger = false, -- Disable auto-trigger to avoid conflicts
+          keymap = {
+            accept = "<Tab>", -- Accept next edit suggestion with Tab
+            next = "<C-]>",
+            prev = "<C-[>",
+            dismiss = "<C-}>",
+          },
         },
       },
       panel = {

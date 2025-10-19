@@ -10,11 +10,15 @@ return {
       prisma = { "prisma" },
       lua = { "stylua" },
       fish = {}, -- Disable Fish formatting
-      sql = { "sql-formatter" },
+      sql = { "sleek" },
       -- fallback
       ["_"] = { "trim_whitespace" },
     },
     formatters = {
+      sleek = {
+        command = "sleek",
+        args = "--indent-spaces=2 --lines-between-queries=3",
+      },
       prisma = {
         command = "npx",
         args = { "prisma", "format", "--schema", "$FILENAME" },

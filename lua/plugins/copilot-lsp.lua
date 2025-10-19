@@ -1,0 +1,35 @@
+return {
+  -- {
+  --   "copilotlsp-nvim/copilot-lsp",
+  --   dependencies = {
+  --     "zbirenbaum/copilot.lua", -- API client required for auth
+  --   },
+  --   enabled = true,
+  --   event = "VeryLazy",
+  --   init = function()
+  --     -- Ensure the Copilot LSP server is enabled manually
+  --     vim.lsp.enable("copilot_ls")
+  --   end,
+  --   opts = {
+  --     suggestion = { enabled = true }, -- inline preview
+  --     panel = { enabled = false },
+  --     nes = {
+  --       enabled = false, -- Disable NES to bypass ui.lua entirely
+  --       auto_trigger = false,
+  --       keymap = {},
+  --     },
+  --   },
+  --   keys = {
+  --     { "<C-l>", "<cmd>Copilot Accept<cr>", desc = "Copilot Accept" },
+  --     { "<C-j>", "<cmd>Copilot Next<cr>", desc = "Copilot Next" },
+  --     { "<C-k>", "<cmd>Copilot Prev<cr>", desc = "Copilot Previous" },
+  --     { "<C-S-l>", "<cmd>Copilot Clear<cr>", desc = "Copilot Clear" },
+  --   },
+  -- },
+  --
+  -- -- Disable the legacy Copilot plugin entirely
+  -- {
+  --   "zbirenbaum/copilot.lua",
+  --   enabled = false,
+  -- },
+}
