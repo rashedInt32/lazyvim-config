@@ -2,10 +2,10 @@ return {
   "stevearc/conform.nvim",
   opts = {
     formatters_by_ft = {
-      javascript = { "prettierd", "prettier", "biome" },
-      typescript = { "prettierd", "prettier", "biome" },
-      javascriptreact = { "prettierd", "prettier", "biome" },
-      typescriptreact = { "prettierd", "prettier", "biome" },
+      javascript = { "prettier", "biome" },
+      typescript = { "prettier", "biome" },
+      javascriptreact = { "prettier", "biome" },
+      typescriptreact = { "prettier", "biome" },
       blade = { "blade-formatter" }, -- Add this line
       prisma = { "prisma" },
       lua = { "stylua" },
@@ -16,8 +16,9 @@ return {
     },
     formatters = {
       sleek = {
-        command = "sleek",
-        args = "--indent-spaces=2 --lines-between-queries=3",
+        command = "/Users/rashed/.cargo/bin/sleek",
+        args = { "--indent-spaces=2", "--lines-between-queries=3" },
+        stdin = true,
       },
       prisma = {
         command = "npx",

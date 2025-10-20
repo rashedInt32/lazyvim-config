@@ -1,8 +1,7 @@
 return {
   "nvim-treesitter/nvim-treesitter",
-  branch = "main",
-  lazy = false,
   build = ":TSUpdate",
+  lazy = false,
   opts = {
     ensure_installed = {
       "lua",
@@ -14,8 +13,13 @@ return {
       "bash",
       "vim",
       "vimdoc",
+      "tsv",
+      "sql",
     },
     highlight = {
+      enable = true,
+    },
+    injections = {
       enable = true,
     },
   },
