@@ -66,7 +66,7 @@ return {
               hint = { fg = "#117a3b" }, -- green
             },
             update_in_insert = false,
-            always_visible = true,
+            always_visible = false,
           },
           {
             function()
