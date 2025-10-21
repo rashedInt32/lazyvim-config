@@ -23,7 +23,7 @@ return {
         --theme = "night-owl", -- let it adapt to colorscheme (or set manually)
         theme = "powerline",
         --theme = "tokyonight", -- let it adapt to colorscheme (or set manually)
-        section_separators = { left = "", right = "" },
+        section_separators = { left = " ", right = " " },
         component_separators = { left = "", right = "" },
         globalstatus = true,
         icons_enabled = true,
@@ -46,9 +46,9 @@ return {
             symbols = { added = " ", modified = " ", removed = " " },
             colored = true,
             diff_color = {
-              added = { fg = "#22da6e", bg = "#3c3836" }, -- Night Owl green
-              modified = { fg = "#c7925b", bg = "#3c3836" }, -- Night Owl yellow-orange
-              removed = { fg = "#ef5350", bg = "#3c3836" }, -- Night Owl red
+              added = { fg = "#22da6e", bg = "#3c3836" },
+              modified = { fg = "#c7925b", bg = "#3c3836" },
+              removed = { fg = "#ef5350", bg = "#3c3836" },
             },
           },
           {
