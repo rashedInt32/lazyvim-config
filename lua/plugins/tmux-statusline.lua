@@ -43,9 +43,9 @@ return {
             symbols = { added = " ", modified = " ", removed = " " },
             colored = true,
             diff_color = {
-              added = { fg = "#22da6e" },
-              modified = { fg = "#c7925b" },
-              removed = { fg = "#ef5350" },
+              added = { fg = "#117a3b" },
+              modified = { fg = "#8c5f3d" },
+              removed = { fg = "#a72627" },
             },
           },
           {
@@ -60,10 +60,10 @@ return {
             },
 
             diagnostics_color = {
-              error = { fg = "#ef5350" }, -- red
-              warn = { fg = "#c7925b" }, -- yellow-orange
-              info = { fg = "#82aaff" }, -- blue
-              hint = { fg = "#22da6e" }, -- green
+              error = { fg = "#a72627" }, -- red
+              warn = { fg = "#8c5f3d" }, -- yellow-orange
+              info = { fg = "#375f9f" }, -- blue
+              hint = { fg = "#117a3b" }, -- green
             },
             update_in_insert = false,
             always_visible = true,
