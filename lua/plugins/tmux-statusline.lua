@@ -3,15 +3,12 @@ return {
     "christopher-francisco/tmux-status.nvim",
     lazy = true,
     opts = {
-      separator = "",
       colors = {
-        window_active = { fg = "#e69875", bg = "#011627" },
-        window_inactive = { fg = "#859289", bg = "#011627" },
-        window_inactive_recent = { fg = "#3f5865", bg = "#011627" },
-        session = { fg = "#a7c080", bg = "#011627" },
+        session = { fg = "#005f00" },
       },
     },
   },
+
   {
     "nvim-lualine/lualine.nvim",
     dependencies = {
@@ -21,7 +18,7 @@ return {
     opts = {
       options = {
         --theme = "night-owl", -- let it adapt to colorscheme (or set manually)
-        theme = "powerline",
+        theme = "powerline_custom",
         --theme = "tokyonight", -- let it adapt to colorscheme (or set manually)
         section_separators = { left = " ", right = " " },
         component_separators = { left = "", right = "" },
@@ -46,13 +43,12 @@ return {
             symbols = { added = " ", modified = " ", removed = " " },
             colored = true,
             diff_color = {
-              added = { fg = "#22da6e", bg = "#3c3836" },
-              modified = { fg = "#c7925b", bg = "#3c3836" },
-              removed = { fg = "#ef5350", bg = "#3c3836" },
+              added = { fg = "#22da6e" },
+              modified = { fg = "#c7925b" },
+              removed = { fg = "#ef5350" },
             },
           },
           {
-
             "diagnostics",
             --sources = { "nvim_lsp" },
             sections = { "error", "warn", "info", "hint" },
@@ -62,11 +58,12 @@ return {
               info = " ",
               hint = " ",
             },
+
             diagnostics_color = {
-              error = { fg = "#ef5350", bg = "#2d2d30" }, -- red
-              warn = { fg = "#c7925b", bg = "#2d2d30" }, -- yellow-orange
-              info = { fg = "#82aaff", bg = "#2d2d30" }, -- blue
-              hint = { fg = "#22da6e", bg = "#2d2d30" }, -- green
+              error = { fg = "#ef5350" }, -- red
+              warn = { fg = "#c7925b" }, -- yellow-orange
+              info = { fg = "#82aaff" }, -- blue
+              hint = { fg = "#22da6e" }, -- green
             },
             update_in_insert = false,
             always_visible = true,
@@ -81,7 +78,7 @@ return {
               return require("tmux-status").show()
             end,
             padding = { left = 2, right = 2 },
-            color = { fg = "#a7c080", bg = "#2d2d30" }, -- Here's the match
+            color = { fg = "#005f00" }, -- Here's the match
           },
         },
       },
