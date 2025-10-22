@@ -4,9 +4,14 @@ return {
   opts = {
     check_ts = true,
     disable_filetype = { "TelescopePrompt", "vim" },
-    map_cr = true, -- map <CR> (Enter) to handle pair insertion nicely
+    map_cr = false,
     map_bs = true,
-    enable_check_bracket_line = true,
-    ignored_next_char = "[%)%]%}\"']",
+    enable_check_bracket_line = false,
+    ignored_next_char = "",
+    fast_wrap = {},
   },
+  config = function(_, opts)
+    local npairs = require("nvim-autopairs")
+    npairs.setup(opts)
+  end,
 }
