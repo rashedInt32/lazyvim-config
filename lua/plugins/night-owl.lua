@@ -8,25 +8,6 @@ return {
     require("night-owl").setup({
       transparent_background = true,
     })
-    --vim.cmd("colorscheme night-owl")
-
-    -- -- Transparent backgrounds
-    -- hl(0, "Normal", { bg = bg })
-    -- hl(0, "NormalNC", { bg = bg })
-    -- hl(0, "NormalFloat", { bg = bg })
-    -- hl(0, "EndOfBuffer", { bg = bg })
-    -- hl(0, "FloatBorder", { bg = bg })
-    -- hl(0, "MsgArea", { bg = bg })
-    -- hl(0, "StatusLine", { bg = bg })
-    -- hl(0, "TelescopeNormal", { bg = bg })
-    -- hl(0, "TelescopeBorder", { bg = bg })
-    --
-    -- hl(0, "LspReferenceText", { bg = "NONE", underline = false })
-    -- hl(0, "LspReferenceRead", { bg = "NONE", underline = false })
-    -- hl(0, "LspReferenceWrite", { bg = "NONE", underline = false })
+    --vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "#585b70", italic = true })
   end,
 }
-
--- Fix the background mismatch
---vim.api.nvim_set_hl(0, "Normal", { bg = "#011627" })
---vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "#011627" })
