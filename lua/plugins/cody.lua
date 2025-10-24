@@ -3,6 +3,8 @@ return {
   {
     "Exafunction/windsurf.vim",
     config = function()
+      vim.g.codeium_enabled = false
+
       -- Optional: disable default keybindings
       vim.g.windsurf_disable_default_mappings = 1
       vim.g.windsurf_debug = true

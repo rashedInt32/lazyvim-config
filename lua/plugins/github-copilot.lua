@@ -14,8 +14,8 @@ return {
     copilot_model = "claude-sonnet-4.5",
     opts = {
       suggestion = {
-        enabled = true, -- Disable to avoid conflicts with blink-cmp-copilot
-        auto_trigger = true,
+        enabled = false, -- Disable to avoid conflicts with blink-cmp-copilot
+        auto_trigger = false,
         debounce = 75,
         keymap = {
           accept = "<C-f>", -- Accept suggestion with Ctrl+F
@@ -45,7 +45,7 @@ return {
           enabled = true, -- Enable NES (Next Edit Suggestion) feature
           auto_trigger = false, -- Disable auto-trigger to avoid conflicts
           keymap = {
-            accept = "<Tab>", -- Accept next edit suggestion with Tab
+            accept = "<C-f>", -- Accept next edit suggestion with Ctrl+F
             next = "<C-]>",
             prev = "<C-[>",
             dismiss = "<C-}>",
@@ -72,6 +72,11 @@ return {
 
       -- 🔥 Reapply Ctrl+F mapping to ensure CopilotChat doesn't override it
       vim.api.nvim_set_keymap("i", "<C-f>", 'copilot#Accept("<CR>")', { expr = true, silent = true })
+
+      -- Tab for NES accept in normal mode
+      vim.keymap.set("n", "<Tab>", function()
+        require("copilot.suggestion").accept()
+      end, { silent = true })
     end,
   },
 
