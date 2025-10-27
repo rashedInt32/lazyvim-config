@@ -136,6 +136,7 @@ return {
     },
 
     config = function(_, opts)
+      -- Configure LSP hover and signature help with borders
       -- Ensure Mason is set up first
       require("mason").setup()
       require("mason-lspconfig").setup({

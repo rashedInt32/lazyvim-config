@@ -44,7 +44,7 @@ return {
             },
           },
           hover = {
-            enabled = false,
+            enabled = true,
             silent = false,
             opts = {
               border = "rounded",
