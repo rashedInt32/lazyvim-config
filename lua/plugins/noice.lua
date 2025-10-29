@@ -125,6 +125,13 @@ return {
             },
             view = "split",
           },
+          {
+            filter = {
+              event = "notify",
+              find = 'lspconfig.*"%*".*not found',
+            },
+            opts = { skip = true },
+          },
         },
       }
     end,

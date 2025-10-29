@@ -3,18 +3,19 @@ return {
     "folke/snacks.nvim",
     priority = 1000,
     event = "VeryLazy",
+    -- LSP integration settings (snacks handles LSP)
     lsp = {
-      enabled = true, -- snacks handles LSP
+      enabled = true,
       diagnostics = {
-        enabled = false, -- CHANGED: Disabled to prevent snacks from managing diagnostic popups
+        enabled = false, -- CHANGED: disabled to prevent snacks managing diagnostic popups
         insert = false,
         virtual_text = false,
-        signs = true, -- CHANGED: Enabled to align with options.lua
-        underline = true, -- CHANGED: Enabled to align with options.lua
+        signs = true, -- CHANGED: enabled to align with options.lua
+        underline = true, -- CHANGED: enabled to align with options.lua
         update_in_insert = false,
       },
       hover = {
-        enabled = false, -- CHANGED: Disabled to prevent hover diagnostics
+        enabled = false, -- CHANGED: disable hover diagnostics
       },
       signature = {
         enabled = false,
@@ -103,9 +104,9 @@ return {
               "-g",
               "!generated",
               "-g",
-              "!node_modules/**", -- Exclude node_modules
+              "!node_modules/**",
               "-g",
-              "!.git/**", -- Optionally exclude .git folder
+              "!.git/**",
               "-g",
               "!**/README.md",
               "-g",
@@ -154,7 +155,6 @@ return {
             },
           },
         },
-
         formatters = {
           file = {
             filename_first = true,
@@ -186,6 +186,7 @@ return {
         },
       },
     },
+
     keys = {
       {
         "<leader><space>",
@@ -350,7 +351,7 @@ return {
         mode = { "n", "x" },
       },
       {
-        '<leader>s"',
+        '<leader>"',
         function()
           Snacks.picker.registers()
         end,
@@ -582,14 +583,7 @@ return {
         desc = "Toggle Terminal",
         mode = { "n", "t", "i", "v" },
       },
-      -- {
-      --   "<c-_>",
-      --   function()
-      --     Snacks.terminal()
-      --   end,
-      --   desc = "which_key_ignore",
-      --   mode = { "n", "t" },
-      -- },
+      -- { "<c-_>", ... } -- left commented as you had it
       {
         "<c-\\>",
         function()
@@ -633,6 +627,7 @@ return {
         end,
       },
     },
+
     init = function()
       vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",
@@ -644,6 +639,7 @@ return {
             Snacks.debug.backtrace()
           end
           vim.print = _G.dd
+
           Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
           Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
           Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
