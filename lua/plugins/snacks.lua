@@ -68,6 +68,7 @@ return {
       explorer = {
         enabled = true,
         respect_gitignore = false,
+        watch = false,
       },
       indent = { enabled = true },
       input = { enabled = true },
