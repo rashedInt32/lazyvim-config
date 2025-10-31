@@ -66,9 +66,7 @@ return {
       bigfile = { enabled = true },
       dashboard = { enabled = true },
       explorer = {
-        enabled = true,
-        respect_gitignore = false,
-        watch = false,
+        enabled = false,
       },
       indent = { enabled = true },
       input = { enabled = true },
