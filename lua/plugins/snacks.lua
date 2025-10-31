@@ -3,19 +3,20 @@ return {
     "folke/snacks.nvim",
     priority = 1000,
     event = "VeryLazy",
-    -- LSP integration settings (snacks handles LSP)
+    enabled = true,
+
     lsp = {
       enabled = true,
       diagnostics = {
-        enabled = false, -- CHANGED: disabled to prevent snacks managing diagnostic popups
+        enabled = false,
         insert = false,
         virtual_text = false,
-        signs = true, -- CHANGED: enabled to align with options.lua
-        underline = true, -- CHANGED: enabled to align with options.lua
+        signs = true,
+        underline = true,
         update_in_insert = false,
       },
       hover = {
-        enabled = false, -- CHANGED: disable hover diagnostics
+        enabled = false,
       },
       signature = {
         enabled = false,
@@ -66,7 +67,8 @@ return {
       bigfile = { enabled = true },
       dashboard = { enabled = true },
       explorer = {
-        enabled = false,
+        enabled = true,
+        respect_gitignore = false,
       },
       indent = { enabled = true },
       input = { enabled = true },
@@ -144,6 +146,7 @@ return {
               "*-lock.yaml",
             },
           },
+
           explorer = {
             layout = {
               layout = {
@@ -169,6 +172,7 @@ return {
           },
         },
       },
+
       quickfile = { enabled = true },
       scope = { enabled = true },
       scroll = {
