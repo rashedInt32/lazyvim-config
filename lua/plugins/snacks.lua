@@ -69,7 +69,7 @@ return {
       explorer = {
         enabled = true,
         respect_gitignore = false,
-        replace_netrw = true,
+        replace_netrw = false,
       },
       indent = { enabled = true },
       input = { enabled = true },
