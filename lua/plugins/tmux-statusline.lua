@@ -18,6 +18,7 @@ return {
     opts = {
       options = {
         --theme = "night-owl", -- let it adapt to colorscheme (or set manually)
+        --theme = "powerline_custom",
         theme = "powerline_custom",
         --theme = "tokyonight", -- let it adapt to colorscheme (or set manually)
         section_separators = { left = " ", right = " " },
