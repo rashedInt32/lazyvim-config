@@ -119,15 +119,11 @@ vim.keymap.set("n", "<leader>ef", 'oif err != nil {<CR>}<Esc>Olog.Fatalf("error:
 
 vim.keymap.set("n", "<leader>el", 'oif err != nil {<CR>}<Esc>O.logger.Error("error", "error", err)<Esc>F.;i')
 
-vim.keymap.set("n", "<leader>ca", function()
-  require("cellular-automaton").start_animation("make_it_rain")
-end)
-
 vim.keymap.set("n", "]c", function()
   if vim.wo.diff then
     return "]c"
   end
-  require("gitsigns").next_hunk()
+  require("gitsigns").nav_hunk()
   return "<Ignore>"
 end, { expr = true })
 
@@ -135,13 +131,20 @@ vim.keymap.set("n", "[c", function()
   if vim.wo.diff then
     return "[c"
   end
-  require("gitsigns").prev_hunk()
+  require("gitsigns").nav_hunk()
   return "<Ignore>"
 end, { expr = true })
 
 vim.keymap.set("n", "<leader>gs", ":Gitsigns stage_hunk<CR>")
 
-vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Show signature help" })
+-- vim.keymap.set({ "n", "x" }, "<leader>ca", function()
+--   require("tiny-code-action").code_action()
+-- end, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>ca", function()
+  vim.lsp.buf.code_action()
+end, { noremap = true, silent = true })
+
+-- vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Show signature help" })
 -- vim.keymap.set("n", "<leader><leader>", function()
 --     vim.cmd("so")
 -- end)
