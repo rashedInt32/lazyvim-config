@@ -1,49 +1,47 @@
 return {
   "rachartier/tiny-code-action.nvim",
   dependencies = {
-    { "nvim-lua/plenary.nvim" },
-    -- you can omit the big pickers if you won’t use them
-    -- { "nvim-telescope/telescope.nvim" },
-    -- { "ibhagwan/fzf-lua" },
-    -- { "folke/snacks.nvim", opts = { terminal = {}, } },
+    "nvim-lua/plenary.nvim",
+    "folke/snacks.nvim", -- use Snacks for picker
   },
   event = "LspAttach",
   opts = {
-    backend = "vim", -- simplest diff preview, no external binary
+    backend = "vim", -- fast, dependency-free diff viewer
     picker = {
-      "buffer", -- choose the floating buffer picker
+      "snacks",
       opts = {
-        hotkeys = true, -- enable single-letter hotkeys for actions
-        hotkeys_mode = "text_diff_based", -- optional: smarter letters
-        position = "center", -- place the floating window at center
-        width = 0.60, -- optional: width fraction (60% of screen)
-        height = 0.40, -- optional: height fraction (40% of screen)
-        -- you can set keymaps inside, like esc to close:
+        layout = {
+          position = "cursor", -- open near cursor
+          width = 0.45,
+          height = "auto", -- adaptive height based on items
+          border = "rounded",
+        },
+        ui = {
+          input = false,
+          prompt = false, -- no search input, just menu
+          icons = true,
+          title = false,
+        },
         keymaps = {
-          quit = { "<esc>", "q" },
+          ["q"] = "close", -- close picker with 'q'
+          ["<esc>"] = "close", -- also close with ESC
         },
       },
     },
-    resolve_timeout = 100, -- 100ms waiting for action resolution
+    resolve_timeout = 150,
     notify = {
-      enabled = false, -- disable notifications for “no actions”
+      enabled = false,
       on_empty = false,
     },
     signs = {
       quickfix = { "", { link = "DiagnosticWarning" } },
-      others = { "", { link = "DiagnosticWarning" } },
       refactor = { "", { link = "DiagnosticInfo" } },
-      ["refactor.move"] = { "󰪹", { link = "DiagnosticInfo" } },
-      ["refactor.extract"] = { "", { link = "DiagnosticError" } },
-      ["source.organizeImports"] = { "", { link = "DiagnosticWarning" } },
+      ["refactor.extract"] = { "", { link = "DiagnosticHint" } },
+      ["source.organizeImports"] = { "", { link = "DiagnosticInfo" } },
       ["source.fixAll"] = { "󰃢", { link = "DiagnosticError" } },
-      ["source"] = { "", { link = "DiagnosticError" } },
-      ["rename"] = { "󰑕", { link = "DiagnosticWarning" } },
-      ["codeAction"] = { "", { link = "DiagnosticWarning" } },
+      rename = { "󰑕", { link = "DiagnosticWarning" } },
     },
-    -- optional: a filter to exclude less relevant actions
-    filter = function(action, client)
-      -- e.g. skip generic “Organize imports” if you don’t care
+    filter = function(action)
       if action.kind == "source.organizeImports" then
         return false
       end
@@ -54,10 +52,10 @@ return {
     {
       "<leader>ca",
       function()
-        require("tiny-code-action").code_action()
+        require("tiny-code-action").code_action({})
       end,
       mode = { "n", "v" },
-      desc = "Code Action (inline)",
+      desc = "Code Action (Snacks)",
     },
   },
 }
