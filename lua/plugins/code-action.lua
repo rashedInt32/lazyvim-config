@@ -2,29 +2,40 @@ return {
   "rachartier/tiny-code-action.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim",
-    "folke/snacks.nvim", -- use Snacks for picker
+    "nvim-telescope/telescope.nvim",
   },
   event = "LspAttach",
   opts = {
-    backend = "vim", -- fast, dependency-free diff viewer
+    backend = "vim", -- use "vim" for simple diff, "delta" if you have delta installed
     picker = {
-      "snacks",
+      "telescope",
       opts = {
-        layout = {
-          position = "cursor", -- open near cursor
-          width = 0.45,
-          height = "auto", -- adaptive height based on items
-          border = "rounded",
+        layout_strategy = "cursor", -- popup near cursor
+        layout_config = {
+          width = 0.5, -- 50% of screen width
+          height = 10, -- max 10 lines, avoids empty space
         },
-        ui = {
-          input = false,
-          prompt = false, -- no search input, just menu
-          icons = true,
-          title = false,
-        },
-        keymaps = {
-          ["q"] = "close", -- close picker with 'q'
-          ["<esc>"] = "close", -- also close with ESC
+        sorting_strategy = "ascending",
+        prompt_prefix = "⚙  ",
+        prompt_title = false,
+        previewer = false, -- set to true if using delta for diff previews
+        initial_mode = "normal",
+        format_item = function(action)
+          -- show icon + title + optional LSP source
+          local signs = require("tiny-code-action").opts.signs
+          local icon = (signs[action.kind] or { "⚡" })[1]
+          local source = action.source or ""
+          return string.format("%s  %s %s", icon, action.title, source ~= "" and "(" .. source .. ")" or "")
+        end,
+        mappings = {
+          i = {
+            ["<esc>"] = require("telescope.actions").close,
+            ["q"] = require("telescope.actions").close,
+          },
+          n = {
+            ["<esc>"] = require("telescope.actions").close,
+            ["q"] = require("telescope.actions").close,
+          },
         },
       },
     },
@@ -42,10 +53,8 @@ return {
       rename = { "󰑕", { link = "DiagnosticWarning" } },
     },
     filter = function(action)
-      if action.kind == "source.organizeImports" then
-        return false
-      end
-      return true
+      -- skip less useful actions
+      return action.kind ~= "source.organizeImports"
     end,
   },
   keys = {
@@ -55,7 +64,7 @@ return {
         require("tiny-code-action").code_action({})
       end,
       mode = { "n", "v" },
-      desc = "Code Action (Snacks)",
+      desc = "Code Action (Telescope UI)",
     },
   },
 }
