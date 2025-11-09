@@ -145,3 +145,5 @@ vim.keymap.set("n", "<leader>gs", ":Gitsigns stage_hunk<CR>")
 -- vim.keymap.set("n", "<leader><leader>", function()
 --     vim.cmd("so")
 -- end)
+--
+-- Open buffer switcher
