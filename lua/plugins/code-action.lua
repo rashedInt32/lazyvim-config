@@ -1,70 +1,70 @@
 return {
-  -- "rachartier/tiny-code-action.nvim",
-  -- dependencies = {
-  --   "nvim-lua/plenary.nvim",
-  --   "nvim-telescope/telescope.nvim",
-  -- },
-  -- event = "LspAttach",
-  -- opts = {
-  --   backend = "vim", -- use "vim" for simple diff, "delta" if you have delta installed
-  --   picker = {
-  --     "telescope",
-  --     opts = {
-  --       layout_strategy = "cursor", -- popup near cursor
-  --       layout_config = {
-  --         width = 0.5, -- 50% of screen width
-  --         height = 10, -- max 10 lines, avoids empty space
-  --       },
-  --       sorting_strategy = "ascending",
-  --       prompt_prefix = "⚙  ",
-  --       prompt_title = false,
-  --       previewer = false, -- set to true if using delta for diff previews
-  --       initial_mode = "normal",
-  --       format_item = function(action)
-  --         -- show icon + title + optional LSP source
-  --         local signs = require("tiny-code-action").opts.signs
-  --         local icon = (signs[action.kind] or { "⚡" })[1]
-  --         local source = action.source or ""
-  --         return string.format("%s  %s %s", icon, action.title, source ~= "" and "(" .. source .. ")" or "")
-  --       end,
-  --       mappings = {
-  --         i = {
-  --           ["<esc>"] = require("telescope.actions").close,
-  --           ["q"] = require("telescope.actions").close,
-  --         },
-  --         n = {
-  --           ["<esc>"] = require("telescope.actions").close,
-  --           ["q"] = require("telescope.actions").close,
-  --         },
-  --       },
-  --     },
-  --   },
-  --   resolve_timeout = 150,
-  --   notify = {
-  --     enabled = false,
-  --     on_empty = false,
-  --   },
-  --   signs = {
-  --     quickfix = { "", { link = "DiagnosticWarning" } },
-  --     refactor = { "", { link = "DiagnosticInfo" } },
-  --     ["refactor.extract"] = { "", { link = "DiagnosticHint" } },
-  --     ["source.organizeImports"] = { "", { link = "DiagnosticInfo" } },
-  --     ["source.fixAll"] = { "󰃢", { link = "DiagnosticError" } },
-  --     rename = { "󰑕", { link = "DiagnosticWarning" } },
-  --   },
-  --   filter = function(action)
-  --     -- skip less useful actions
-  --     return action.kind ~= "source.organizeImports"
-  --   end,
-  -- },
-  -- keys = {
-  --   {
-  --     "<leader>ca",
-  --     function()
-  --       require("tiny-code-action").code_action({})
-  --     end,
-  --     mode = { "n", "v" },
-  --     desc = "Code Action (Telescope UI)",
-  --   },
-  -- },
+  "rachartier/tiny-code-action.nvim",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    "nvim-telescope/telescope.nvim",
+  },
+  event = "LspAttach",
+  opts = {
+    backend = "vim", -- use "vim" for simple diff, "delta" if you have delta installed
+    picker = {
+      "telescope",
+      opts = {
+        layout_strategy = "cursor", -- popup near cursor
+        layout_config = {
+          width = 0.5, -- 50% of screen width
+          height = 10, -- max 10 lines, avoids empty space
+        },
+        sorting_strategy = "ascending",
+        prompt_prefix = "⚙  ",
+        prompt_title = false,
+        previewer = false, -- set to true if using delta for diff previews
+        initial_mode = "normal",
+        format_item = function(action)
+          -- show icon + title + optional LSP source
+          local signs = require("tiny-code-action").opts.signs
+          local icon = (signs[action.kind] or { "⚡" })[1]
+          local source = action.source or ""
+          return string.format("%s  %s %s", icon, action.title, source ~= "" and "(" .. source .. ")" or "")
+        end,
+        mappings = {
+          i = {
+            ["<esc>"] = require("telescope.actions").close,
+            ["q"] = require("telescope.actions").close,
+          },
+          n = {
+            ["<esc>"] = require("telescope.actions").close,
+            ["q"] = require("telescope.actions").close,
+          },
+        },
+      },
+    },
+    resolve_timeout = 150,
+    notify = {
+      enabled = false,
+      on_empty = false,
+    },
+    signs = {
+      quickfix = { "", { link = "DiagnosticWarning" } },
+      refactor = { "", { link = "DiagnosticInfo" } },
+      ["refactor.extract"] = { "", { link = "DiagnosticHint" } },
+      ["source.organizeImports"] = { "", { link = "DiagnosticInfo" } },
+      ["source.fixAll"] = { "󰃢", { link = "DiagnosticError" } },
+      rename = { "󰑕", { link = "DiagnosticWarning" } },
+    },
+    filter = function(action)
+      -- skip less useful actions
+      return action.kind ~= "source.organizeImports"
+    end,
+  },
+  keys = {
+    {
+      "<leader>ca",
+      function()
+        require("tiny-code-action").code_action({})
+      end,
+      mode = { "n", "v" },
+      desc = "Code Action (Telescope UI)",
+    },
+  },
 }

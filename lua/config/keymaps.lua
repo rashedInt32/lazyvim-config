@@ -137,10 +137,28 @@ end, { expr = true })
 
 vim.keymap.set("n", "<leader>gs", ":Gitsigns stage_hunk<CR>")
 
-vim.keymap.set("n", "<leader>ca", function()
-  vim.lsp.buf.code_action()
-end, { noremap = true, silent = true })
-
+-- vim.keymap.set("n", "<leader>ca", function()
+--   local old_select = vim.ui.select
+--   vim.ui.select = function(items, opts, on_choice)
+--     -- restore after first use so async LSP can call us
+--     vim.ui.select = old_select
+--
+--     -- Ensure the selector opens in normal mode
+--     vim.schedule(function()
+--       pcall(vim.cmd, "stopinsert")
+--     end)
+--     vim.defer_fn(function()
+--       pcall(vim.cmd, "stopinsert")
+--     end, 60)
+--
+--     -- Delegate to whichever ui_select is active (Snacks by default)
+--     return old_select(items, opts, on_choice)
+--   end
+--
+--   -- trigger LSP code actions
+--   vim.lsp.buf.code_action({ apply = false })
+-- end, { noremap = true, silent = true, desc = "Code Action" })
+--
 -- vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Show signature help" })
 -- vim.keymap.set("n", "<leader><leader>", function()
 --     vim.cmd("so")
