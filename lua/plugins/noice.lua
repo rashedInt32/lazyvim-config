@@ -51,7 +51,7 @@ return {
               max_width = math.floor(columns * 0.8),
               max_height = math.floor(lines * 0.6),
               wrap = true,
-              focusable = false,
+              focusable = true,
               padding = { top = 1, bottom = 1, left = 2, right = 2 },
             },
           },
