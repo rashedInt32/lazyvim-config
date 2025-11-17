@@ -5,6 +5,8 @@ return {
   },
   lazy = false,
   opts = {
+    skip_confirm_for_simple_edits = true,
+    --prompt_save_on_select_new_entry = false,
     default_file_explorer = false,
     columns = {
       "icon",
@@ -12,7 +14,8 @@ return {
     keymaps = {
       ["g?"] = { "actions.show_help", mode = "n" },
       ["<CR>"] = "actions.select",
-      ["<C-s>"] = { "actions.select", opts = { vertical = true } },
+      ["<C-s>"] = false,
+      ["<C-j>"] = { "actions.select", opts = { vertical = true } },
       ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
       ["<C-t>"] = { "actions.select", opts = { tab = true } },
       ["<C-p>"] = "actions.preview",
