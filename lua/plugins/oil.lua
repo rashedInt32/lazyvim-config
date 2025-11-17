@@ -42,7 +42,7 @@ return {
       override = function(conf)
         conf.anchor = "SW"
         conf.row = vim.o.lines - 2
-        conf.col = 0
+        conf.col = 1
         conf.width = vim.o.columns - 4
         conf.height = math.floor(vim.o.lines * 0.4)
         return conf
