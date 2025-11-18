@@ -6,7 +6,7 @@ return {
   lazy = false,
   opts = {
     skip_confirm_for_simple_edits = true,
-    --prompt_save_on_select_new_entry = false,
+    prompt_save_on_select_new_entry = false,
     default_file_explorer = false,
     columns = {
       "icon",
@@ -14,9 +14,9 @@ return {
     keymaps = {
       ["g?"] = { "actions.show_help", mode = "n" },
       ["<CR>"] = "actions.select",
-      ["<C-s>"] = false,
-      ["<C-j>"] = { "actions.select", opts = { vertical = true } },
-      ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
+      --["<C-s>"] = false,
+      ["<C-h>"] = { "actions.select", opts = { vertical = true } },
+      ["<C-s>"] = { "actions.select", opts = { horizontal = true } },
       ["<C-t>"] = { "actions.select", opts = { tab = true } },
       ["<C-p>"] = "actions.preview",
       ["<C-c>"] = { "actions.close", mode = "n" },
@@ -55,16 +55,12 @@ return {
   config = function(_, opts)
     require("oil").setup(opts)
 
-    local oil_parent_limit = function()
-      local oil = require("oil")
-      local current_dir = oil.get_current_dir()
-      if current_dir then
-        local parent = vim.fn.fnamemodify(current_dir, ":h:h")
-        if parent and parent ~= "/" and parent ~= current_dir then
-          oil.open(parent)
-        end
-      end
-    end
+    vim.api.nvim_create_autocmd("BufLeave", {
+      pattern = "oil://*",
+      callback = function()
+        require("oil").save()
+      end,
+    })
 
     vim.keymap.set("n", "-", "<CMD>Oil --float<CR>", { desc = "Open parent directory" })
   end,

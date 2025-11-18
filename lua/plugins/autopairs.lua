@@ -13,5 +13,15 @@ return {
   config = function(_, opts)
     local npairs = require("nvim-autopairs")
     npairs.setup(opts)
+
+    local has_blink, blink = pcall(require, "blink.cmp")
+    if has_blink then
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "BlinkCmpCompleteDone",
+        callback = function(event)
+          npairs.on_confirm_done()(event)
+        end,
+      })
+    end
   end,
 }
