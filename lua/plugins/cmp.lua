@@ -15,13 +15,7 @@ return {
           local copilot = require("copilot.suggestion")
           if copilot.is_visible() then
             copilot.accept()
-            vim.schedule(function()
-              local npairs = require("nvim-autopairs")
-              npairs.autopairs_cr()
-            end)
-            return true
           end
-          return false
         end,
         "fallback",
       },

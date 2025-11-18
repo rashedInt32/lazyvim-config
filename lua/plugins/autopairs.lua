@@ -23,5 +23,15 @@ return {
         end,
       })
     end
+
+    vim.api.nvim_create_autocmd("InsertEnter", {
+      callback = function()
+        vim.defer_fn(function()
+          if not npairs then
+            npairs = require("nvim-autopairs")
+          end
+        end, 10)
+      end,
+    })
   end,
 }
