@@ -8,6 +8,12 @@ return {
     skip_confirm_for_simple_edits = true,
     prompt_save_on_select_new_entry = false,
     default_file_explorer = false,
+    confirmation = {
+      border = "rounded",
+      win_options = {
+        winblend = 0,
+      },
+    },
     columns = {
       "icon",
     },
