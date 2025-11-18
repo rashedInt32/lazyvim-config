@@ -53,6 +53,7 @@ return {
       providers = {
         lsp = { score_offset = 250 },
         copilot = { name = "copilot", module = "blink-copilot", score_offset = 200, async = true },
+
         buffer = { score_offset = 150 },
         path = { score_offset = 140 },
         snippets = { score_offset = 120, module = "blink.cmp.sources.snippets" },
