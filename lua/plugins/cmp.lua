@@ -56,7 +56,13 @@ return {
 
         buffer = { score_offset = 150 },
         path = { score_offset = 140 },
-        snippets = { score_offset = 120, module = "blink.cmp.sources.snippets" },
+        snippets = {
+          score_offset = 260,
+          opts = {
+            friendly_snippets = false,
+            search_paths = { vim.fn.stdpath("config") .. "/snippets" },
+          },
+        },
       },
     },
   },

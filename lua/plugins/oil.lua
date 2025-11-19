@@ -5,8 +5,8 @@ return {
   },
   lazy = false,
   opts = {
-    skip_confirm_for_simple_edits = true,
-    prompt_save_on_select_new_entry = false,
+    --skip_confirm_for_simple_edits = true,
+    --prompt_save_on_select_new_entry = false,
     default_file_explorer = false,
     confirmation = {
       border = "rounded",
@@ -60,13 +60,6 @@ return {
   },
   config = function(_, opts)
     require("oil").setup(opts)
-
-    vim.api.nvim_create_autocmd("BufLeave", {
-      pattern = "oil://*",
-      callback = function()
-        require("oil").save()
-      end,
-    })
 
     vim.keymap.set("n", "-", "<CMD>Oil --float<CR>", { desc = "Open parent directory" })
   end,
