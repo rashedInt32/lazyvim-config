@@ -10,6 +10,6 @@ return {
       topdelete = { text = "‾" },
       changedelete = { text = "~" },
     },
-    current_line_blame = true, -- optional
+    current_line_blame = false,
   },
 }
