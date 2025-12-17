@@ -193,6 +193,44 @@ return {
 
     keys = {
       {
+        "<leader>ss",
+        function()
+          Snacks.picker.lsp_symbols({
+            kinds = {
+              "Function",
+              "Method",
+              "Constructor",
+              "Class",
+              "Interface",
+              "Struct",
+              "Enum",
+              "Module",
+              "Namespace",
+              "Property",
+              "Field",
+              "Constant",
+              "EnumMember",
+              "Variable",
+            },
+          })
+        end,
+        desc = "LSP Symbols",
+      },
+      {
+        "<leader>sm",
+        function()
+          Snacks.picker.marks()
+        end,
+        desc = "Marks",
+      },
+      {
+        "<leader>sj",
+        function()
+          Snacks.picker.jumps()
+        end,
+        desc = "Jumps",
+      },
+      {
         "<leader><space>",
         function()
           Snacks.picker.smart()
