@@ -7,18 +7,15 @@ return {
   event = "InsertEnter",
   opts = {
     keymap = {
-      ["<Tab>"] = { "select_and_accept", "fallback" },
-      ["<S-Tab>"] = { "fallback" },
+      ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+      ["<C-e>"] = { "hide", "fallback" },
+      ["<C-p>"] = { "select_prev", "fallback" },
+      ["<C-n>"] = { "select_next", "fallback" },
+      ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+      ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+      ["<Tab>"] = { "select_and_accept", "snippet_forward", "fallback" },
+      ["<S-Tab>"] = { "snippet_backward", "fallback" },
       ["<CR>"] = { "fallback" },
-      ["<C-f>"] = {
-        function(cmp)
-          local copilot = require("copilot.suggestion")
-          if copilot.is_visible() then
-            copilot.accept()
-          end
-        end,
-        "fallback",
-      },
     },
     appearance = {
       nerd_font_variant = "mono",
