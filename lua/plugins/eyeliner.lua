@@ -8,7 +8,6 @@ return {
   --     -- dim all other characters if set to true (recommended!)
   --     dim = false,
   --
-  --
   --     -- set the maximum number of characters eyeliner.nvim will check from
   --     -- your current cursor position; this is useful if you are dealing with
   --     -- large files: see https://github.com/jinh0/eyeliner.nvim/issues/41
