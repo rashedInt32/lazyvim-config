@@ -184,6 +184,14 @@ return {
       },
       statuscolumn = { enabled = true },
       words = { enabled = true },
+      zen = {
+        toggles = {
+          dim = false,
+        },
+        show = {
+          statusline = true,
+        },
+      },
       styles = {
         notification = {
           -- wo = { wrap = true }
