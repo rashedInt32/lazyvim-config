@@ -42,7 +42,7 @@ return {
           ["*"] = false, -- Disable for other filetypes
         },
         nes = {
-          enabled = true, -- Enable NES (Next Edit Suggestion) feature
+          enabled = false, -- Enable NES (Next Edit Suggestion) feature
           auto_trigger = false, -- Disable auto-trigger to avoid conflicts
           keymap = {
             accept = "<C-f>", -- Accept next edit suggestion with Ctrl+F
