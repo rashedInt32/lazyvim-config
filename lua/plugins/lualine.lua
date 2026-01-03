@@ -115,6 +115,7 @@ return {
           color = { bg = colors.gray2, fg = colors.bg, gui = "bold" },
           separator = { left = "", right = "" },
           symbols = { added = " ", modified = " ", removed = " " },
+          always_visible = true,
 
           diff_color = {
             added = { fg = colors.green },
