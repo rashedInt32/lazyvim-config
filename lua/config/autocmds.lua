@@ -103,7 +103,7 @@ vim.api.nvim_create_user_command("TestLualine", function()
 
     local branch = {
       "branch",
-      icon = "",
+      icon = " ",
       color = { bg = colors.green, fg = colors.bg, gui = "bold" },
       separator = { left = "", right = "" },
     }
@@ -219,7 +219,8 @@ vim.api.nvim_create_user_command("TestLualine", function()
         hint = { fg = colors.cyan },
       },
       color = { bg = colors.gray2, fg = colors.blue, gui = "bold" },
-      separator = { left = "" },
+      separator = { left = "", right = "" },
+      always_visible = true,
     }
 
     local lsp = {
@@ -240,6 +241,7 @@ vim.api.nvim_create_user_command("TestLualine", function()
         ignore_focus = {},
         always_divide_middle = true,
         globalstatus = true,
+        component_padding = 0,
       },
 
       sections = {
@@ -265,7 +267,6 @@ vim.api.nvim_create_user_command("TestLualine", function()
           diff,
           space,
           dia,
-          lsp,
         },
       },
 
