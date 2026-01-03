@@ -24,14 +24,3 @@ vim.api.nvim_create_autocmd("User", {
     vim.api.nvim_del_keymap("i", "<C-F>")
   end,
 })
-
-vim.api.nvim_create_user_command("TestLualine", function()
-  config_lualine(colors)
-  vim.o.laststatus = vim.g.lualine_laststatus
-  print("✓ Test lualine config loaded")
-end, {})
-
-vim.api.nvim_create_user_command("ResetLualine", function()
-  require("lazy").reload({ plugins = { "lualine.nvim" } })
-  print("✓ Reset to original lualine config")
-end, {})
