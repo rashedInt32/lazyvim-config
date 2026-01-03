@@ -117,7 +117,6 @@ return {
           symbols = { added = " ", modified = " ", removed = " " },
           --symbols = { added = " ", modified = " ", removed = " " },
           colored = true,
-          always_visible = true,
 
           diff_color = {
             added = { fg = colors.green },
@@ -199,9 +198,9 @@ return {
             },
             lualine_y = { macro, space },
             lualine_z = {
-              location,
-              space,
               diff,
+              space,
+              location,
               space,
               dia,
             },
