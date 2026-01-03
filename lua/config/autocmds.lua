@@ -136,72 +136,6 @@ vim.api.nvim_create_user_command("TestLualine", function()
       separator = { left = "", right = "" },
     }
 
-    local function getLspName()
-      local bufnr = vim.api.nvim_get_current_buf()
-      local buf_ft = vim.bo.filetype
-
-      local client_names = {}
-
-      ----------------------------------------------------------------------
-      -- LSP clients
-      ----------------------------------------------------------------------
-      local buf_clients = vim.lsp.get_clients({ bufnr = bufnr })
-
-      for _, client in ipairs(buf_clients) do
-        table.insert(client_names, client.name)
-      end
-
-      ----------------------------------------------------------------------
-      -- nvim-lint
-      ----------------------------------------------------------------------
-      local lint_ok, lint = pcall(require, "lint")
-      if lint_ok and lint.linters_by_ft then
-        local linters = lint.linters_by_ft[buf_ft]
-        if type(linters) == "table" then
-          for _, l in ipairs(linters) do
-            table.insert(client_names, l)
-          end
-        elseif type(linters) == "string" then
-          table.insert(client_names, linters)
-        end
-      end
-
-      ----------------------------------------------------------------------
-      -- conform.nvim
-      ----------------------------------------------------------------------
-      local conform_ok, conform = pcall(require, "conform")
-      if conform_ok then
-        local formatters = table.concat(conform.list_formatters_for_buffer(), " ")
-        if conform_ok then
-          for formatter in formatters:gmatch("%w+") do
-            if formatter then
-              table.insert(client_names, formatter)
-            end
-          end
-        end
-      end
-
-      ----------------------------------------------------------------------
-      -- Si no hay nada, mostrar "No tools"
-      ----------------------------------------------------------------------
-      if #client_names == 0 then
-        return "  No tools"
-      end
-
-      ----------------------------------------------------------------------
-      -- Eliminar duplicados
-      ----------------------------------------------------------------------
-      local uniq, seen = {}, {}
-      for _, name in ipairs(client_names) do
-        if not seen[name] then
-          table.insert(uniq, name)
-          seen[name] = true
-        end
-      end
-
-      return "  " .. table.concat(uniq, ", ")
-    end
-
     local macro = {
       require("noice").api.status.mode.get,
       cond = require("noice").api.status.mode.has,
@@ -211,7 +145,7 @@ vim.api.nvim_create_user_command("TestLualine", function()
     local dia = {
       "diagnostics",
       sources = { "nvim_diagnostic" },
-      symbols = { error = " ", warn = " ", info = " ", hint = " " },
+      symbols = { error = " ", warn = " ", info = " ", hint = " " },
       diagnostics_color = {
         error = { fg = colors.red },
         warn = { fg = colors.yellow },
@@ -221,14 +155,6 @@ vim.api.nvim_create_user_command("TestLualine", function()
       color = { bg = colors.gray2, fg = colors.blue, gui = "bold" },
       separator = { left = "", right = "" },
       always_visible = true,
-    }
-
-    local lsp = {
-      function()
-        return getLspName()
-      end,
-      separator = { left = "", right = "" },
-      color = { bg = colors.purple, fg = colors.bg, gui = "italic,bold" },
     }
 
     require("lualine").setup({
