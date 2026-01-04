@@ -93,8 +93,8 @@ return {
           icon_only = true,
           colored = true,
 
-          color = { bg = colors.gray2, fg = colors.blue, gui = "italic,bold" },
-          separator = { left = "", right = "" },
+          color = { fg = colors.blue, gui = "italic,bold" },
+          icon = { align = "right" },
         }
 
         local branch = {
@@ -135,7 +135,11 @@ return {
         }
 
         local macro = {
-          require("noice").api.status.mode.get,
+          function()
+            local mode = require("noice").api.status.mode.get()
+            -- Extract "@x" from "recording @x"
+            return mode and (" " .. mode:match("@%w"))
+          end,
           cond = require("noice").api.status.mode.has,
           color = { fg = colors.red, bg = "#01111d", gui = "italic,bold" },
         }
@@ -165,6 +169,7 @@ return {
             return require("tmux-status").show()
           end,
           color = { fg = "#005f00", bg = "#01111d" },
+          separator = { left = "", right = "" },
         }
 
         require("lualine").setup({
@@ -175,7 +180,7 @@ return {
             component_separators = { left = "", right = "" },
             section_separators = { left = "", right = "" },
             ignore_focus = {},
-            always_divide_middle = true,
+            --always_divide_middle = true,
             globalstatus = true,
             component_padding = 0,
           },
@@ -193,16 +198,15 @@ return {
               filename,
               --filetype,
             },
-            lualine_x = {
-              space,
-            },
-            lualine_y = { macro, space },
+            lualine_x = {},
+            lualine_y = { macro },
             lualine_z = {
               diff,
               space,
               location,
               space,
               dia,
+              --tmux_session,
             },
           },
 
