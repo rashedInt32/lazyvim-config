@@ -35,7 +35,6 @@ return {
           no = colors.red,
           s = colors.yellow,
           S = colors.yellow,
-          [""] = colors.yellow,
           ic = colors.yellow,
           R = colors.green,
           Rv = colors.purple,

@@ -168,7 +168,7 @@ return {
             keys = {
               ["<Esc>"] = { "close", mode = { "n", "i" } },
               ["<a-.>"] = { "toggle_hidden", mode = { "i", "n" } },
-              ["<a-h"] = false,
+              ["<a-h>"] = false,
             },
           },
         },
