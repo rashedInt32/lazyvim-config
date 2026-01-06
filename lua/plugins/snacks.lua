@@ -5,23 +5,23 @@ return {
     event = "VeryLazy",
     enabled = true,
 
-    lsp = {
-      enabled = true,
-      diagnostics = {
-        enabled = false,
-        insert = false,
-        virtual_text = false,
-        signs = true,
-        underline = true,
-        update_in_insert = false,
-      },
-      hover = {
-        enabled = false,
-      },
-      signature = {
-        enabled = false,
-      },
-    },
+    -- lsp = {
+    --   enabled = true,
+    --   diagnostics = {
+    --     enabled = false,
+    --     insert = false,
+    --     virtual_text = false,
+    --     signs = true,
+    --     underline = true,
+    --     update_in_insert = false,
+    --   },
+    --   hover = {
+    --     enabled = false,
+    --   },
+    --   signature = {
+    --     enabled = false,
+    --   },
+    -- },
     opts = {
       terminal = {
         enabled = true,
