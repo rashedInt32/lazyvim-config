@@ -80,11 +80,11 @@ vim.diagnostic.config({
   severity_sort = true,
   signs = true,
   virtual_text = false,
-  underline = true,
+  underline = false,
 
   float = {
     border = "rounded",
-    source = "always",
+    source = true,
     header = "",
     prefix = "",
 
@@ -106,7 +106,7 @@ vim.diagnostic.config({
       }
 
       local icon, hl = unpack(icon_map[diagnostic.severity] or { "", "" })
-      local icon_str = (hl ~= "" and ("%#" .. hl .. "#" .. icon .. "%*") or icon)
+      local icon_str = (hl ~= "" and ("%#" .. hl .. "#" .. icon .. "%* ") or icon)
 
       -- TypeScript-specific formatting fallback
       local ok, formatter = pcall(require, "format-ts-errors")
