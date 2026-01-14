@@ -25,6 +25,9 @@ return {
       hl.CursorLine = {
         bg = "#021320",
       }
+      hl.Visual = {
+        bg = "#1e2a3f",
+      }
     end,
   },
 }
