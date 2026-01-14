@@ -7,7 +7,7 @@ return {
   event = "InsertEnter",
   opts = {
     keymap = {
-      ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+      ["<C-l>"] = { "show", "show_documentation", "hide_documentation" },
       ["<C-e>"] = { "hide", "fallback" },
       ["<C-p>"] = { "select_prev", "fallback" },
       ["<C-n>"] = { "select_next", "fallback" },
@@ -30,6 +30,13 @@ return {
       },
     },
     completion = {
+      trigger = {
+        show_on_insert = false,
+        show_on_change = false,
+        show_on_backspace = false,
+      },
+
+      keyword_length = 1,
       accept = {
         auto_brackets = {
           enabled = false,
@@ -49,12 +56,12 @@ return {
       default = { "lsp", "copilot", "buffer", "path", "snippets" },
       providers = {
         lsp = { score_offset = 250 },
-        copilot = { name = "copilot", module = "blink-copilot", score_offset = 200, async = true },
+        copilot = { name = "copilot", module = "blink-copilot", score_offset = 120, async = true },
 
         buffer = { score_offset = 150 },
         path = { score_offset = 140 },
         snippets = {
-          score_offset = 260,
+          score_offset = 100,
           opts = {
             friendly_snippets = false,
             search_paths = { vim.fn.stdpath("config") .. "/snippets" },

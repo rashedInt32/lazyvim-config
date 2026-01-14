@@ -3,7 +3,7 @@ return {
   lazy = false,
   priority = 1000,
   opts = {
-    style = "night",
+    style = "moon",
     transparent = true,
     styles = {
       sidebars = "transparent",
@@ -27,6 +27,12 @@ return {
       }
       hl.Visual = {
         bg = "#1e2a3f",
+      }
+      hl.CopilotSuggestion = {
+        fg = "#5a6a8a",
+      }
+      hl.BlinkCmpGhostText = {
+        fg = "#5a6a8a",
       }
     end,
   },
