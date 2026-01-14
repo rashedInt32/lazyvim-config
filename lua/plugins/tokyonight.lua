@@ -8,6 +8,18 @@ return {
     styles = {
       sidebars = "transparent",
       floats = "transparent",
+      comments = { italic = true },
+      keywords = { italic = true },
+      functions = { italic = true },
+      conditionals = {},
+      loops = {},
+      strings = {},
+      variables = {},
+      numbers = {},
+      booleans = {},
+      properties = {},
+      types = {},
+      operators = {},
     },
     on_highlights = function(hl, c)
       hl.CursorLine = {
