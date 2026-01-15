@@ -26,7 +26,7 @@ return {
         bg = "#021320",
       }
       hl.Visual = {
-        bg = "#1e2a3f",
+        bg = "#2d3f5f",
       }
       hl.CopilotSuggestion = {
         fg = "#5a6a8a",
