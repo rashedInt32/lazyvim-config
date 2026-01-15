@@ -1,29 +1,41 @@
 return {
   -- "ray-x/lsp_signature.nvim",
-  -- event = "BufReadPre",
+  -- event = "LspAttach",
   -- opts = {
-  --   bind = true,
-  --   debug = false,
+  --   bind = false,
+  --   doc_lines = 2,
   --   floating_window = true,
-  --
-  --   -- Let plugin auto decide placement, but push away from cursor
-  --   floating_window_above_cur_line = nil, -- auto choose top/bottom
-  --   floating_window_off_y = 1, -- ensures below cursor if possible
+  --   floating_window_above_cur_line = true,
   --   floating_window_off_x = 0,
-  --
-  --   -- Make sure float stays *behind* cursor text
-  --   zindex = 50, -- lower than cursor (default 200+ blocks cursor)
-  --
-  --   floating_window_close_timeout = 4000,
+  --   floating_window_off_y = 0,
+  --   fix_pos = false,
+  --   hint_enable = true,
+  --   hint_prefix = "🐼 ",
+  --   hint_scheme = "String",
+  --   always_trigger = false,
+  --   auto_close_after = nil,
+  --   extra_trigger_chars = {},
+  --   timer_interval = 0,
+  --   close_timeout = 4000,
+  --   zindex = 50,
   --   handler_opts = {
   --     border = "rounded",
   --   },
-  --
-  --   extra_keymaps = function()
-  --     return {
-  --       select_signature_key = "<C-s>",
-  --       close_signature_key = "<C-e>",
-  --     }
-  --   end,
+  --   hi_parameter = "LspSignatureActiveParameter",
+  --   padding = " ",
+  --   toggle_key = nil,
+  --   toggle_key_flip_floatwin_setting = false,
   -- },
+  -- config = function(_, opts)
+  --   require("lsp_signature").setup(opts)
+  --
+  --   vim.api.nvim_create_autocmd("LspAttach", {
+  --     callback = function(args)
+  --       local bufnr = args.buf
+  --       vim.keymap.set("n", "K", function()
+  --         require("lsp_signature").toggle_float_win()
+  --       end, { buffer = bufnr, desc = "Signature Help", silent = true })
+  --     end,
+  --   })
+  -- end,
 }
