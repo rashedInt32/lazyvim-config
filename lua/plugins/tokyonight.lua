@@ -3,7 +3,7 @@ return {
   lazy = false,
   priority = 1000,
   opts = {
-    style = "moon",
+    style = "night",
     transparent = true,
     styles = {
       sidebars = "transparent",
@@ -36,4 +36,18 @@ return {
       }
     end,
   },
+  config = function(_, opts)
+    require("tokyonight").setup(opts)
+    vim.cmd.colorscheme("tokyonight")
+    
+    vim.api.nvim_create_autocmd("ColorScheme", {
+      pattern = "tokyonight",
+      callback = function()
+        vim.api.nvim_set_hl(0, "Visual", { bg = "#2d3f5f" })
+        vim.api.nvim_set_hl(0, "CursorLine", { bg = "#021320" })
+        vim.api.nvim_set_hl(0, "CopilotSuggestion", { fg = "#5a6a8a" })
+        vim.api.nvim_set_hl(0, "BlinkCmpGhostText", { fg = "#5a6a8a" })
+      end,
+    })
+  end,
 }

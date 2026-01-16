@@ -56,12 +56,12 @@ return {
       default = { "lsp", "copilot", "buffer", "path", "snippets" },
       providers = {
         lsp = { score_offset = 250 },
-        copilot = { name = "copilot", module = "blink-copilot", score_offset = 120, async = true },
+        copilot = { name = "copilot", module = "blink-copilot", score_offset = 160, async = true },
 
         buffer = { score_offset = 150 },
         path = { score_offset = 140 },
         snippets = {
-          score_offset = 100,
+          score_offset = 260,
           opts = {
             friendly_snippets = false,
             search_paths = { vim.fn.stdpath("config") .. "/snippets" },

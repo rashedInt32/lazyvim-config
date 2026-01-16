@@ -185,26 +185,6 @@ return {
               max_height = 30,
             })
           end, { buffer = bufnr, desc = "Open floating diagnostics" })
-          -- local function smart_hover_or_signature()
-          --   local col = vim.fn.col(".")
-          --   local line = vim.fn.getline(".")
-          --   local before = line:sub(1, col - 1)
-          --
-          --   local inside_parens = before:find("%(") and not before:find("%)[^%(]*$")
-          --
-          --   if inside_parens then
-          --     vim.lsp.buf_request(0, "textDocument/signatureHelp", {
-          --       textDocument = vim.lsp.util.make_text_document_params(),
-          --       position = vim.lsp.util.make_position_params().position,
-          --       context = { triggerKind = 1 },
-          --     }, vim.lsp.handlers["textDocument/signatureHelp"])
-          --   else
-          --     vim.lsp.buf.hover()
-          --   end
-          -- end
-          -- vim.keymap.set("n", "K", smart_hover_or_signature, { buffer = bufnr, desc = "Hover or Signature Help" })
-          -- -- Insert-mode signature help
-          -- vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { buffer = bufnr, desc = "Signature Help" })
         end,
       })
 
