@@ -16,7 +16,7 @@ return {
   },
   keys = {
     { "y", "<Plug>(YankyYank)", mode = { "n", "x" }, desc = "Yank text" },
-    { "p", "=p", mode = "n", remap = true, desc = "Put after with auto-indent" },
+    { "p", "<Plug>(YankyPutAfter)", mode = { "n", "x" }, desc = "Put yanked text after cursor" },
     { "P", "=P", mode = "n", remap = true, desc = "Put before with auto-indent" },
     { "gp", "<Plug>(YankyGPutAfter)", mode = { "n", "x" }, desc = "Put yanked text after selection" },
     { "gP", "<Plug>(YankyGPutBefore)", mode = { "n", "x" }, desc = "Put yanked text before selection" },
