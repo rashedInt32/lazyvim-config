@@ -34,12 +34,16 @@ return {
       hl.BlinkCmpGhostText = {
         fg = "#5a6a8a",
       }
+      -- hl.Comment = {
+      --   fg = "#6f7bb2",
+      --   italic = true,
+      -- }
     end,
   },
   config = function(_, opts)
     require("tokyonight").setup(opts)
     vim.cmd.colorscheme("tokyonight")
-    
+
     vim.api.nvim_create_autocmd("ColorScheme", {
       pattern = "tokyonight",
       callback = function()
@@ -47,6 +51,7 @@ return {
         vim.api.nvim_set_hl(0, "CursorLine", { bg = "#021320" })
         vim.api.nvim_set_hl(0, "CopilotSuggestion", { fg = "#5a6a8a" })
         vim.api.nvim_set_hl(0, "BlinkCmpGhostText", { fg = "#5a6a8a" })
+        --vim.api.nvim_set_hl(0, "Comment", { fg = "#6f7bb2", italic = true })
       end,
     })
   end,
