@@ -1,5 +1,6 @@
 return {
   "oxfist/night-owl.nvim",
+  enabled = false,
   lazy = false, -- load during startup as main colorscheme
   priority = 1000, -- load before other plugins
   opts = {},

@@ -34,10 +34,10 @@ return {
       hl.BlinkCmpGhostText = {
         fg = "#5a6a8a",
       }
-      -- hl.Comment = {
-      --   fg = "#6f7bb2",
-      --   italic = true,
-      -- }
+      hl.Comment = {
+        fg = "#6772a4",
+        italic = true,
+      }
     end,
   },
   config = function(_, opts)
@@ -51,7 +51,7 @@ return {
         vim.api.nvim_set_hl(0, "CursorLine", { bg = "#021320" })
         vim.api.nvim_set_hl(0, "CopilotSuggestion", { fg = "#5a6a8a" })
         vim.api.nvim_set_hl(0, "BlinkCmpGhostText", { fg = "#5a6a8a" })
-        --vim.api.nvim_set_hl(0, "Comment", { fg = "#6f7bb2", italic = true })
+        vim.api.nvim_set_hl(0, "Comment", { fg = "#6772a4", italic = true })
       end,
     })
   end,
