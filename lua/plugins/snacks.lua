@@ -115,6 +115,8 @@ return {
               "!**/.next",
               "-g",
               "!**/.gitignore",
+              "-g",
+              "!**/bootstrap",
             },
           },
           files = {
@@ -145,6 +147,7 @@ return {
               "*.jpg",
               "*.png",
               "*-lock.yaml",
+              "**/bootstrap",
             },
           },
 
