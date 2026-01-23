@@ -65,7 +65,7 @@ return {
         throttle = 20,
 
         -- Minimum message length before wrapping to a new line
-        softwrap = 30,
+        softwrap = 40,
 
         -- Configuration for multiline diagnostics
         -- Can be a boolean or a table with detailed options
@@ -125,10 +125,10 @@ return {
               got, expected = msg:match("Argument of type '(.-)' is not assignable to parameter of type '(.-)'%.?$")
             end
             if expected and got then
-              got = got:gsub("import%([^)]+%)%.", ""):sub(1, 35)
-              expected = expected:gsub("import%([^)]+%)%.", ""):sub(1, 35)
-              if #got > 35 then got = got .. "…" end
-              if #expected > 35 then expected = expected .. "…" end
+              got = got:gsub("import%([^)]+%)%.", ""):sub(1, 50)
+              expected = expected:gsub("import%([^)]+%)%.", ""):sub(1, 50)
+              if #got > 50 then got = got .. "…" end
+              if #expected > 50 then expected = expected .. "…" end
               return "✗ " .. got .. " → ✓ " .. expected
             end
 
