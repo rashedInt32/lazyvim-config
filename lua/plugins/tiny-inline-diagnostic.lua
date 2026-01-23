@@ -115,16 +115,72 @@ return {
           after = 30,
         },
 
-        -- Custom format function for diagnostic messages
-        -- Function receives a diagnostic object and should return a string
-        -- Example: function(diagnostic) return diagnostic.message .. " [" .. diagnostic.source .. "]" end
         format = function(diagnostic)
-          local max_length = 400 -- Adjust this to your preference
-          local message = diagnostic.message
-          if #message > max_length then
-            return string.format("🎬 Scene too long (%d chars). Director's cut at the cinema.", #message)
+          local msg = diagnostic.message
+          local source = diagnostic.source or ""
+
+          if source:match("typescript") or source:match("ts") or source:match("vtsls") then
+            local expected, got = msg:match("Type '(.-)' is not assignable to type '(.-)'%.?$")
+            if not expected then
+              got, expected = msg:match("Argument of type '(.-)' is not assignable to parameter of type '(.-)'%.?$")
+            end
+            if expected and got then
+              got = got:gsub("import%([^)]+%)%.", ""):sub(1, 35)
+              expected = expected:gsub("import%([^)]+%)%.", ""):sub(1, 35)
+              if #got > 35 then got = got .. "…" end
+              if #expected > 35 then expected = expected .. "…" end
+              return "✗ " .. got .. " → ✓ " .. expected
+            end
+
+            local prop = msg:match("Property '(.-)' is missing")
+            if prop then
+              return "◈ Missing: '" .. prop .. "'"
+            end
+
+            local missing_prop = msg:match("Property '(.-)' does not exist")
+            if missing_prop then
+              return "✗ Unknown: '" .. missing_prop .. "'"
+            end
+
+            local name = msg:match("Cannot find name '(.-)'")
+            if name then
+              return "✗ Undefined: '" .. name .. "'"
+            end
+
+            local module_path = msg:match("Cannot find module '(.-)'")
+            if module_path then
+              return "✗ Module: '" .. module_path:gsub(".*/", "") .. "'"
+            end
+
+            local implicit = msg:match("Parameter '(.-)' implicitly has an 'any'")
+            if implicit then
+              return "⚠ Needs type: '" .. implicit .. "'"
+            end
+
+            if msg:match("Object is possibly") then
+              return "⚠ Possibly nullish"
+            end
+
+            local ok, formatter = pcall(require, "format-ts-errors")
+            if ok and diagnostic.code then
+              local format_func = formatter[diagnostic.code]
+              if format_func and type(format_func) == "function" then
+                local formatted = format_func(msg)
+                if formatted and formatted ~= "" then
+                  formatted = formatted:gsub("```typescript\n", ""):gsub("```ts\n", ""):gsub("\n```", "")
+                  if #formatted > 100 then
+                    formatted = formatted:sub(1, 97) .. "…"
+                  end
+                  return formatted
+                end
+              end
+            end
           end
-          return message
+
+          if #msg > 100 then
+            return msg:sub(1, 97) .. "…"
+          end
+          return msg
         end,
 
         -- Virtual text display configuration
