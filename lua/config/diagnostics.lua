@@ -15,7 +15,9 @@ local function prettify_type(type_str)
     return type_str
   end
 
-  type_str = type_str:gsub("import%([^)]+%)%.", ""):gsub("import%([^)]+%)", "ᴵ"):gsub("ParseResult%.", "")
+  type_str = type_str:gsub("import%(\"[^\"]+/node_modules/[^\"]+\"%)%.", "")
+  type_str = type_str:gsub("import%(\"[^\"]+\"%)%.([%w_]+)", "%1")
+  type_str = type_str:gsub("ParseResult%.", "")
 
   return type_str
 end
@@ -251,6 +253,7 @@ vim.diagnostic.config({
     source = true,
     header = "",
     prefix = "",
+    max_width = 100,
 
     suffix = function(diagnostic)
       if diagnostic.code then

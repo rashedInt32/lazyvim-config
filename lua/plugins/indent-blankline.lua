@@ -3,20 +3,26 @@ return {
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
-    opts = {
-      indent = {
-        char = "│",
-      },
-      scope = {
-        enabled = false, -- turn off bold indent lines
-      },
-    },
-    config = function(_, opts)
-      local ibl = require("ibl")
-      ibl.setup(opts)
+    config = function()
+      local hooks = require("ibl.hooks")
 
-      -- Optional: subtle color for indent lines
-      vim.api.nvim_set_hl(0, "IblIndent", { fg = "#3b3b3b", nocombine = true })
+      hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+        vim.api.nvim_set_hl(0, "IblIndentHidden", { fg = "#0a2a3d", nocombine = true })
+        vim.api.nvim_set_hl(0, "IblScopeVisible", { fg = "#5c5c5c", nocombine = true })
+      end)
+
+      require("ibl").setup({
+        indent = {
+          char = "│",
+          highlight = "IblIndentHidden",
+        },
+        scope = {
+          enabled = true,
+          show_start = false,
+          show_end = false,
+          highlight = "IblScopeVisible",
+        },
+      })
     end,
   },
 
