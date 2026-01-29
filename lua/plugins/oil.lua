@@ -16,6 +16,7 @@ return {
       default_file_explorer = false,
       win_options = {
         signcolumn = "no",
+        foldcolumn = "1",
       },
       confirmation = {
         border = "rounded",
@@ -56,7 +57,6 @@ return {
         border = "rounded",
         win_options = {
           winblend = 0,
-          signcolumn = "yes:2",
         },
         override = function(conf)
           conf.anchor = "SW"
