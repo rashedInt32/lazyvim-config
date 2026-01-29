@@ -1,5 +1,20 @@
 return {
   {
+    "FerretDetective/oil-git-signs.nvim",
+    ft = "oil",
+    opts = {
+      show_index = function()
+        return false
+      end,
+      working_tree = {
+        ["M"] = { icon = "~", hl_group = "OilGitSignsWorkingTreeModified" },
+        ["A"] = { icon = "+", hl_group = "OilGitSignsWorkingTreeAdded" },
+        ["D"] = { icon = "-", hl_group = "OilGitSignsWorkingTreeDeleted" },
+        ["?"] = { icon = "?", hl_group = "OilGitSignsWorkingTreeUntracked" },
+      },
+    },
+  },
+  {
     "stevearc/oil.nvim",
     dependencies = {
       { "nvim-mini/mini.icons", opts = {} },
@@ -15,8 +30,7 @@ return {
       },
       default_file_explorer = false,
       win_options = {
-        signcolumn = "no",
-        foldcolumn = "1",
+        signcolumn = "yes:1",
       },
       confirmation = {
         border = "rounded",
@@ -51,7 +65,7 @@ return {
         show_hidden = false,
       },
       float = {
-        padding = 2,
+        padding = 0,
         max_width = 0,
         max_height = 0,
         border = "rounded",
@@ -70,6 +84,11 @@ return {
     },
     config = function(_, opts)
       require("oil").setup(opts)
+
+      vim.api.nvim_set_hl(0, "OilGitSignsWorkingTreeModified", { link = "diffChanged" })
+      vim.api.nvim_set_hl(0, "OilGitSignsWorkingTreeAdded", { link = "diffAdded" })
+      vim.api.nvim_set_hl(0, "OilGitSignsWorkingTreeDeleted", { link = "diffRemoved" })
+      vim.api.nvim_set_hl(0, "OilGitSignsWorkingTreeUntracked", { link = "diffAdded" })
 
       vim.keymap.set("n", "-", "<CMD>Oil --float<CR>", { desc = "Open parent directory" })
     end,
