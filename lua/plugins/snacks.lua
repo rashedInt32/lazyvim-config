@@ -185,8 +185,8 @@ return {
         speed = 10,
         delay = 50,
       },
-      statuscolumn = { enabled = true },
-      words = { enabled = true },
+      statuscolumn = { enabled = false },
+      words = { enabled = false },
       zen = {
         toggles = {
           dim = false,
