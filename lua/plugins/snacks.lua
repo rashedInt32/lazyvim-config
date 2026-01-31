@@ -76,6 +76,7 @@ return {
       notifier = {
         enabled = true,
         timeout = 3000,
+        animate = false,
       },
       picker = {
         enabled = true,

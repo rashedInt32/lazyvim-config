@@ -8,11 +8,11 @@ return {
       "rcarriga/nvim-notify",
     },
     opts = function()
-      -- Calculate dynamic sizes based on current screen
       local columns = vim.o.columns
       local lines = vim.o.lines
 
       return {
+        animate = false,
         cmdline = {
           view = "cmdline",
         },

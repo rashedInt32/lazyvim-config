@@ -28,6 +28,8 @@ vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
+vim.opt.timeoutlen = 300
+vim.opt.ttimeoutlen = 10
 vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.breakindent = true
