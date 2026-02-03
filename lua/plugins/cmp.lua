@@ -2,7 +2,7 @@ return {
   "saghen/blink.cmp",
   dependencies = {
     "rafamadriz/friendly-snippets",
-    "fang2hou/blink-copilot",
+    -- "fang2hou/blink-copilot",
   },
   event = "InsertEnter",
   opts = {
@@ -12,7 +12,20 @@ return {
       ["<C-p>"] = { "select_prev", "fallback" },
       ["<C-n>"] = { "select_next", "fallback" },
       ["<C-b>"] = { "scroll_documentation_up", "fallback" },
-      ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+      -- ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+      -- When blink-copilot is enabled, use this to prioritize inline copilot suggestion:
+      -- ["<C-f>"] = {
+      --   function(cmp)
+      --     if require("copilot.suggestion").is_visible() then
+      --       require("copilot.suggestion").accept()
+      --       return true
+      --     end
+      --     return false
+      --   end,
+      --   "scroll_documentation_down",
+      --   "fallback",
+      -- },
+      ["<C-f>"] = { "fallback" },
       ["<Tab>"] = { "select_and_accept", "snippet_forward", "fallback" },
       ["<S-Tab>"] = { "snippet_backward", "fallback" },
       ["<CR>"] = { "fallback" },
@@ -53,11 +66,10 @@ return {
       },
     },
     sources = {
-      default = { "lsp", "copilot", "buffer", "path", "snippets" },
+      default = { "lsp", --[[ "copilot", ]] "buffer", "path", "snippets" },
       providers = {
         lsp = { score_offset = 250 },
-        copilot = { name = "copilot", module = "blink-copilot", score_offset = 160, async = true },
-
+        -- copilot = { name = "copilot", module = "blink-copilot", score_offset = 160, async = true },
         buffer = { score_offset = 150 },
         path = { score_offset = 140 },
         snippets = {

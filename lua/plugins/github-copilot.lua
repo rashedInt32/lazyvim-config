@@ -11,11 +11,11 @@ return {
     cmd = "Copilot",
     enabled = true,
     event = "InsertEnter",
-    copilot_model = "claude-sonnet-4.5",
+    copilot_model = "claude-opus-4.5",
     opts = {
       suggestion = {
-        enabled = false, -- Disable to avoid conflicts with blink-cmp-copilot
-        auto_trigger = false,
+        enabled = true, -- Disable to avoid conflicts with blink-cmp-copilot
+        auto_trigger = true,
         debounce = 75,
         keymap = {
           accept = "<C-f>", -- Accept suggestion with Ctrl+F
