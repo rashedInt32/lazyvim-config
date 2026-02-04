@@ -45,7 +45,6 @@ return {
     completion = {
       trigger = {
         show_on_insert = false,
-        show_on_change = false,
         show_on_backspace = false,
       },
 
@@ -66,7 +65,12 @@ return {
       },
     },
     sources = {
-      default = { "lsp", --[[ "copilot", ]] "buffer", "path", "snippets" },
+      default = {
+        "lsp", --[[ "copilot", ]]
+        "buffer",
+        "path",
+        "snippets",
+      },
       providers = {
         lsp = { score_offset = 250 },
         -- copilot = { name = "copilot", module = "blink-copilot", score_offset = 160, async = true },
