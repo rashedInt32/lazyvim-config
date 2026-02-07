@@ -15,8 +15,10 @@ return {
     },
   },
   keys = {
+    -- NOTE: Explicitly NOT including <leader>p mapping to avoid conflict with black hole paste
+    -- LazyVim default maps <leader>p to yank history picker - we're disabling that here
     { "y", "<Plug>(YankyYank)", mode = { "n", "x" }, desc = "Yank text" },
-    { "p", "<Plug>(YankyPutAfter)", mode = { "n", "x" }, desc = "Put yanked text after cursor" },
+    { "p", "<Plug>(YankyPutAfter)", mode = { "n" }, desc = "Put yanked text after cursor" },
     { "P", "=P", mode = "n", remap = true, desc = "Put before with auto-indent" },
     { "gp", "<Plug>(YankyGPutAfter)", mode = { "n", "x" }, desc = "Put yanked text after selection" },
     { "gP", "<Plug>(YankyGPutBefore)", mode = { "n", "x" }, desc = "Put yanked text before selection" },
@@ -32,5 +34,13 @@ return {
     { "<P", "<Plug>(YankyPutIndentBeforeShiftLeft)", desc = "Put before and indent left" },
     { "=p", "<Plug>(YankyPutAfterFilter)", desc = "Put after applying a filter" },
     { "=P", "<Plug>(YankyPutBeforeFilter)", desc = "Put before applying a filter" },
+    -- Alternative keymap for yank history (since <leader>p is used for black hole paste)
+    { "<leader>sy", function() require("snacks").picker.yanky() end, mode = { "n", "x" }, desc = "Yank History" },
   },
+  config = function(_, opts)
+    require("yanky").setup(opts)
+    -- Clear LazyVim's default <leader>p mapping and set our black hole paste
+    pcall(vim.keymap.del, "x", "<leader>p")
+    vim.keymap.set("x", "<leader>p", [["_dP]], { desc = "Paste without yanking (black hole)" })
+  end,
 }

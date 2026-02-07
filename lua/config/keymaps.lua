@@ -84,8 +84,7 @@ vim.keymap.set("n", "<leader>svwm", function()
   require("vim-with-me").StopVimWithMe()
 end)
 
--- greatest remap ever
-vim.keymap.set("x", "<leader>p", [["_dP]])
+-- greatest remap ever (black hole paste) is configured in yanky.lua to avoid conflicts
 
 -- next greatest remap ever : asbjornHaland
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
