@@ -627,7 +627,7 @@ return {
       {
         "<c-/>",
         function()
-          Snacks.terminal()
+          Snacks.terminal(nil, { env = { NVIM_TERMINAL = "1" } })
         end,
         desc = "Toggle Terminal",
         mode = { "n", "t", "i", "v" },
@@ -636,7 +636,7 @@ return {
       {
         "<c-\\>",
         function()
-          Snacks.terminal()
+          Snacks.terminal(nil, { env = { NVIM_TERMINAL = "1" } })
         end,
         desc = "Toggle Terminal",
         mode = { "n", "t" },
