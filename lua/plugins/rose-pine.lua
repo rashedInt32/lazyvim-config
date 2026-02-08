@@ -61,10 +61,11 @@ return {
     },
 
     highlight_groups = {
+      CursorLine = { bg = "#021320" },
+      Visual = { bg = "#1d3b53" },
       -- Comment = { fg = "foam" },
       -- StatusLine = { fg = "love", bg = "love", blend = 15 },
       -- VertSplit = { fg = "muted", bg = "muted" },
-      -- Visual = { fg = "base", bg = "text", inherit = false },
     },
 
     before_highlight = function(group, highlight, palette)
@@ -86,5 +87,13 @@ return {
     -- vim.cmd("colorscheme rose-pine-main")
     -- vim.cmd("colorscheme rose-pine-moon")
     -- vim.cmd("colorscheme rose-pine-dawn")
+
+    vim.api.nvim_create_autocmd("ColorScheme", {
+      pattern = "rose-pine*",
+      callback = function()
+        vim.api.nvim_set_hl(0, "CursorLine", { bg = "#021320" })
+        vim.api.nvim_set_hl(0, "Visual", { bg = "#1d3b53" })
+      end,
+    })
   end,
 }
