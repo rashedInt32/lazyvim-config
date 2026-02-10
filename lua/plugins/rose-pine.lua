@@ -14,10 +14,10 @@ return {
 
     palette = {
       main = {
-        base = "#011627",
+        base = "#011627", -- Night Owl Background
         surface = "#011f35",
         overlay = "#0b2942",
-        muted = "#637777",
+        muted = "#637777", -- Night Owl Slate Comments
         subtle = "#82aaff",
         rose = "#ff7eb6",
         pine = "#7fdbca",
@@ -29,8 +29,8 @@ return {
       },
     },
 
+    -- We removed 'border = "overlay"' from here to let Rose Pine decide
     groups = {
-      border = "overlay",
       link = "iris",
       panel = "surface",
       error = "love",
@@ -62,21 +62,16 @@ return {
       ["@constant"] = { fg = "pine" },
       ["@boolean"] = { fg = "pine" },
 
-      -- 3. UI ACCENTS & BORDER FIX
+      -- 3. UI ACCENTS
       CursorLine = { bg = "#021320" },
       LineNr = { fg = "#3b4261" },
       CursorLineNr = { fg = "subtle", bold = true },
 
-      -- THE BORDER FIX: This makes split lines visible
-      -- WinSeparator: The lines between windows
-      -- NormalNC: Colors for Non-Current (inactive) windows
-      WinSeparator = { fg = "#1a3a5e", bg = "NONE" },
-      StatusLine = { fg = "subtle", bg = "#011f35" },
-      StatusLineNC = { fg = "muted", bg = "#011627" },
+      -- 4. BORDER FIX (VERTICAL SPLITS)
+      -- Using Rose Pine's internal 'muted' or 'highlight_med' for splits
+      WinSeparator = { fg = "#3b4261", bg = "NONE" },
 
-      -- Better Floating Windows
-      NormalFloat = { bg = "surface" },
-      FloatBorder = { fg = "overlay", bg = "surface" },
+      -- REMOVED: NormalFloat and FloatBorder overrides to return to defaults
     },
   },
   config = function(_, opts)
