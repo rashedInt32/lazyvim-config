@@ -9,23 +9,23 @@ return {
     styles = {
       bold = true,
       italic = true,
-      transparency = false, -- Force Night Owl Background
+      transparency = false,
     },
 
     palette = {
       main = {
-        base = "#011627", -- Night Owl Background
-        surface = "#011f35", -- Sidebar/Panel Background
-        overlay = "#0b2942", -- Floating Windows
-        muted = "#637777", -- Night Owl Slate Comments
-        subtle = "#82aaff", -- Night Owl Punctuation
-        rose = "#ff7eb6", -- Rosé Pink (Keywords)
-        pine = "#7fdbca", -- Night Owl Seafoam (Constants)
-        foam = "#7dcfff", -- Tokyo Sky (Variables)
-        iris = "#c792ea", -- Night Owl Purple (Functions)
-        leaf = "#c3e88d", -- Tokyo Green (Strings)
-        love = "#ff5189", -- Neon Pink (Errors)
-        gold = "#ecc48d", -- Night Owl Gold (Types)
+        base = "#011627",
+        surface = "#011f35",
+        overlay = "#0b2942",
+        muted = "#637777",
+        subtle = "#82aaff",
+        rose = "#ff7eb6",
+        pine = "#7fdbca",
+        foam = "#7dcfff",
+        iris = "#c792ea",
+        leaf = "#c3e88d",
+        love = "#ff5189",
+        gold = "#ecc48d",
       },
     },
 
@@ -45,13 +45,13 @@ return {
     },
 
     highlight_groups = {
-      -- 1. THE COMMENT FIX (Recedes into background)
+      -- 1. THE COMMENT FIX
       ["@comment"] = { fg = "#637777", italic = true },
       ["Comment"] = { fg = "#637777", italic = true },
       ["@lsp.type.comment"] = { fg = "#637777" },
 
       -- 2. SYNTAX REFINEMENTS
-      Visual = { bg = "#2d4f67", inherit = false },
+      Visual = { bg = "#1d3b53", inherit = false },
       ["@keyword.modifier"] = { fg = "rose", italic = true },
       ["@function"] = { fg = "iris" },
       ["@type"] = { fg = "gold" },
@@ -62,10 +62,17 @@ return {
       ["@constant"] = { fg = "pine" },
       ["@boolean"] = { fg = "pine" },
 
-      -- 3. UI ACCENTS
-      CursorLine = { bg = "#022a44" },
+      -- 3. UI ACCENTS & BORDER FIX
+      CursorLine = { bg = "#021320" },
       LineNr = { fg = "#3b4261" },
       CursorLineNr = { fg = "subtle", bold = true },
+
+      -- THE BORDER FIX: This makes split lines visible
+      -- WinSeparator: The lines between windows
+      -- NormalNC: Colors for Non-Current (inactive) windows
+      WinSeparator = { fg = "#1a3a5e", bg = "NONE" },
+      StatusLine = { fg = "subtle", bg = "#011f35" },
+      StatusLineNC = { fg = "muted", bg = "#011627" },
 
       -- Better Floating Windows
       NormalFloat = { bg = "surface" },
