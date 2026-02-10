@@ -4,11 +4,10 @@ return {
   lazy = false,
   priority = 1000,
   opts = {
-    variant = "auto", -- auto, main, moon, or dawn
+    variant = "moon", -- auto, main, moon, or dawn
     dark_variant = "main", -- main, moon, or dawn
     dim_inactive_windows = false,
     extend_background_behind_borders = true,
-
     enable = {
       terminal = true,
       legacy_highlights = true,
@@ -53,11 +52,24 @@ return {
     },
 
     palette = {
-      -- Override the builtin palette per variant
-      -- moon = {
-      --     base = '#18191a',
-      --     overlay = '#363738',
-      -- },
+      moon = {
+        base = "#011627",
+        surface = "#1e2030",
+        overlay = "#2f334d",
+        muted = "#636da6",
+        subtle = "#828bb8",
+        text = "#e0def4",
+        love = "#ff757f",
+        gold = "#ffc777",
+        rose = "#ff966c",
+        pine = "#82aaff",
+        foam = "#86e1fc",
+        iris = "#fca7ea",
+        leaf = "#c3e88d",
+        highlight_low = "#2a283e",
+        highlight_med = "#44415a",
+        highlight_high = "#56526e",
+      },
     },
 
     highlight_groups = {
