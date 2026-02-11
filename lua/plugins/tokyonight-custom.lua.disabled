@@ -1,0 +1,60 @@
+return {
+  "folke/tokyonight.nvim",
+  lazy = false,
+  priority = 1000,
+  opts = {
+    style = "night",
+    transparent = true,
+    styles = {
+      sidebars = "transparent",
+      floats = "transparent",
+      comments = { italic = true },
+      keywords = { italic = true },
+      functions = { italic = true },
+    },
+    -- 1. OVERRIDE THE PALETTE (Injecting your Night Owl colors)
+    on_colors = function(c)
+      c.bg = "#011627" -- Background
+      c.bg_visual = "#1d3b53" -- Selection
+      c.comment = "#6a8080" -- Comments
+      c.magenta = "#ff7eb6" -- 'Rose' (Keywords like class)
+      c.purple = "#c792ea" -- 'Iris' (Keywords like export/import)
+      c.cyan = "#7dcfff" -- 'Foam' (Properties/Fields)
+      c.blue = "#82aaff" -- 'Subtle'
+      c.yellow = "#ff9e64" -- 'Gold' (Types)
+      c.green = "#c3e88d" -- 'Leaf' (Strings)
+      c.red = "#ff5189" -- 'Love' (Errors)
+      c.teal = "#7fdbca" -- 'Pine' (Constants/Booleans)
+    end,
+
+    -- 2. FIX HIGHLIGHT LOGIC (LSP & Keyword separation)
+    on_highlights = function(hl, c)
+      -- Fix the "Export vs Class" separation
+      hl["@keyword.export"] = { fg = c.purple, italic = true }
+      hl["@keyword.import"] = { fg = c.purple, italic = true }
+      hl["@keyword.storage"] = { fg = c.magenta } -- 'class', 'const'
+
+      -- Ensure properties/fields use 'Foam' (Cyan) and never fall back to Gold
+      hl["@property"] = { fg = c.cyan }
+      hl["@variable.member"] = { fg = c.cyan }
+      hl["@lsp.type.property"] = { fg = c.cyan }
+      hl["@lsp.type.variableMember"] = { fg = c.cyan }
+
+      -- UI Refinements
+      hl.CursorLine = { bg = "#021320" }
+      hl.Visual = { bg = c.bg_visual }
+      hl.CopilotSuggestion = { fg = "#5a6a8a" }
+      hl.BlinkCmpGhostText = { fg = "#5a6a8a" }
+
+      -- Ensure Types are consistently Gold
+      hl["@type"] = { fg = c.yellow }
+      hl["@lsp.type.type"] = { fg = c.yellow }
+      hl["@lsp.type.interface"] = { fg = c.yellow }
+    end,
+  },
+  config = function(_, opts)
+    require("tokyonight").setup(opts)
+    vim.cmd.colorscheme("tokyonight")
+  end,
+}
+
