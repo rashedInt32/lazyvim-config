@@ -29,7 +29,6 @@ return {
       },
     },
 
-    -- We removed 'border = "overlay"' from here to let Rose Pine decide
     groups = {
       link = "iris",
       panel = "surface",
@@ -50,32 +49,51 @@ return {
       ["Comment"] = { fg = "#637777", italic = true },
       ["@lsp.type.comment"] = { fg = "#637777" },
 
-      -- 2. SYNTAX REFINEMENTS
-      Visual = { bg = "#1d3b53", inherit = false },
-      ["@keyword.modifier"] = { fg = "rose", italic = true },
-      ["@function"] = { fg = "iris" },
-      ["@type"] = { fg = "gold" },
-      ["@type.definition"] = { fg = "gold", bold = true },
-      ["@string"] = { fg = "leaf" },
+      -- 2. KEYWORD DIFFERENTIATION (The "Class vs Export" fix)
+      ["@keyword.export"] = { fg = "iris", italic = true }, -- 'export', 'import', 'from'
+      ["@keyword.function"] = { fg = "iris", italic = true }, -- 'function'
+      ["@keyword.repeat"] = { fg = "iris" }, -- 'for', 'while'
+      ["@keyword.return"] = { fg = "iris" }, -- 'return'
+
+      ["@keyword.storage"] = { fg = "rose" }, -- 'class', 'const', 'let'
+      ["@keyword.modifier"] = { fg = "rose", italic = true }, -- 'readonly', 'static'
+      ["@keyword.conditional"] = { fg = "rose" }, -- 'if', 'else'
+
+      -- 3. SYNTAX & PROPERTY STABILITY (The "Foam" fix)
       ["@variable.member"] = { fg = "foam" },
       ["@property"] = { fg = "foam" },
+      ["@field"] = { fg = "foam" },
+      ["@variable.parameter"] = { fg = "iris", italic = true },
+
+      -- 4. TYPE DEFINITIONS (The "Gold" section)
+      ["@type"] = { fg = "gold" },
+      ["@type.definition"] = { fg = "gold", bold = true },
       ["@constant"] = { fg = "pine" },
       ["@boolean"] = { fg = "pine" },
+      ["@string"] = { fg = "leaf" },
+      ["@function"] = { fg = "iris" },
 
-      -- 3. UI ACCENTS
+      -- 5. THE "TOKYONIGHT" STABILITY ENGINE (LSP Overrides)
+      -- This stops the 2-second delay/color shift by forcing LSP to match TS
+      ["@lsp.type.property"] = { link = "@property" },
+      ["@lsp.type.variableMember"] = { link = "@variable.member" },
+      ["@lsp.type.function"] = { link = "@function" },
+      ["@lsp.type.method"] = { link = "@function" },
+      ["@lsp.type.type"] = { link = "@type" },
+      ["@lsp.type.class"] = { link = "@type" },
+      ["@lsp.type.interface"] = { link = "@type" },
+      ["@lsp.type.parameter"] = { link = "@variable.parameter" },
+
+      -- 6. UI ACCENTS
+      Visual = { bg = "#1d3b53", inherit = false },
       CursorLine = { bg = "#021320" },
       LineNr = { fg = "#3b4261" },
       CursorLineNr = { fg = "subtle", bold = true },
-
-      -- 4. BORDER FIX (VERTICAL SPLITS)
-      -- Using Rose Pine's internal 'muted' or 'highlight_med' for splits
       WinSeparator = { fg = "#3b4261", bg = "NONE" },
-
-      -- REMOVED: NormalFloat and FloatBorder overrides to return to defaults
     },
   },
   config = function(_, opts)
     require("rose-pine").setup(opts)
-    vim.cmd("colorscheme rose-pine")
+    --vim.cmd("colorscheme rose-pine")
   end,
 }

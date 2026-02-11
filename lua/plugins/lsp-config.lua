@@ -155,6 +155,7 @@ return {
       -- Shared on_attach for all servers
       local on_attach = function(client, bufnr)
         -- Prevent unwanted LSPs on SQL buffers
+        --client.server_capabilities.semanticTokensProvider = nil
         local ft = vim.bo[bufnr].filetype
         if ft == "sql" and client.name ~= "postgres_lsp" and client.name ~= "sqls" then
           vim.schedule(function()
