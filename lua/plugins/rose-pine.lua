@@ -25,7 +25,8 @@ return {
         iris = "#c792ea",
         leaf = "#c3e88d",
         love = "#ff5189",
-        gold = "#ecc48d",
+        -- THE MAGICAL SHINE: Stellar Amber instead of dull gold
+        gold = "#ff9e64",
       },
     },
 
@@ -45,9 +46,9 @@ return {
 
     highlight_groups = {
       -- 1. THE COMMENT FIX
-      ["@comment"] = { fg = "#637777", italic = true },
-      ["Comment"] = { fg = "#637777", italic = true },
-      ["@lsp.type.comment"] = { fg = "#637777" },
+      ["@comment"] = { fg = "#6a8080", italic = true },
+      ["Comment"] = { fg = "#6a8080", italic = true },
+      ["@lsp.type.comment"] = { fg = "#6a8080" },
 
       -- 2. KEYWORD DIFFERENTIATION (The "Class vs Export" fix)
       ["@keyword.export"] = { fg = "iris", italic = true }, -- 'export', 'import', 'from'
@@ -65,23 +66,24 @@ return {
       ["@field"] = { fg = "foam" },
       ["@variable.parameter"] = { fg = "iris", italic = true },
 
-      -- 4. TYPE DEFINITIONS (The "Gold" section)
-      ["@type"] = { fg = "gold" },
+      -- 4. THE SHINING TYPES (Stellar Amber)
+      ["@type"] = { fg = "gold", bold = true },
+      ["@type.builtin"] = { fg = "gold", bold = true },
       ["@type.definition"] = { fg = "gold", bold = true },
       ["@constant"] = { fg = "pine" },
       ["@boolean"] = { fg = "pine" },
       ["@string"] = { fg = "leaf" },
       ["@function"] = { fg = "iris" },
 
-      -- 5. THE "TOKYONIGHT" STABILITY ENGINE (LSP Overrides)
-      -- This stops the 2-second delay/color shift by forcing LSP to match TS
-      ["@lsp.type.property"] = { link = "@property" },
-      ["@lsp.type.variableMember"] = { link = "@variable.member" },
+      -- 5. THE STABILITY ENGINE (LSP Overrides)
+      -- Force LSP to use our specific colors immediately
+      ["@lsp.type.property"] = { fg = "foam" },
+      ["@lsp.type.variableMember"] = { fg = "foam" },
       ["@lsp.type.function"] = { link = "@function" },
       ["@lsp.type.method"] = { link = "@function" },
-      ["@lsp.type.type"] = { link = "@type" },
-      ["@lsp.type.class"] = { link = "@type" },
-      ["@lsp.type.interface"] = { link = "@type" },
+      ["@lsp.type.type"] = { fg = "gold", bold = true },
+      ["@lsp.type.class"] = { fg = "gold", bold = true },
+      ["@lsp.type.interface"] = { fg = "gold", bold = true },
       ["@lsp.type.parameter"] = { link = "@variable.parameter" },
 
       -- 6. UI ACCENTS
@@ -90,10 +92,14 @@ return {
       LineNr = { fg = "#3b4261" },
       CursorLineNr = { fg = "subtle", bold = true },
       WinSeparator = { fg = "#3b4261", bg = "NONE" },
+
+      -- Copilot / Blink Ghost Text
+      CopilotSuggestion = { fg = "#5a6a8a" },
+      BlinkCmpGhostText = { fg = "#5a6a8a" },
     },
   },
   config = function(_, opts)
     require("rose-pine").setup(opts)
-    --vim.cmd("colorscheme rose-pine")
+    vim.cmd("colorscheme rose-pine")
   end,
 }
