@@ -35,7 +35,7 @@ vim.api.nvim_create_autocmd("User", {
 
 -- Theme switching commands and autocmds
 vim.api.nvim_create_user_command("ThemeRosePineMoon", function()
-  vim.cmd("colorscheme rose-pine-moon")
+  vim.cmd("colorscheme rose-pine")
   vim.notify("Switched to Rosé Pine Moon theme", vim.log.levels.INFO)
 end, { desc = "Switch to Rosé Pine Moon theme" })
 

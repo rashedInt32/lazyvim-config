@@ -17,7 +17,7 @@ return {
         base = "#011627", -- Night Owl Background
         surface = "#011f35",
         overlay = "#0b2942",
-        muted = "#637777", -- Night Owl Slate Comments
+        muted = "#6a8080", -- Night Owl Slate Comments
         subtle = "#82aaff",
         rose = "#ff7eb6",
         pine = "#7fdbca",
@@ -25,8 +25,9 @@ return {
         iris = "#c792ea",
         leaf = "#c3e88d",
         love = "#ff5189",
-        -- THE MAGICAL SHINE: Stellar Amber instead of dull gold
-        gold = "#ff9e64",
+        -- TOKYONIGHT MATCH: The classic "e0af68" yellow.
+        -- It's buttery, balanced, and premium.
+        gold = "#e0af68",
       },
     },
 
@@ -51,22 +52,19 @@ return {
       ["@lsp.type.comment"] = { fg = "#6a8080" },
 
       -- 2. KEYWORD DIFFERENTIATION (The "Class vs Export" fix)
-      ["@keyword.export"] = { fg = "iris", italic = true }, -- 'export', 'import', 'from'
-      ["@keyword.function"] = { fg = "iris", italic = true }, -- 'function'
-      ["@keyword.repeat"] = { fg = "iris" }, -- 'for', 'while'
-      ["@keyword.return"] = { fg = "iris" }, -- 'return'
+      ["@keyword.export"] = { fg = "iris", italic = true },
+      ["@keyword.import"] = { fg = "iris", italic = true },
+      ["@keyword.storage"] = { fg = "rose" },
+      ["@keyword.modifier"] = { fg = "rose", italic = true },
+      ["@keyword.conditional"] = { fg = "rose" },
 
-      ["@keyword.storage"] = { fg = "rose" }, -- 'class', 'const', 'let'
-      ["@keyword.modifier"] = { fg = "rose", italic = true }, -- 'readonly', 'static'
-      ["@keyword.conditional"] = { fg = "rose" }, -- 'if', 'else'
-
-      -- 3. SYNTAX & PROPERTY STABILITY (The "Foam" fix)
+      -- 3. PROPERTY STABILITY (The "Foam" fix)
       ["@variable.member"] = { fg = "foam" },
       ["@property"] = { fg = "foam" },
       ["@field"] = { fg = "foam" },
       ["@variable.parameter"] = { fg = "iris", italic = true },
 
-      -- 4. THE SHINING TYPES (Stellar Amber)
+      -- 4. TYPE DEFINITIONS (Tokyonight Yellow)
       ["@type"] = { fg = "gold", bold = true },
       ["@type.builtin"] = { fg = "gold", bold = true },
       ["@type.definition"] = { fg = "gold", bold = true },
@@ -76,7 +74,6 @@ return {
       ["@function"] = { fg = "iris" },
 
       -- 5. THE STABILITY ENGINE (LSP Overrides)
-      -- Force LSP to use our specific colors immediately
       ["@lsp.type.property"] = { fg = "foam" },
       ["@lsp.type.variableMember"] = { fg = "foam" },
       ["@lsp.type.function"] = { link = "@function" },
@@ -92,8 +89,6 @@ return {
       LineNr = { fg = "#3b4261" },
       CursorLineNr = { fg = "subtle", bold = true },
       WinSeparator = { fg = "#3b4261", bg = "NONE" },
-
-      -- Copilot / Blink Ghost Text
       CopilotSuggestion = { fg = "#5a6a8a" },
       BlinkCmpGhostText = { fg = "#5a6a8a" },
     },
