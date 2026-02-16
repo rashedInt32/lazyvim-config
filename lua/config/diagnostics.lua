@@ -246,7 +246,9 @@ vim.diagnostic.config({
   severity_sort = true,
   signs = true,
   virtual_text = false,
-  underline = false,
+  underline = {
+    severity = { min = vim.diagnostic.severity.HINT },
+  },
 
   float = {
     border = "rounded",
@@ -298,3 +300,64 @@ vim.diagnostic.config({
 })
 
 vim.api.nvim_set_hl(0, "DiagnosticHintItalic", { link = "DiagnosticHint", italic = true })
+
+-- Subtle underlines - only show at specific positions with minimal styling
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { undercurl = true, sp = "#ff6c6b" })
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { undercurl = true, sp = "#ecbe7b" })
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { undercurl = true, sp = "#5699af" })
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { undercurl = true, sp = "#a9a1e1" })
+
+-- Custom handler to show inline error indicators at exact positions
+local ns = vim.api.nvim_create_namespace("diagnostic_inline_indicators")
+
+-- Create subtle background highlight groups
+vim.api.nvim_set_hl(0, "DiagnosticSpotlightError", { bg = "#3d1f1f" })  -- subtle red background
+vim.api.nvim_set_hl(0, "DiagnosticSpotlightWarn", { bg = "#3d331f" })   -- subtle yellow background
+vim.api.nvim_set_hl(0, "DiagnosticSpotlightInfo", { bg = "#1f2d3d" })   -- subtle blue background
+vim.api.nvim_set_hl(0, "DiagnosticSpotlightHint", { bg = "#2d1f3d" })   -- subtle purple background
+
+local function show_inline_indicators(bufnr)
+  vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+
+  local diagnostics = vim.diagnostic.get(bufnr)
+  -- Group diagnostics by line + column to avoid duplicate highlights
+  local seen_positions = {}
+
+  -- Sort by severity (lowest number = highest severity)
+  table.sort(diagnostics, function(a, b)
+    return a.severity < b.severity
+  end)
+
+  for _, diagnostic in ipairs(diagnostics) do
+    local hl_group = "DiagnosticSpotlight" .. ({ "Error", "Warn", "Info", "Hint" })[diagnostic.severity] or "DiagnosticSpotlightError"
+
+    -- Create unique key for position (line:col)
+    local pos_key = diagnostic.lnum .. ":" .. diagnostic.col
+
+    -- Only show one indicator per position (highest severity wins due to sorting)
+    if not seen_positions[pos_key] then
+      seen_positions[pos_key] = true
+
+      -- Apply subtle background highlight at the exact column
+      vim.api.nvim_buf_set_extmark(bufnr, ns, diagnostic.lnum, diagnostic.col, {
+        end_col = diagnostic.col + 1,  -- Highlight just one character
+        hl_group = hl_group,
+        priority = 100,
+      })
+    end
+  end
+end
+
+-- Update indicators on diagnostic changes
+vim.api.nvim_create_autocmd({ "DiagnosticChanged", "BufEnter" }, {
+  callback = function(args)
+    show_inline_indicators(args.buf)
+  end,
+})
+
+-- Initial setup for existing buffers
+for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+  if vim.api.nvim_buf_is_loaded(bufnr) then
+    show_inline_indicators(bufnr)
+  end
+end
