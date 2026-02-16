@@ -339,11 +339,19 @@ local function show_inline_indicators(bufnr)
       seen_positions[pos_key] = true
 
       -- Apply subtle background highlight at the exact column
-      vim.api.nvim_buf_set_extmark(bufnr, ns, diagnostic.lnum, diagnostic.col, {
-        end_col = diagnostic.col + 1,  -- Highlight just one character
-        hl_group = hl_group,
-        priority = 100,
-      })
+      -- Get line length to ensure end_col doesn't exceed buffer
+      local line = vim.api.nvim_buf_get_lines(bufnr, diagnostic.lnum, diagnostic.lnum + 1, false)[1] or ""
+      local line_len = #line
+      local end_col = math.min(diagnostic.col + 1, line_len)
+
+      -- Only apply if there's a valid character to highlight
+      if diagnostic.col < line_len then
+        vim.api.nvim_buf_set_extmark(bufnr, ns, diagnostic.lnum, diagnostic.col, {
+          end_col = end_col,  -- Highlight just one character
+          hl_group = hl_group,
+          priority = 100,
+        })
+      end
     end
   end
 end
