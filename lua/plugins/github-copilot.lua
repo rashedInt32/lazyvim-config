@@ -41,16 +41,10 @@ return {
           heex = true,
           ["*"] = false, -- Disable for other filetypes
         },
-        nes = {
-          enabled = false, -- Enable NES (Next Edit Suggestion) feature
-          auto_trigger = false, -- Disable auto-trigger to avoid conflicts
-          keymap = {
-            accept = "<C-f>", -- Accept next edit suggestion with Ctrl+F
-            next = "<C-]>",
-            prev = "<C-[>",
-            dismiss = "<C-}>",
-          },
-        },
+      },
+      nes = {
+        enabled = false, -- Enable NES (Next Edit Suggestion) feature
+        auto_trigger = false, -- Disable auto-trigger to avoid conflicts
       },
       panel = {
         enabled = false, -- Disable Copilot panel
