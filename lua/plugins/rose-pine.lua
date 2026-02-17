@@ -28,6 +28,7 @@ return {
         -- TOKYONIGHT MATCH: The classic "e0af68" yellow.
         -- It's buttery, balanced, and premium.
         gold = "#0db9d7",
+        yield = "#e0af68",
 
         -- bg = "#222436",
         -- bg_dark = "#1e2030",
@@ -82,37 +83,61 @@ return {
       ["Comment"] = { fg = "#6a8080", italic = true },
       ["@lsp.type.comment"] = { fg = "#6a8080" },
 
-      -- 2. KEYWORD DIFFERENTIATION (The "Class vs Export" fix)
-      ["@keyword.export"] = { fg = "iris", italic = true },
-      ["@keyword.import"] = { fg = "iris", italic = true },
-      ["@keyword.storage"] = { fg = "rose" },
+      -- 2. KEYWORD DIFFERENTIATION (Balanced semantic roles)
+      ["@keyword.export"] = { fg = "rose", italic = true },
+      ["@keyword.import"] = { fg = "rose", italic = true },
+      ["@keyword.storage"] = { fg = "pine" },
       ["@keyword.modifier"] = { fg = "rose", italic = true },
-      ["@keyword.conditional"] = { fg = "rose" },
+      ["@keyword.conditional"] = { fg = "love" },
+      ["@keyword.return"] = { fg = "love" },
+      ["@keyword.repeat"] = { fg = "love" },
+      ["@keyword.coroutine"] = { fg = "yield", italic = true },
 
       -- 3. PROPERTY STABILITY (The "Foam" fix)
       ["@variable.member"] = { fg = "foam" },
       ["@property"] = { fg = "foam" },
       ["@field"] = { fg = "foam" },
-      ["@variable.parameter"] = { fg = "iris", italic = true },
+      ["@variable.parameter"] = { fg = "leaf", italic = true },
 
-      -- 4. TYPE DEFINITIONS (Tokyonight Yellow)
+      -- 4. TYPE DEFINITIONS (Balanced hierarchy)
       ["@type"] = { fg = "gold", bold = true },
-      ["@type.builtin"] = { fg = "gold", bold = true },
-      ["@type.definition"] = { fg = "gold", bold = true },
+      ["@type.builtin"] = { fg = "subtle" },
+      ["@type.definition"] = { fg = "gold" },
+      ["@type.class"] = { fg = "iris", bold = true },
+      ["@type.interface"] = { fg = "foam", bold = true },
       ["@constant"] = { fg = "pine" },
       ["@boolean"] = { fg = "pine" },
       ["@string"] = { fg = "leaf" },
+      ["@string.special"] = { fg = "foam" },
       ["@function"] = { fg = "iris" },
+      ["@function.method"] = { fg = "gold" },
+      ["@function.builtin"] = { fg = "pine" },
+      ["@function.macro"] = { fg = "love" },
 
-      -- 5. THE STABILITY ENGINE (LSP Overrides)
+      -- 5. THE STABILITY ENGINE (LSP Overrides - Balanced)
       ["@lsp.type.property"] = { fg = "foam" },
       ["@lsp.type.variableMember"] = { fg = "foam" },
       ["@lsp.type.function"] = { link = "@function" },
-      ["@lsp.type.method"] = { link = "@function" },
+      ["@lsp.type.method"] = { fg = "gold" },
       ["@lsp.type.type"] = { fg = "gold", bold = true },
-      ["@lsp.type.class"] = { fg = "gold", bold = true },
-      ["@lsp.type.interface"] = { fg = "gold", bold = true },
-      ["@lsp.type.parameter"] = { link = "@variable.parameter" },
+      ["@lsp.type.class"] = { fg = "iris", bold = true },
+      ["@lsp.type.interface"] = { fg = "foam", bold = true },
+      ["@lsp.type.parameter"] = { fg = "leaf", italic = true },
+      ["@lsp.type.namespace"] = { fg = "iris" },
+      ["@lsp.type.enum"] = { fg = "gold" },
+      ["@lsp.type.enumMember"] = { fg = "pine" },
+      ["@lsp.type.struct"] = { fg = "iris" },
+      ["@lsp.type.typeParameter"] = { fg = "rose", italic = true },
+      ["@lsp.type.decorator"] = { fg = "love" },
+      ["@lsp.type.event"] = { fg = "rose" },
+      ["@lsp.type.operator"] = { fg = "subtle" },
+      -- LSP Modifiers for additional semantics
+      ["@lsp.mod.readonly"] = { fg = "pine", italic = true },
+      ["@lsp.mod.static"] = { bold = true },
+      ["@lsp.mod.async"] = { fg = "rose", italic = true },
+      ["@lsp.mod.abstract"] = { fg = "love", italic = true },
+      ["@lsp.mod.deprecated"] = { strikethrough = true },
+      ["@lsp.mod.documentation"] = { fg = "foam" },
 
       -- 6. UI ACCENTS
       Visual = { bg = "#1d3b53", inherit = false },
@@ -127,5 +152,18 @@ return {
   config = function(_, opts)
     require("rose-pine").setup(opts)
     vim.cmd("colorscheme rose-pine")
+    
+    -- Differentiate async/await/yield from return using pattern match
+    vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+      pattern = { "*.ts", "*.tsx", "*.js", "*.jsx", "*.lua" },
+      callback = function()
+        vim.fn.matchadd("YieldKeyword", "\\<yield\\>", 100)
+        vim.fn.matchadd("YieldKeyword", "\\<await\\>", 100)
+        vim.fn.matchadd("YieldKeyword", "\\<async\\>", 100)
+      end,
+    })
+    
+    -- Define custom highlight for yield/await/async
+    vim.api.nvim_set_hl(0, "YieldKeyword", { fg = "#e0af68", italic = true })
   end,
 }
