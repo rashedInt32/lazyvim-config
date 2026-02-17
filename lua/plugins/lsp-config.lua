@@ -157,7 +157,7 @@ return {
         -- Prevent unwanted LSPs on SQL buffers
         client.server_capabilities.semanticTokensProvider = nil
         local ft = vim.bo[bufnr].filetype
-        if ft == "sql" and client.name ~= "postgres_lsp" and client.name ~= "sqls" then
+        if ft == "sql" and client.name ~= "postgres_lsp" and client.name ~= "sqls" and client.name ~= "copilot" then
           vim.schedule(function()
             client.stop()
           end)

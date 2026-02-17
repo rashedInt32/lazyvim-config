@@ -39,6 +39,7 @@ return {
           svelte = true,
           elixir = true,
           heex = true,
+          sql = true,
           ["*"] = false, -- Disable for other filetypes
         },
       },
