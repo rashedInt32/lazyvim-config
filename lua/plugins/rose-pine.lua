@@ -28,7 +28,6 @@ return {
         -- TOKYONIGHT MATCH: The classic "e0af68" yellow.
         -- It's buttery, balanced, and premium.
         gold = "#0db9d7",
-        yield = "#e0af68",
 
         -- bg = "#222436",
         -- bg_dark = "#1e2030",
@@ -91,7 +90,7 @@ return {
       ["@keyword.conditional"] = { fg = "love" },
       ["@keyword.return"] = { fg = "love" },
       ["@keyword.repeat"] = { fg = "love" },
-      ["@keyword.coroutine"] = { fg = "yield", italic = true },
+      ["@keyword.coroutine"] = { fg = "rose", italic = true },
 
       -- 3. PROPERTY STABILITY (The "Foam" fix)
       ["@variable.member"] = { fg = "foam" },
@@ -153,17 +152,17 @@ return {
     require("rose-pine").setup(opts)
     vim.cmd("colorscheme rose-pine")
     
-    -- Differentiate async/await/yield from return using pattern match
+    -- Override yield/await/async to use rose color (different from return)
     vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
       pattern = { "*.ts", "*.tsx", "*.js", "*.jsx", "*.lua" },
       callback = function()
-        vim.fn.matchadd("YieldKeyword", "\\<yield\\>", 100)
-        vim.fn.matchadd("YieldKeyword", "\\<await\\>", 100)
-        vim.fn.matchadd("YieldKeyword", "\\<async\\>", 100)
+        vim.fn.matchadd("CoroutineKeyword", "\\<yield\\>", 100)
+        vim.fn.matchadd("CoroutineKeyword", "\\<await\\>", 100)
+        vim.fn.matchadd("CoroutineKeyword", "\\<async\\>", 100)
       end,
     })
     
-    -- Define custom highlight for yield/await/async
-    vim.api.nvim_set_hl(0, "YieldKeyword", { fg = "#e0af68", italic = true })
+    -- Define highlight for coroutine keywords using rose color
+    vim.api.nvim_set_hl(0, "CoroutineKeyword", { fg = "#ff7eb6", italic = true })
   end,
 }
