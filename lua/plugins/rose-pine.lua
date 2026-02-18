@@ -27,65 +27,85 @@ return {
         gold = "#e0af68", -- Types (TokyoNight Gold)
 
         -- NEW PREMIUM VARIABLES
-        mint = "#f2ceb6", -- Parameters (Italicized)
+        --mint = "#f2ceb6", -- Parameters (Italicized)
+        mint = "#b4befe", -- Parameters (Italicized)
         olive = "#addb67", -- Strings & SQL
       },
     },
 
     highlight_groups = {
-      -- 1. THE "CALM" ENGINE
+      -- 1. THE "CALM" ENGINE (Muted punctuation)
       ["@punctuation.bracket"] = { fg = "subtle" },
-      ["@punctuation.delimiter"] = { fg = "subtle" },
       ["@operator"] = { fg = "subtle" },
       ["@comment"] = { fg = "muted", italic = true },
-      ["Comment"] = { fg = "muted", italic = true },
 
-      -- 2. LOGIC FLOW (The "Love" Action)
+      -- 1. THE IMPORT IDENTIFIER FIX
+      -- This forces the actual names inside the { } to stay vibrant Rose.
+      ["@variable.import"] = { fg = "rose" },
+      ["@lsp.type.import"] = { fg = "rose" },
+      ["@variable.typescript"] = { fg = "rose" },
+
+      -- 2. THE SPECIFIC TS/TSX OVERRIDE
+      -- TypeScript often uses specific tags for symbols in the import statement.
+      ["@include.typescript"] = { fg = "love" }, -- The 'import' and 'from' keywords
+      ["@variable.parameter.typescript"] = { fg = "rose" }, -- Sometimes imports are tagged this way
+
+      -- 3. THE "DESTRUCTURING" FIX
+      -- Since you are destructuring the imports { a, b },
+      -- we ensure property-like identifiers stay bright.
+      ["@variable.member.typescript"] = { fg = "rose" },
+
+      -- 4. CLEAN UP THE COMMAS
+      -- This ensures only the commas and braces stay muted, not the text.
+
+      -- This ensures that when you use a variable as a value,
+      -- it keeps its "Data" color (Lavender) instead of the "Key" color.
+
+      -- This targets the ":" delimiter to make sure it doesn't
+      -- glow as bright as the text, which helps the separation.
+
+      -- 2. SHORTHAND PROPERTY FIX
+      -- If you use { email } instead of { email: email },
+      -- this ensures it still looks intentional.
+      ["@punctuation.delimiter"] = { fg = "subtle" }, -- Mutes the ':'
+
+      -- 2. LOGIC & ACTION (Action Pink)
       ["@keyword.conditional"] = { fg = "love" },
       ["@keyword.return"] = { fg = "love", italic = true, bold = true },
-      ["@keyword.repeat"] = { fg = "love" },
-      ["@keyword.exception"] = { fg = "love" },
-      ["@keyword.function"] = { fg = "love", italic = true }, -- 'function' vs 'const'
+      ["@keyword.function"] = { fg = "love", italic = true },
       ["@punctuation.special"] = { fg = "love" }, -- The '*' in function*
 
-      -- 3. STRUCTURE & METADATA
-      ["@keyword.export"] = { fg = "rose", italic = true },
-      ["@keyword.import"] = { fg = "rose", italic = true },
-      ["@keyword.storage"] = { fg = "iris" }, -- 'const', 'let', 'static'
-      ["@keyword.modifier"] = { fg = "rose", italic = true }, -- 'async', 'readonly'
+      -- 3. STRUCTURE (Iris/Purple)
+      ["@keyword.storage"] = { fg = "iris" }, -- const, let
+      ["@keyword.modifier"] = { fg = "rose", italic = true },
 
-      -- 4. THE BLUEPRINT (Gold Hierarchy)
-      ["@type"] = { fg = "gold", bold = true },
-      ["@type.builtin"] = { fg = "iris" },
-      ["@type.interface"] = { fg = "gold", bold = true },
+      -- 4. PARAMETERS (Electric Lavender - The Star)
       ["@variable.parameter"] = { fg = "mint", italic = true },
+      ["@lsp.type.parameter"] = { fg = "mint", italic = true },
+      ["@lsp.mod.declaration.typescript"] = { fg = "mint", italic = true },
 
-      -- 5. ACTION (Foam for Functions)
-      ["@function"] = { fg = "foam" },
-      ["@function.method"] = { fg = "foam" },
-      ["@function.call"] = { fg = "foam" },
-      ["@property"] = { fg = "iris" },
-      ["@variable.member"] = { fg = "iris" },
+      -- 5. THE "SQL" & VARIABLE FIX (Making them visible again)
+      -- We keep generic variables muted, but elevate "Member" variables and
+      -- specific LSP types so things like 'sql' or 'Effect' stay bright.
+      ["@variable"] = { fg = "subtle" },
+      ["@variable.member"] = { fg = "foam" }, -- Ensures result.length is visible
+      ["@lsp.type.variable"] = { fg = "mint" }, -- Slightly brighter than subtle
+      ["@lsp.type.property"] = { fg = "foam" },
+      ["@lsp.type.namespace"] = { fg = "iris" }, -- Keeps 'Effect' or 'Layer' purple
 
-      -- 6. DATA (Olive for Strings)
-      ["@constant"] = { fg = "pine" },
-      ["@boolean"] = { fg = "pine" },
+      -- 6. DATA & TYPES (The Architecture)
+      ["@type"] = { fg = "gold", bold = true },
+      ["@type.interface"] = { fg = "gold", bold = true },
+      ["@lsp.type.type"] = { fg = "gold", bold = true },
+      ["@lsp.type.class"] = { fg = "iris", bold = true },
       ["@string"] = { fg = "olive" },
+      ["@constant"] = { fg = "pine" },
 
       -- 7. UI ACCENTS
       Visual = { bg = "#1b2e3f", inherit = false },
       CursorLine = { bg = "#081d2f" },
       LineNr = { fg = "#3b4261" },
       CursorLineNr = { fg = "foam", bold = true },
-      WinSeparator = { fg = "#0b2942", bg = "NONE" },
-
-      -- LSP Overrides for separation
-      ["@lsp.type.type"] = { link = "@type" },
-      ["@lsp.type.interface"] = { link = "@type.interface" },
-      ["@lsp.type.function"] = { link = "@function" },
-      ["@lsp.type.method"] = { link = "@function.method" },
-      ["@lsp.type.parameter"] = { fg = "mint", italic = true },
-      ["@lsp.type.variable"] = { fg = "subtle" }, -- Mutes regular variables
     },
   },
   config = function(_, opts)
