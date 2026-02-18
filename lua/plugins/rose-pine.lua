@@ -63,7 +63,7 @@ return {
       -- ==========================================
 
       -- Effect operations (special handling for Effect-TS)
-      ["@function.builtin"] = { fg = "love" }, -- Effect.gen, Effect.fn, etc.
+      ["@function.builtin"] = { fg = "#b07db0" }, -- Effect.gen, Effect.fn, etc.
 
       -- Type names (types you use, not define)
       ["@type"] = { fg = "gold" },
@@ -264,7 +264,7 @@ return {
       end,
     })
 
-    vim.api.nvim_set_hl(0, "EffectOp", { fg = "#ff5189" }) -- love color
+    vim.api.nvim_set_hl(0, "EffectOp", { fg = "#b07db0" })
     vim.api.nvim_set_hl(0, "CoroutineKeyword", { fg = "#ff5189", italic = true })
 
     -- Highlight TODO/FIXME in comments
