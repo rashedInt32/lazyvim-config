@@ -158,7 +158,8 @@ return {
       -- Punctuation - barely visible
       ["@punctuation.bracket"] = { fg = "subtle" },
       ["@punctuation.delimiter"] = { fg = "subtle" },
-      ["@operator"] = { fg = "subtle" },
+      ["@operator"] = { fg = "muted" },
+      ["@operator.typescript"] = { fg = "muted" },
 
       -- Generics syntax (the < > brackets)
       ["@punctuation.special.generic"] = { fg = "subtle" },
@@ -187,12 +188,18 @@ return {
       -- LSP Properties/Members
       ["@lsp.type.property"] = { fg = "foam" },
       ["@lsp.type.member"] = { fg = "foam" },
+      ["@lsp.typemod.property.declaration"] = { fg = "iris" },
+      
+      -- Object literal keys (messages:, id:)
+      ["@property"] = { fg = "iris" },
+      ["@property.typescript"] = { fg = "iris" },
+      ["@object.property"] = { fg = "iris" },
       
       -- LSP Functions
       ["@lsp.type.function"] = { fg = "foam" },
       ["@lsp.typemod.function.declaration"] = { fg = "foam", bold = true },
       ["@lsp.type.method"] = { fg = "foam" },
-      ["@lsp.typemod.method.declaration"] = { fg = "foam", bold = true },
+      ["@lsp.typemod.method.declaration"] = { fg = "foam" },
       
       -- LSP Classes and Types
       ["@lsp.type.class"] = { fg = "iris" },
