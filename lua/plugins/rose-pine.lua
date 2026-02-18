@@ -28,7 +28,8 @@ return {
         mint = "#b4befe", -- Parameters (italicized)
         olive = "#addb67", -- Strings, SQL literals
         keyword = "#3e8fb0", -- Keywords (const, return, if, etc.)
-        operator = "#80a4c2", -- Night Owl operator color
+        operator = "#5f7e97", -- Night Owl operator color
+        comment = "#8a9b9b", -- Brighter gray comment color
       },
     },
 
@@ -54,8 +55,8 @@ return {
       ["@string.special"] = { fg = "olive" }, -- Template literals
 
       -- COMMENTS (important context - visible, not faded)
-      ["@comment"] = { fg = "muted", italic = true },
-      ["@comment.documentation"] = { fg = "muted", italic = true },
+      ["@comment"] = { fg = "comment", italic = true },
+      ["@comment.documentation"] = { fg = "comment", italic = true },
 
       -- ==========================================
       -- TIER 2: STRUCTURAL (Understanding the code)
@@ -141,7 +142,7 @@ return {
       ["@keyword.storage.typescript"] = { fg = "foam" }, -- TypeScript class/const/let
       ["@keyword.modifier"] = { fg = "foam" }, -- extends, static, readonly - keep foam
       ["@keyword.modifier.typescript"] = { fg = "foam" }, -- TypeScript extends/static/readonly
-      ["@keyword.coroutine"] = { fg = "love" }, -- async, await (special)
+      ["@keyword.coroutine"] = { fg = "keyword" }, -- yield (not special, use keyword color)
 
       -- LSP keyword overrides (prevent LSP from overriding with keyword color)
       ["@lsp.type.keyword"] = { fg = "keyword" },
@@ -152,6 +153,8 @@ return {
       -- SQL strings should use olive, not keyword color
       ["@string.sql"] = { fg = "olive" },
       ["@string.special.sql"] = { fg = "olive" },
+      -- SQL keywords inside template literals should use olive too
+      ["@keyword.sql"] = { fg = "olive" },
 
       -- Ensure const vs parameters are different colors
       -- const/let are @keyword.storage (foam), parameters are mint - already different!
@@ -161,6 +164,7 @@ return {
       ["@punctuation.delimiter"] = { fg = "subtle" },
       ["@operator"] = { fg = "operator" },
       ["@operator.typescript"] = { fg = "operator" },
+      ["@keyword.operator"] = { fg = "foam" }, -- typeof, instanceof, etc.
 
       -- Generics syntax (the < > brackets)
       ["@punctuation.special.generic"] = { fg = "subtle" },
@@ -218,7 +222,7 @@ return {
       ["@lsp.typemod.string.injected"] = { fg = "olive" },
 
       -- LSP Comments
-      ["@lsp.type.comment"] = { fg = "muted", italic = true },
+      ["@lsp.type.comment"] = { fg = "comment", italic = true },
 
       -- LSP Numbers and Constants
       ["@lsp.type.number"] = { fg = "pine" },
@@ -254,8 +258,8 @@ return {
           "\\<Effect\\.\\(gen\\|fn\\|succeed\\|fail\\|promise\\|sync\\|async\\|pipe\\|catchTag\\|orDie\\|provide\\|map\\|flatMap\\|tap\\|andThen\\|catchAll\\)\\>",
           100
         )
-        -- async/await/yield
-        vim.fn.matchadd("CoroutineKeyword", "\\<yield\\>", 100)
+        -- async/await (keep love color, yield uses keyword)
+        vim.fn.matchadd("CoroutineKeyword", "\\<async\\>", 100)
         vim.fn.matchadd("CoroutineKeyword", "\\<await\\>", 100)
       end,
     })
