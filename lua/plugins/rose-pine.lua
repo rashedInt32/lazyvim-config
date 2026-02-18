@@ -69,15 +69,15 @@ return {
       -- this ensures it still looks intentional.
       ["@punctuation.delimiter"] = { fg = "subtle" }, -- Mutes the ':'
 
-      -- 2. LOGIC & ACTION (Action Pink)
+      -- 2. LOGIC & ACTION (Action Pink) - NO BOLD/ITALIC on keywords
       ["@keyword.conditional"] = { fg = "love" },
-      ["@keyword.return"] = { fg = "love", italic = true, bold = true },
-      ["@keyword.function"] = { fg = "love", italic = true },
+      ["@keyword.return"] = { fg = "love" },
+      ["@keyword.function"] = { fg = "love" },
       ["@punctuation.special"] = { fg = "love" }, -- The '*' in function*
 
       -- 3. STRUCTURE (Iris/Purple)
       ["@keyword.storage"] = { fg = "iris" }, -- const, let
-      ["@keyword.modifier"] = { fg = "rose", italic = true },
+      ["@keyword.modifier"] = { fg = "rose" },
 
       -- 4. PARAMETERS (Electric Lavender - The Star)
       ["@variable.parameter"] = { fg = "mint", italic = true },
@@ -93,11 +93,11 @@ return {
       ["@lsp.type.property"] = { fg = "foam" },
       ["@lsp.type.namespace"] = { fg = "iris" }, -- Keeps 'Effect' or 'Layer' purple
 
-      -- 6. DATA & TYPES (The Architecture)
-      ["@type"] = { fg = "gold", bold = true },
-      ["@type.interface"] = { fg = "gold", bold = true },
-      ["@lsp.type.type"] = { fg = "gold", bold = true },
-      ["@lsp.type.class"] = { fg = "iris", bold = true },
+      -- 6. DATA & TYPES (The Architecture) - NO BOLD on types
+      ["@type"] = { fg = "gold" },
+      ["@type.interface"] = { fg = "gold" },
+      ["@lsp.type.type"] = { fg = "gold" },
+      ["@lsp.type.class"] = { fg = "iris" },
       ["@string"] = { fg = "olive" },
       ["@constant"] = { fg = "pine" },
 
