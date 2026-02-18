@@ -28,6 +28,7 @@ return {
         mint = "#b4befe", -- Parameters (italicized)
         olive = "#addb67", -- Strings, SQL literals
         keyword = "#3e8fb0", -- Keywords (const, return, if, etc.)
+        operator = "#80a4c2", -- Night Owl operator color
       },
     },
 
@@ -141,25 +142,25 @@ return {
       ["@keyword.modifier"] = { fg = "foam" }, -- extends, static, readonly - keep foam
       ["@keyword.modifier.typescript"] = { fg = "foam" }, -- TypeScript extends/static/readonly
       ["@keyword.coroutine"] = { fg = "love" }, -- async, await (special)
-      
+
       -- LSP keyword overrides (prevent LSP from overriding with keyword color)
       ["@lsp.type.keyword"] = { fg = "keyword" },
       ["@lsp.typemod.keyword.declaration.typescript"] = { fg = "foam" }, -- class declarations
       ["@lsp.typemod.keyword.static.typescript"] = { fg = "foam" }, -- static keyword
       ["@lsp.typemod.keyword.async.typescript"] = { fg = "love" }, -- async
-      
+
       -- SQL strings should use olive, not keyword color
       ["@string.sql"] = { fg = "olive" },
       ["@string.special.sql"] = { fg = "olive" },
-      
+
       -- Ensure const vs parameters are different colors
       -- const/let are @keyword.storage (foam), parameters are mint - already different!
 
       -- Punctuation - barely visible
       ["@punctuation.bracket"] = { fg = "subtle" },
       ["@punctuation.delimiter"] = { fg = "subtle" },
-      ["@operator"] = { fg = "muted" },
-      ["@operator.typescript"] = { fg = "muted" },
+      ["@operator"] = { fg = "operator" },
+      ["@operator.typescript"] = { fg = "operator" },
 
       -- Generics syntax (the < > brackets)
       ["@punctuation.special.generic"] = { fg = "subtle" },
@@ -167,62 +168,62 @@ return {
       -- ==========================================
       -- LSP SEMANTIC TOKENS (Override to match our colors)
       -- ==========================================
-      
+
       -- LSP Keywords - ensure they follow our keyword color scheme
       ["@lsp.type.keyword"] = { fg = "keyword" },
       ["@lsp.typemod.keyword.async"] = { fg = "love" },
       ["@lsp.typemod.keyword.declaration"] = { fg = "foam" },
       ["@lsp.typemod.keyword.static"] = { fg = "foam" },
       ["@lsp.typemod.keyword.readonly"] = { fg = "foam" },
-      
+
       -- LSP Variables - distinguish const vs parameters
       ["@lsp.type.variable"] = { fg = "foam" },
       ["@lsp.typemod.variable.declaration"] = { fg = "foam" },
       ["@lsp.typemod.variable.local"] = { fg = "foam" },
       ["@lsp.typemod.variable.readonly"] = { fg = "foam" },
-      
+
       -- LSP Parameters
       ["@lsp.type.parameter"] = { fg = "mint", italic = true },
       ["@lsp.typemod.parameter.declaration"] = { fg = "mint", italic = true },
-      
+
       -- LSP Properties/Members
       ["@lsp.type.property"] = { fg = "foam" },
       ["@lsp.type.member"] = { fg = "foam" },
       ["@lsp.typemod.property.declaration"] = { fg = "iris" },
-      
+
       -- Object literal keys (messages:, id:)
       ["@property"] = { fg = "iris" },
       ["@property.typescript"] = { fg = "iris" },
       ["@object.property"] = { fg = "iris" },
-      
+
       -- LSP Functions
       ["@lsp.type.function"] = { fg = "foam" },
       ["@lsp.typemod.function.declaration"] = { fg = "foam", bold = true },
       ["@lsp.type.method"] = { fg = "foam" },
       ["@lsp.typemod.method.declaration"] = { fg = "foam" },
-      
+
       -- LSP Classes and Types
       ["@lsp.type.class"] = { fg = "iris" },
       ["@lsp.type.interface"] = { fg = "gold" },
       ["@lsp.type.enum"] = { fg = "iris" },
       ["@lsp.type.struct"] = { fg = "iris" },
       ["@lsp.type.typeParameter"] = { fg = "gold" },
-      
+
       -- LSP Namespaces/Modules
       ["@lsp.type.namespace"] = { fg = "iris" },
       ["@lsp.type.module"] = { fg = "iris" },
-      
+
       -- LSP Strings (including SQL)
       ["@lsp.type.string"] = { fg = "olive" },
       ["@lsp.typemod.string.injected"] = { fg = "olive" },
-      
+
       -- LSP Comments
       ["@lsp.type.comment"] = { fg = "muted", italic = true },
-      
+
       -- LSP Numbers and Constants
       ["@lsp.type.number"] = { fg = "pine" },
       ["@lsp.type.enumMember"] = { fg = "pine" },
-      
+
       -- ==========================================
       -- UI ELEMENTS
       -- ==========================================
