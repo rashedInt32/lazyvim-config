@@ -140,8 +140,8 @@ return {
       ["@keyword.function"] = { fg = "pine" }, -- function keyword - keep pine
       ["@keyword.storage"] = { fg = "foam" }, -- class, const, let - keep foam
       ["@keyword.storage.typescript"] = { fg = "foam" }, -- TypeScript class/const/let
-      ["@keyword.modifier"] = { fg = "foam" }, -- extends, static, readonly - keep foam
-      ["@keyword.modifier.typescript"] = { fg = "foam" }, -- TypeScript extends/static/readonly
+      ["@keyword.modifier"] = { fg = "foam" }, -- extends, static - keep foam (readonly handled by matchadd)
+      ["@keyword.modifier.typescript"] = { fg = "foam" }, -- TypeScript extends/static - keep foam
       ["@keyword.coroutine"] = { fg = "keyword" }, -- yield (not special, use keyword color)
 
       -- LSP keyword overrides (prevent LSP from overriding with keyword color)
@@ -178,7 +178,7 @@ return {
       ["@lsp.typemod.keyword.async"] = { fg = "love" },
       ["@lsp.typemod.keyword.declaration"] = { fg = "foam" },
       ["@lsp.typemod.keyword.static"] = { fg = "foam" },
-      ["@lsp.typemod.keyword.readonly"] = { fg = "foam" },
+      ["@lsp.typemod.keyword.modifier"] = { fg = "foam" },
 
       -- LSP Variables - distinguish const vs parameters
       ["@lsp.type.variable"] = { fg = "foam" },
@@ -261,11 +261,14 @@ return {
         -- async/await (keep love color, yield uses keyword)
         vim.fn.matchadd("CoroutineKeyword", "\\<async\\>", 100)
         vim.fn.matchadd("CoroutineKeyword", "\\<await\\>", 100)
+        -- readonly keyword in rose color (bypasses LSP semantic tokens)
+        vim.fn.matchadd("ReadonlyKeyword", "\\<readonly\\>", 101)
       end,
     })
 
     vim.api.nvim_set_hl(0, "EffectOp", { fg = "#ff5189" })
     vim.api.nvim_set_hl(0, "CoroutineKeyword", { fg = "#ff5189", italic = true })
+    vim.api.nvim_set_hl(0, "ReadonlyKeyword", { fg = "#3e8fb0" })
 
     -- Highlight TODO/FIXME in comments
     vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
