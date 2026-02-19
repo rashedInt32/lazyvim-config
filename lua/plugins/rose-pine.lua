@@ -3,14 +3,11 @@ return {
   name = "rose-pine",
   lazy = false,
   priority = 1000,
+
   opts = {
     variant = "main",
     dark_variant = "main",
-    styles = {
-      bold = true,
-      italic = true,
-      transparency = false,
-    },
+    styles = { bold = true, italic = true, transparency = false },
 
     palette = {
       main = {
@@ -53,41 +50,39 @@ return {
       ["@string"] = { fg = "olive" },
       ["@string.documentation"] = { fg = "olive", italic = true },
       ["@string.special"] = { fg = "olive" }, -- Template literals
+      ["@string.sql"] = { fg = "olive" },
+      ["@string.special.sql"] = { fg = "olive" },
 
       -- COMMENTS (important context - visible, not faded)
       ["@comment"] = { fg = "comment", italic = true },
       ["@comment.documentation"] = { fg = "comment", italic = true },
+
+      -- SQL injection content fallback
+      ["@injection.content"] = { link = "@string" },
 
       -- ==========================================
       -- TIER 2: STRUCTURAL (Understanding the code)
       -- ==========================================
 
       -- Effect operations (special handling for Effect-TS)
-      ["@function.builtin"] = { fg = "love" }, -- Effect.gen, Effect.fn, etc. - important, make them stand out
+      ["@function.builtin"] = { fg = "love" }, -- Effect.gen, Effect.fn, etc.
 
       -- Type names (types you use, not define)
       ["@type"] = { fg = "gold" },
       ["@type.interface"] = { fg = "gold" },
       ["@type.parameter"] = { fg = "gold" },
-      ["@lsp.type.type"] = { fg = "gold" },
-      ["@lsp.type.class"] = { fg = "iris" },
-      ["@lsp.type.interface"] = { fg = "gold" },
-      ["@lsp.type.enum"] = { fg = "iris" },
 
       -- Namespaces & modules
       ["@module"] = { fg = "iris" },
       ["@namespace"] = { fg = "iris" },
-      ["@lsp.type.namespace"] = { fg = "iris" },
 
       -- Variables & properties (reading data)
       ["@variable.member"] = { fg = "foam" }, -- result.length, user.name
-      ["@property"] = { fg = "foam" },
-      ["@lsp.type.property"] = { fg = "foam" },
+      ["@property"] = { fg = "iris" }, -- object keys: message:, id:
       ["@field"] = { fg = "foam" },
 
       -- Generic variables (brighter than subtle)
       ["@variable"] = { fg = "subtle" },
-      ["@lsp.type.variable"] = { fg = "mint" },
 
       -- Constants & data
       ["@constant"] = { fg = "pine" },
@@ -101,10 +96,7 @@ return {
 
       -- Import statements (rose for visibility)
       ["@variable.import"] = { fg = "rose" },
-      ["@lsp.type.import"] = { fg = "rose" },
-      ["@variable.typescript"] = { fg = "rose" },
       ["@include"] = { fg = "rose" },
-      ["@include.typescript"] = { fg = "rose" },
       ["@import"] = { fg = "rose" },
 
       -- Import sources
@@ -118,9 +110,6 @@ return {
       -- Function parameters (italic for distinction)
       ["@variable.parameter"] = { fg = "mint", italic = true },
       ["@parameter"] = { fg = "mint", italic = true },
-      ["@lsp.type.parameter"] = { fg = "mint", italic = true },
-      ["@lsp.mod.declaration.typescript"] = { fg = "mint", italic = true },
-      ["@variable.parameter.typescript"] = { fg = "mint", italic = true },
 
       -- Template literal parameters ${...}
       ["@punctuation.special"] = { fg = "foam" },
@@ -136,97 +125,20 @@ return {
       ["@keyword.return"] = { fg = "keyword" },
       ["@keyword.import"] = { fg = "keyword" }, -- import
       ["@keyword.export"] = { fg = "keyword" }, -- export
-      -- These keep their original colors (not the custom keyword color):
       ["@keyword.function"] = { fg = "pine" }, -- function keyword - keep pine
       ["@keyword.storage"] = { fg = "foam" }, -- class, const, let - keep foam
-      ["@keyword.storage.typescript"] = { fg = "foam" }, -- TypeScript class/const/let
-      ["@keyword.modifier"] = { fg = "foam" }, -- extends, static - keep foam (readonly handled by matchadd)
-      ["@keyword.modifier.typescript"] = { fg = "foam" }, -- TypeScript extends/static - keep foam
+      ["@keyword.modifier"] = { fg = "foam" }, -- extends, static - keep foam
       ["@keyword.coroutine"] = { fg = "keyword" }, -- yield (not special, use keyword color)
-
-      -- LSP keyword overrides (prevent LSP from overriding with keyword color)
-      ["@lsp.type.keyword"] = { fg = "keyword" },
-      ["@lsp.typemod.keyword.declaration.typescript"] = { fg = "foam" }, -- class declarations
-      ["@lsp.typemod.keyword.static.typescript"] = { fg = "foam" }, -- static keyword
-      ["@lsp.typemod.keyword.async.typescript"] = { fg = "love" }, -- async
-
-      -- SQL strings should use olive, not keyword color
-      ["@string.sql"] = { fg = "olive" },
-      ["@string.special.sql"] = { fg = "olive" },
-      -- SQL keywords inside template literals should use olive too
-      ["@keyword.sql"] = { fg = "olive" },
-
-      -- Ensure const vs parameters are different colors
-      -- const/let are @keyword.storage (foam), parameters are mint - already different!
+      ["@keyword.sql"] = { fg = "olive" }, -- SQL keywords inside template literals
 
       -- Punctuation - barely visible
       ["@punctuation.bracket"] = { fg = "subtle" },
       ["@punctuation.delimiter"] = { fg = "subtle" },
       ["@operator"] = { fg = "operator" },
-      ["@operator.typescript"] = { fg = "operator" },
       ["@keyword.operator"] = { fg = "foam" }, -- typeof, instanceof, etc.
 
       -- Generics syntax (the < > brackets)
       ["@punctuation.special.generic"] = { fg = "subtle" },
-
-      -- ==========================================
-      -- LSP SEMANTIC TOKENS (Override to match our colors)
-      -- ==========================================
-
-      -- LSP Keywords - ensure they follow our keyword color scheme
-      ["@lsp.type.keyword"] = { fg = "keyword" },
-      ["@lsp.typemod.keyword.async"] = { fg = "love" },
-      ["@lsp.typemod.keyword.declaration"] = { fg = "foam" },
-      ["@lsp.typemod.keyword.static"] = { fg = "foam" },
-      ["@lsp.typemod.keyword.modifier"] = { fg = "foam" },
-
-      -- LSP Variables - distinguish const vs parameters
-      ["@lsp.type.variable"] = { fg = "foam" },
-      ["@lsp.typemod.variable.declaration"] = { fg = "foam" },
-      ["@lsp.typemod.variable.local"] = { fg = "foam" },
-      ["@lsp.typemod.variable.readonly"] = { fg = "foam" },
-
-      -- LSP Parameters
-      ["@lsp.type.parameter"] = { fg = "mint", italic = true },
-      ["@lsp.typemod.parameter.declaration"] = { fg = "mint", italic = true },
-
-      -- LSP Properties/Members
-      ["@lsp.type.property"] = { fg = "foam" },
-      ["@lsp.type.member"] = { fg = "foam" },
-      ["@lsp.typemod.property.declaration"] = { fg = "iris" },
-
-      -- Object literal keys (messages:, id:)
-      ["@property"] = { fg = "iris" },
-      ["@property.typescript"] = { fg = "iris" },
-      ["@object.property"] = { fg = "iris" },
-
-      -- LSP Functions
-      ["@lsp.type.function"] = { fg = "foam" },
-      ["@lsp.typemod.function.declaration"] = { fg = "foam", bold = true },
-      ["@lsp.type.method"] = { fg = "foam" },
-      ["@lsp.typemod.method.declaration"] = { fg = "foam" },
-
-      -- LSP Classes and Types
-      ["@lsp.type.class"] = { fg = "iris" },
-      ["@lsp.type.interface"] = { fg = "gold" },
-      ["@lsp.type.enum"] = { fg = "iris" },
-      ["@lsp.type.struct"] = { fg = "iris" },
-      ["@lsp.type.typeParameter"] = { fg = "gold" },
-
-      -- LSP Namespaces/Modules
-      ["@lsp.type.namespace"] = { fg = "iris" },
-      ["@lsp.type.module"] = { fg = "iris" },
-
-      -- LSP Strings (including SQL)
-      ["@lsp.type.string"] = { fg = "olive" },
-      ["@lsp.typemod.string.injected"] = { fg = "olive" },
-
-      -- LSP Comments
-      ["@lsp.type.comment"] = { fg = "comment", italic = true },
-
-      -- LSP Numbers and Constants
-      ["@lsp.type.number"] = { fg = "pine" },
-      ["@lsp.type.enumMember"] = { fg = "pine" },
 
       -- ==========================================
       -- UI ELEMENTS
@@ -244,39 +156,104 @@ return {
       Error = { fg = "love", bold = true },
     },
   },
+
   config = function(_, opts)
     require("rose-pine").setup(opts)
     vim.cmd("colorscheme rose-pine")
 
-    -- Highlight Effect-specific operations with love color
+    -- ==========================================
+    -- LSP SEMANTIC TOKEN HARMONIZATION
+    -- ==========================================
+    vim.api.nvim_create_autocmd("LspAttach", {
+      callback = function()
+        local links = {
+          -- Base LSP types
+          ["@lsp.type.class"] = "@type",
+          ["@lsp.type.interface"] = "@type",
+          ["@lsp.type.function"] = "@function",
+          ["@lsp.type.method"] = "@function",
+          ["@lsp.type.parameter"] = "@variable.parameter",
+          ["@lsp.type.property"] = "@property",
+          ["@lsp.type.namespace"] = "@namespace",
+          ["@lsp.type.module"] = "@module",
+          ["@lsp.type.string"] = "@string",
+          ["@lsp.type.number"] = "@number",
+          ["@lsp.type.boolean"] = "@boolean",
+          ["@lsp.type.comment"] = "@comment",
+          ["@lsp.type.keyword"] = "@keyword",
+          ["@lsp.type.enum"] = "@type",
+          ["@lsp.type.enumMember"] = "@constant",
+
+          -- LSP Parameters (ensure mint italic)
+          ["@lsp.type.parameter"] = "@variable.parameter",
+          ["@lsp.typemod.parameter.declaration"] = "@variable.parameter",
+
+          -- LSP Properties - object literal keys should be iris (purple)
+          ["@lsp.type.property"] = "@property",
+          ["@lsp.type.member"] = "@property",
+          ["@lsp.typemod.property.declaration"] = "@property",
+
+          -- LSP Variables
+          ["@lsp.type.variable"] = "@variable",
+          ["@lsp.typemod.variable.declaration"] = "@variable",
+          ["@lsp.typemod.variable.local"] = "@variable",
+          ["@lsp.typemod.variable.readonly"] = "@keyword.storage",
+
+          -- TypeScript-specific semantic tokens
+          ["@lsp.type.variable.typescript"] = "@variable",
+          ["@lsp.typemod.variable.declaration.typescript"] = "@keyword.storage",
+          ["@lsp.typemod.variable.readonly.typescript"] = "@keyword.storage",
+          ["@lsp.typemod.variable.local.typescript"] = "@variable",
+          ["@lsp.mod.declaration.typescript"] = "@keyword.storage",
+          ["@lsp.mod.readonly.typescript"] = "@keyword.storage",
+          ["@lsp.typemod.keyword.declaration.typescript"] = "@keyword.storage",
+          ["@lsp.typemod.keyword.static.typescript"] = "@keyword.storage",
+          ["@lsp.typemod.keyword.async.typescript"] = "@keyword",
+        }
+
+        for from, to in pairs(links) do
+          vim.api.nvim_set_hl(0, from, { link = to })
+        end
+      end,
+    })
+
+    -- ==========================================
+    -- EFFECT-TS & SPECIAL HIGHLIGHTING
+    -- ==========================================
+    vim.api.nvim_set_hl(0, "EffectOp", { fg = "#ff5189", bold = true })
+    vim.api.nvim_set_hl(0, "CoroutineKeyword", { fg = "#ff5189", italic = true })
+    vim.api.nvim_set_hl(0, "ReadonlyKeyword", { fg = "#3e8fb0" })
+    vim.api.nvim_set_hl(0, "TodoComment", { fg = "#e0af68", bold = true })
+
+    -- Re-apply EffectOp highlighting after LSP attaches (to ensure it takes precedence)
+    vim.api.nvim_create_autocmd("LspAttach", {
+      pattern = { "*.ts", "*.tsx", "*.js", "*.jsx" },
+      callback = function()
+        vim.fn.matchadd(
+          "EffectOp",
+          [[\<Effect\.\(gen\|fn\|succeed\|fail\|promise\|sync\|async\|pipe\|catchTag\|orDie\|provide\|map\|flatMap\|tap\|andThen\|catchAll\)\>]],
+          100
+        )
+      end,
+    })
+
     vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
       pattern = { "*.ts", "*.tsx", "*.js", "*.jsx" },
       callback = function()
-        -- Effect operations
+        -- Effect operations (high priority to override LSP)
         vim.fn.matchadd(
           "EffectOp",
-          "\\<Effect\\.\\(gen\\|fn\\|succeed\\|fail\\|promise\\|sync\\|async\\|pipe\\|catchTag\\|orDie\\|provide\\|map\\|flatMap\\|tap\\|andThen\\|catchAll\\)\\>",
+          [[\<Effect\.\(gen\|fn\|succeed\|fail\|promise\|sync\|async\|pipe\|catchTag\|orDie\|provide\|map\|flatMap\|tap\|andThen\|catchAll\)\>]],
           100
         )
-        -- async/await (keep love color, yield uses keyword)
-        vim.fn.matchadd("CoroutineKeyword", "\\<async\\>", 100)
-        vim.fn.matchadd("CoroutineKeyword", "\\<await\\>", 100)
-        -- readonly keyword in rose color (bypasses LSP semantic tokens)
-        vim.fn.matchadd("ReadonlyKeyword", "\\<readonly\\>", 101)
+        -- async/await (high priority to override LSP)
+        vim.fn.matchadd("CoroutineKeyword", [[\<async\>]], 100)
+        vim.fn.matchadd("CoroutineKeyword", [[\<await\>]], 100)
+        -- readonly keyword
+        vim.fn.matchadd("ReadonlyKeyword", [[\<readonly\>]], 101)
+        -- TODO/FIXME in comments
+        vim.fn.matchadd("TodoComment", [[\(TODO\|FIXME\|NOTE\|HACK\|BUG\|WARNING\):]], 101)
       end,
     })
-
-    vim.api.nvim_set_hl(0, "EffectOp", { fg = "#ff5189" })
-    vim.api.nvim_set_hl(0, "CoroutineKeyword", { fg = "#ff5189", italic = true })
-    vim.api.nvim_set_hl(0, "ReadonlyKeyword", { fg = "#3e8fb0" })
-
-    -- Highlight TODO/FIXME in comments
-    vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-      pattern = "*",
-      callback = function()
-        vim.fn.matchadd("TodoComment", "\\(TODO\\|FIXME\\|NOTE\\|HACK\\|BUG\\|WARNING\\):", 100)
-      end,
-    })
-    vim.api.nvim_set_hl(0, "TodoComment", { fg = "#e0af68", bold = true })
   end,
 }
