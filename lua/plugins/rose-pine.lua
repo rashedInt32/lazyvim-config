@@ -21,7 +21,7 @@ return {
         overlay = "#102a3f",
 
         subtle = "#708fa3",
-        comment = "#5c7280",
+        comment = "#7a9a9a",
 
         foam = "#5fb3d9",
 
@@ -106,12 +106,12 @@ return {
       --------------------------------------------------
 
       ["@comment"] = {
-        fg = "#5c7280",
+        fg = "#7a9a9a",
         italic = true,
       },
 
-      CursorLine = { bg = "#0f2a3d" },
-      Visual = { bg = "#15364d" },
+      CursorLine = { bg = "#021320" },
+      Visual = { bg = "#234d6b" },
 
       CursorLineNr = { fg = "#5fb3d9", bold = true },
 
@@ -171,6 +171,14 @@ return {
       pattern = { "*.ts", "*.tsx" },
       callback = function()
         vim.fn.matchadd("EffectOp", [[\<Effect\.\(gen\|fn\|pipe\|map\|flatMap\|catchTag\|provide\|tap\)\>]], 90)
+      end,
+    })
+
+    vim.api.nvim_create_autocmd("ColorScheme", {
+      pattern = "rose-pine",
+      callback = function()
+        vim.api.nvim_set_hl(0, "Visual", { bg = "#234d6b" })
+        vim.api.nvim_set_hl(0, "CursorLine", { bg = "#021320" })
       end,
     })
   end,
