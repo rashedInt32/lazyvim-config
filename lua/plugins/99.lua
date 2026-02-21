@@ -8,7 +8,7 @@ return {
     -- for reporting bugs, i would not rely on this, but instead the provided
     -- logging mechanisms within 99.  This is for more debugging purposes
     _99.setup({
-      model = "github-copilot/claude-opus-4.5",
+      model = "ollama-cloud/kimi-k2.5",
 
       --- A new feature that is centered around tags
       completion = {
@@ -64,7 +64,7 @@ return {
     -- likely ill add a mode check and assert on required visual mode
     -- so just prepare for it now
     vim.keymap.set("v", "<leader>9v", function()
-      _99.visual_prompt()
+      _99.visual()
     end)
 
     --- if you have a request you dont want to make any changes, just cancel it
@@ -79,5 +79,5 @@ return {
     vim.keymap.set("n", "<leader>9fd", function()
       _99.fill_in_function_prompt()
     end)
-  end
+  end,
 }
