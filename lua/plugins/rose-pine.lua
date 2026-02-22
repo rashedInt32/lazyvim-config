@@ -10,6 +10,7 @@ return {
     styles = {
       bold = true,
       italic = true,
+      transparency = true,
     },
 
     palette = {
