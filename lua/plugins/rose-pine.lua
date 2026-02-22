@@ -61,15 +61,22 @@ return {
       -- FLOW FIELD
       --------------------------------------------------
 
-      ["@function.call"] = { fg = "#bfa3ff" },
-      ["@function.method.call"] = { fg = "#bfa3ff" },
+      -- FUNCTIONS (brightest execution layer)
+      ["@function.call"] = { fg = "#d0bcff" },
 
+      -- JSX ATTRIBUTES (medium surface)
+      ["@_jsx_attribute"] = { fg = "#5fb3d9" },
+      ["@tag.attribute"] = { fg = "#5fb3d9" },
+
+      -- HTML/JSX TAGS (different from functions)
+      ["@tag"] = { fg = "#e0af68" },
+      ["@tag.builtin"] = { fg = "#6fb1a0" },
+
+      -- MEMBERS (calmer, deeper)
+      ["@variable.member"] = { fg = "#8f6fd1" },
+
+      -- PARAMETERS (blue identity)
       ["@variable.parameter"] = { fg = "#8bb4ff" },
-
-      ["@variable.member"] = { fg = "#bfa3ff" },
-
-      ["@property"] = { fg = "#bfa3ff" },
-      ["@field"] = { fg = "#bfa3ff" },
 
       --------------------------------------------------
       -- DATA SURFACE
