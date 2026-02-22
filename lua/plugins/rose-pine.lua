@@ -57,7 +57,7 @@ return {
       ["@function.call"] = { fg = "#cbb4ff" },
       ["@function.method.call"] = { fg = "#cbb4ff" },
 
-      ["@tag"] = { fg = "#e0af68" },
+      ["@tag"] = { fg = "#c678dd" },
       ["@tag.builtin"] = { fg = "#6fb1a0" },
 
       ["@_jsx_attribute"] = { fg = "#5fb3d9" },
