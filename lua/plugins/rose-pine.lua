@@ -106,8 +106,8 @@ return {
         italic = true,
       },
 
-      CursorLine = { bg = "#021320" },
-      Visual = { bg = "#234d6b" },
+      CursorLine = { bg = "#061e33" },
+      Visual = { bg = "#2d5a7d" },
       CursorLineNr = { fg = "#5fb3d9", bold = true },
 
       Error = { fg = "#e06c75", bold = true },
