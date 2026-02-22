@@ -5,7 +5,6 @@ return {
   priority = 1000,
 
   opts = {
-
     variant = "main",
 
     styles = {
@@ -15,29 +14,22 @@ return {
 
     palette = {
       main = {
-
         base = "#011627",
         surface = "#0b2233",
         overlay = "#102a3f",
 
-        subtle = "#708fa3",
+        subtle = "#7f9db2", -- lifted slightly
         comment = "#7a9a9a",
 
         foam = "#5fb3d9",
-
-        -- Structural identity core
         gold = "#e0af68",
-
-        -- Execution anchor layer (IMPORTANT)
         iris = "#cbb4ff",
 
         pine = "#6fb1a0",
         olive = "#8fbf7f",
-
         sql = "#b5d98c",
 
         love = "#e06c75",
-
         keyword = "#4f8fb3",
         operator = "#4a6b80",
 
@@ -52,8 +44,9 @@ return {
       -- STRUCTURAL CORE
       --------------------------------------------------
 
-      ["@function"] = { fg = "#bfa3ff" },
+      ["@function"] = { fg = "#c8b6ff" },
       ["@function.definition"] = { fg = "#5fb3d9", bold = true },
+
       ["@type"] = { fg = "#e0af68" },
       ["@type.definition"] = { fg = "#e0af68", bold = true },
 
@@ -61,28 +54,25 @@ return {
       -- FLOW FIELD
       --------------------------------------------------
 
-      -- FUNCTIONS (brightest execution layer)
-      ["@function.call"] = { fg = "#d0bcff" },
+      ["@function.call"] = { fg = "#cbb4ff" },
+      ["@function.method.call"] = { fg = "#cbb4ff" },
 
-      -- JSX ATTRIBUTES (medium surface)
-      ["@_jsx_attribute"] = { fg = "#5fb3d9" },
-      ["@tag.attribute"] = { fg = "#5fb3d9" },
-
-      -- HTML/JSX TAGS (different from functions)
       ["@tag"] = { fg = "#e0af68" },
       ["@tag.builtin"] = { fg = "#6fb1a0" },
 
-      -- MEMBERS (calmer, deeper)
-      ["@variable.member"] = { fg = "#8f6fd1" },
+      ["@_jsx_attribute"] = { fg = "#5fb3d9" },
+      ["@tag.attribute"] = { fg = "#5fb3d9" },
 
-      -- PARAMETERS (blue identity)
+      ["@variable.member"] = { fg = "#8f6fd1" },
+      ["@property"] = { fg = "#8f6fd1" },
+
       ["@variable.parameter"] = { fg = "#8bb4ff" },
 
       --------------------------------------------------
       -- DATA SURFACE
       --------------------------------------------------
 
-      ["@variable"] = { fg = "#708fa3" },
+      ["@variable"] = { fg = "#7f9db2" }, -- lifted for readability
 
       ["@variable.builtin"] = { fg = "#5fb3d9", bold = true },
       ["@variable.defaultLibrary"] = { fg = "#5fb3d9", bold = true },
@@ -100,7 +90,6 @@ return {
       ["@keyword.control"] = { fg = "#4f8fb3" },
       ["@keyword.storage"] = { fg = "#4f8fb3" },
       ["@keyword.return"] = { fg = "#4f8fb3" },
-
       ["@keyword.sql"] = { fg = "#b5d98c", bold = true },
 
       ["@operator"] = { fg = "#4a6b80" },
@@ -119,7 +108,6 @@ return {
 
       CursorLine = { bg = "#021320" },
       Visual = { bg = "#234d6b" },
-
       CursorLineNr = { fg = "#5fb3d9", bold = true },
 
       Error = { fg = "#e06c75", bold = true },
@@ -131,16 +119,11 @@ return {
     require("rose-pine").setup(opts)
     vim.cmd("colorscheme rose-pine")
 
-    --------------------------------------------------
-    -- Semantic Harmony Layer (Stable Version)
-    --------------------------------------------------
-
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function()
         local map = {
-
-          ["@lsp.type.function"] = "@function",
-          ["@lsp.type.method"] = "@function.call",
+          ["@lsp.type.function"] = "@function.call",
+          ["@lsp.type.method"] = "@function.method.call",
 
           ["@lsp.typemod.function.defaultLibrary"] = "@function",
 
@@ -154,38 +137,11 @@ return {
           ["@lsp.type.namespace"] = "@type",
 
           ["@lsp.type.keyword"] = "@keyword",
-
-          ["@lsp.typemod.variable.readonly"] = "@variable",
-          ["@lsp.typemod.property.readonly"] = "@property",
         }
 
         for from, to in pairs(map) do
           vim.api.nvim_set_hl(0, from, { link = to })
         end
-      end,
-    })
-
-    --------------------------------------------------
-    -- Effect Operator Matcher
-    --------------------------------------------------
-
-    vim.api.nvim_set_hl(0, "EffectOp", {
-      fg = "#e06c75",
-      bold = true,
-    })
-
-    vim.api.nvim_create_autocmd({ "BufEnter" }, {
-      pattern = { "*.ts", "*.tsx" },
-      callback = function()
-        vim.fn.matchadd("EffectOp", [[\<Effect\.\(gen\|fn\|pipe\|map\|flatMap\|catchTag\|provide\|tap\)\>]], 90)
-      end,
-    })
-
-    vim.api.nvim_create_autocmd("ColorScheme", {
-      pattern = "rose-pine",
-      callback = function()
-        vim.api.nvim_set_hl(0, "Visual", { bg = "#234d6b" })
-        vim.api.nvim_set_hl(0, "CursorLine", { bg = "#021320" })
       end,
     })
   end,
