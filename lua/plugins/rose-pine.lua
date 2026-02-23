@@ -82,8 +82,8 @@ return {
       ["@_jsx_attribute"] = { fg = "#5fb3d9" },
       ["@tag.attribute"] = { fg = "#5fb3d9" },
 
-      ["@variable.member"] = { fg = "#8f6fd1" },
-      ["@property"] = { fg = "#8f6fd1" },
+      ["@variable.member"] = { fg = "#b794f6" },
+      ["@property"] = { fg = "#b794f6" },
 
       ["@variable.parameter"] = { fg = "#8bb4ff" },
 
@@ -91,7 +91,7 @@ return {
       -- DATA SURFACE
       --------------------------------------------------
 
-      ["@variable"] = { fg = "#7f9db2" }, -- lifted for readability
+      ["@variable"] = { fg = "#9bb5c7" }, -- lifted for readability
 
       ["@variable.builtin"] = { fg = "#5fb3d9", bold = true },
       ["@variable.defaultLibrary"] = { fg = "#5fb3d9", bold = true },
@@ -105,10 +105,10 @@ return {
       -- LANGUAGE CONTROL
       --------------------------------------------------
 
-      ["@keyword"] = { fg = "#4f8fb3" },
-      ["@keyword.control"] = { fg = "#4f8fb3" },
-      ["@keyword.storage"] = { fg = "#4f8fb3" },
-      ["@keyword.return"] = { fg = "#4f8fb3" },
+      ["@keyword"] = { fg = "#5fb3d9" },
+      ["@keyword.control"] = { fg = "#5fb3d9" },
+      ["@keyword.storage"] = { fg = "#c678dd", bold = true },
+      ["@keyword.return"] = { fg = "#5fb3d9" },
       ["@keyword.sql"] = { fg = "#b5d98c", bold = true },
 
       ["@operator"] = { fg = "#4a6b80" },
