@@ -1,3 +1,21 @@
+-- return {
+--   "rose-pine/neovim",
+--   name = "rose-pine",
+--   opts = {
+--     variant = "moon",
+--
+--     styles = {
+--       bold = true,
+--       italic = true,
+--       transparency = true,
+--     },
+--   },
+--
+--   config = function(_, opts)
+--     require("rose-pine").setup(opts)
+--     vim.cmd("colorscheme rose-pine")
+--   end,
+-- }
 return {
   "rose-pine/neovim",
   name = "rose-pine",
@@ -134,7 +152,6 @@ return {
 
           -- Fix struct object keys - prevent declaration modifier from making them gold
           ["@lsp.typemod.class.declaration"] = "@variable.member",
-          ["@lsp.typemod.property.declaration"] = "@property",
 
           ["@lsp.type.class"] = "@type",
           ["@lsp.type.interface"] = "@type",
@@ -147,6 +164,22 @@ return {
         for from, to in pairs(map) do
           vim.api.nvim_set_hl(0, from, { link = to })
         end
+      end,
+    })
+    vim.api.nvim_set_hl(0, "EffectOp", {
+      fg = "#e06c75",
+      bold = true,
+      italic = false,
+    })
+
+    vim.api.nvim_create_autocmd({ "BufEnter" }, {
+      pattern = { "*.ts", "*.tsx" },
+      callback = function()
+        vim.fn.matchadd(
+          "EffectOp",
+          [[\<Effect\.\(gen\|fn\|pipe\|map\|flatMap\|catchTag\|provide\|tap\|all\|run\|try\|fail\|sync\|async\|maybe\|option\)\>]],
+          95
+        )
       end,
     })
   end,
