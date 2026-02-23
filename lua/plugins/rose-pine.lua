@@ -132,6 +132,10 @@ return {
           ["@lsp.type.parameter"] = "@variable.parameter",
           ["@lsp.type.property"] = "@property",
 
+          -- Fix struct object keys - prevent declaration modifier from making them gold
+          ["@lsp.typemod.class.declaration"] = "@variable.member",
+          ["@lsp.typemod.property.declaration"] = "@property",
+
           ["@lsp.type.class"] = "@type",
           ["@lsp.type.interface"] = "@type",
           ["@lsp.type.enum"] = "@type",
