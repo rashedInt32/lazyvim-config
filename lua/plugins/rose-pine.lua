@@ -126,7 +126,7 @@ return {
       },
 
       CursorLine = { bg = "#061e33" },
-      Visual = { bg = "#2d5a7d" },
+      Visual = { bg = "#4a7c9e" },
       CursorLineNr = { fg = "#5fb3d9", bold = true },
 
       Error = { fg = "#e06c75", bold = true },
