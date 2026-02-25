@@ -266,9 +266,9 @@ vim.diagnostic.config({
 
     format = function(diagnostic)
       local icon_map = {
-        [vim.diagnostic.severity.ERROR] = " ",
-        [vim.diagnostic.severity.WARN] = " ",
-        [vim.diagnostic.severity.INFO] = " ",
+        [vim.diagnostic.severity.ERROR] = " ",
+        [vim.diagnostic.severity.WARN] = " ",
+        [vim.diagnostic.severity.INFO] = " ",
         [vim.diagnostic.severity.HINT] = "󰌵 ",
       }
 
@@ -311,10 +311,10 @@ vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { undercurl = true, sp = "#a9a
 local ns = vim.api.nvim_create_namespace("diagnostic_inline_indicators")
 
 -- Create subtle background highlight groups
-vim.api.nvim_set_hl(0, "DiagnosticSpotlightError", { bg = "#3d1f1f" })  -- subtle red background
-vim.api.nvim_set_hl(0, "DiagnosticSpotlightWarn", { bg = "#3d331f" })   -- subtle yellow background
-vim.api.nvim_set_hl(0, "DiagnosticSpotlightInfo", { bg = "#1f2d3d" })   -- subtle blue background
-vim.api.nvim_set_hl(0, "DiagnosticSpotlightHint", { bg = "#2d1f3d" })   -- subtle purple background
+vim.api.nvim_set_hl(0, "DiagnosticSpotlightError", { bg = "#5a2a2a" })  -- subtle red background
+vim.api.nvim_set_hl(0, "DiagnosticSpotlightWarn", { bg = "#5a4a2a" })   -- subtle yellow background
+vim.api.nvim_set_hl(0, "DiagnosticSpotlightInfo", { bg = "#2a3d5a" })   -- subtle blue background
+vim.api.nvim_set_hl(0, "DiagnosticSpotlightHint", { bg = "#4a2a5a" })   -- subtle purple background
 
 local function show_inline_indicators(bufnr)
   vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)

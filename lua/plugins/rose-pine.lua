@@ -131,6 +131,12 @@ return {
 
       Error = { fg = "#e06c75", bold = true },
       Warning = { fg = "#e0af68", bold = true },
+
+      -- Diagnostic highlights for tiny-inline-diagnostic
+      DiagnosticError = { fg = "#e06c75", bold = true },
+      DiagnosticWarn = { fg = "#e0af68", bold = true },
+      DiagnosticInfo = { fg = "#5fb3d9", bold = true },
+      DiagnosticHint = { fg = "#8fbf7f", bold = true },
     },
   },
 
