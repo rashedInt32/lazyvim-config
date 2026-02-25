@@ -1,21 +1,3 @@
--- return {
---   "rose-pine/neovim",
---   name = "rose-pine",
---   opts = {
---     variant = "moon",
---
---     styles = {
---       bold = true,
---       italic = true,
---       transparency = true,
---     },
---   },
---
---   config = function(_, opts)
---     require("rose-pine").setup(opts)
---     vim.cmd("colorscheme rose-pine")
---   end,
--- }
 return {
   "rose-pine/neovim",
   name = "rose-pine",
@@ -37,7 +19,7 @@ return {
         surface = "#0b2233",
         overlay = "#102a3f",
 
-        subtle = "#7f9db2", -- lifted slightly
+        subtle = "#7f9db2",
         comment = "#7a9a9a",
 
         foam = "#5fb3d9",
@@ -58,13 +40,14 @@ return {
     },
 
     highlight_groups = {
-
       --------------------------------------------------
       -- STRUCTURAL CORE
       --------------------------------------------------
 
       ["@function"] = { fg = "#c8b6ff" },
-      ["@function.definition"] = { fg = "#5fb3d9", bold = true },
+      ["@function.definition"] = { fg = "#c8b6ff", bold = true },
+      ["@function.call"] = { fg = "#cbb4ff" },
+      ["@function.method.call"] = { fg = "#cbb4ff" },
 
       ["@type"] = { fg = "#e0af68" },
       ["@type.definition"] = { fg = "#e0af68", bold = true },
@@ -72,9 +55,6 @@ return {
       --------------------------------------------------
       -- FLOW FIELD
       --------------------------------------------------
-
-      ["@function.call"] = { fg = "#cbb4ff" },
-      ["@function.method.call"] = { fg = "#cbb4ff" },
 
       ["@tag"] = { fg = "#c678dd" },
       ["@tag.builtin"] = { fg = "#6fb1a0" },
@@ -91,8 +71,7 @@ return {
       -- DATA SURFACE
       --------------------------------------------------
 
-      ["@variable"] = { fg = "#9bb5c7" }, -- lifted for readability
-
+      ["@variable"] = { fg = "#9bb5c7" },
       ["@variable.builtin"] = { fg = "#5fb3d9", bold = true },
       ["@variable.defaultLibrary"] = { fg = "#5fb3d9", bold = true },
 
@@ -137,6 +116,12 @@ return {
       DiagnosticWarn = { fg = "#e0af68", bold = true },
       DiagnosticInfo = { fg = "#5fb3d9", bold = true },
       DiagnosticHint = { fg = "#8fbf7f", bold = true },
+
+      --------------------------------------------------
+      -- CUSTOM HIGHLIGHTS
+      --------------------------------------------------
+
+      EffectOp = { fg = "#e06c75", bold = true, italic = false },
     },
   },
 
@@ -147,24 +132,28 @@ return {
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function()
         local map = {
-          ["@lsp.type.function"] = "@function.call",
+          -- Functions: keep declaration vs call distinction
+          ["@lsp.type.function"] = "@function",
           ["@lsp.type.method"] = "@function.method.call",
 
+          -- Default library functions
           ["@lsp.typemod.function.defaultLibrary"] = "@function",
 
-          ["@lsp.type.variable"] = "@variable",
+          -- Variables: don't override, let treesitter handle it
+          -- ["@lsp.type.variable"] = "@variable",  -- REMOVED: causes conflicts
           ["@lsp.type.parameter"] = "@variable.parameter",
+
+          -- Properties
           ["@lsp.type.property"] = "@property",
 
-          -- Fix struct object keys - prevent declaration modifier from making them gold
-          ["@lsp.typemod.class.declaration"] = "@variable.member",
-
+          -- Types: keep class/interface/enum consistent
           ["@lsp.type.class"] = "@type",
           ["@lsp.type.interface"] = "@type",
           ["@lsp.type.enum"] = "@type",
           ["@lsp.type.namespace"] = "@type",
 
-          ["@lsp.type.keyword"] = "@keyword",
+          -- Fix struct object keys
+          ["@lsp.typemod.class.declaration"] = "@variable.member",
         }
 
         for from, to in pairs(map) do
@@ -172,12 +161,8 @@ return {
         end
       end,
     })
-    vim.api.nvim_set_hl(0, "EffectOp", {
-      fg = "#e06c75",
-      bold = true,
-      italic = false,
-    })
 
+    -- Effect operators highlighting
     vim.api.nvim_create_autocmd({ "BufEnter" }, {
       pattern = { "*.ts", "*.tsx" },
       callback = function()
