@@ -2,9 +2,9 @@ return {
   "briangwaltney/paren-hint.nvim",
   lazy = false,
   config = function()
-    -- you can create a custom highlight group for the ghost text with the below command.
-    -- change the `highlight` option to `parenhint` if you use this method.
-    -- vim.api.nvim_exec([[ highlight parenhint guifg='#56633E' ]], false)
+    -- custom highlight group - slightly darker than comment color (#7a9a9a)
+    vim.api.nvim_set_hl(0, "parenhint", { fg = "#5d7d7d" })
+
     require("paren-hint").setup({
       -- Include the opening paren in the ghost text
       include_paren = true,
@@ -17,7 +17,7 @@ return {
 
       -- style of the ghost text using highlight group
       -- :Telescope highlights to see the available highlight groups if you have telescope installed
-      highlight = "Comment",
+      highlight = "parenhint",
 
       -- excluded filetypes
       excluded_filetypes = {
