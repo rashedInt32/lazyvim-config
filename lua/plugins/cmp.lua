@@ -48,7 +48,7 @@ return {
         show_on_backspace = false,
       },
 
-      keyword_length = 1,
+
       accept = {
         auto_brackets = {
           enabled = false,

@@ -9,7 +9,7 @@ return {
       end,
     },
     cmd = "Copilot",
-    enabled = true,
+    enabled = false,
     event = "InsertEnter",
     copilot_model = "claude-opus-4.5",
     opts = {
