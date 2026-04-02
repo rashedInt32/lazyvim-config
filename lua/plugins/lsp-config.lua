@@ -106,7 +106,6 @@ return {
               },
               preferences = {
                 importModuleSpecifier = "non-relative",
-                quoteStyle = "single",
               },
             },
             javascript = {
@@ -123,7 +122,6 @@ return {
               },
               preferences = {
                 importModuleSpecifier = "non-relative",
-                --quoteStyle = "single",
               },
             },
             vtsls = {

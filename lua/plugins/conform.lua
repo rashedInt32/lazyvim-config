@@ -2,7 +2,9 @@ return {
   "stevearc/conform.nvim",
 
   opts = {
-    -- ❌ Disable auto format globally
+    default_format_opts = {
+      inherit = true,
+    },
     format_on_save = false,
 
     formatters_by_ft = {
@@ -51,6 +53,7 @@ return {
         command = "prettier",
         args = { "--stdin-filepath", "$FILENAME" },
         stdin = true,
+        inherit = true,
         condition = function(ctx)
           local max_size = 200 * 1024
           local ok, stats = pcall(vim.loop.fs_stat, ctx.filename)

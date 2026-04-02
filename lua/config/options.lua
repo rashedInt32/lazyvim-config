@@ -10,8 +10,22 @@ vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
+vim.opt.list = true
+vim.opt.listchars = {
+  tab = "→ ",
+  trail = "·",
+  nbsp = "∘",
+}
 
 vim.opt.smartindent = true
+vim.opt.preserveindent = true
+vim.opt.copyindent = true
+vim.opt.autoindent = true
+vim.opt.formatoptions:remove({ "c", "r", "o" }) -- disables auto-comment indent
+vim.opt.fileignorecase = vim.opt.fileignorecase
+vim.opt.indentkeys = "0,{,o,O,]"
+vim.opt.startofline = true
+vim.opt.indentexpr = ""
 
 vim.opt.swapfile = false
 vim.opt.backup = false
