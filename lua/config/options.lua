@@ -34,6 +34,8 @@ vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.breakindent = true
 
+vim.g.autoformat = false
+
 -- line number and relative line number
 vim.opt.number = false
 vim.opt.relativenumber = false
