@@ -19,6 +19,9 @@ return {
     highlight = {
       enable = true,
     },
+    indent = {
+      enable = true,
+    },
     injections = {
       enable = true,
     },

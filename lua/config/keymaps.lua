@@ -139,3 +139,8 @@ vim.keymap.set("n", "<leader>gs", ":Gitsigns stage_hunk<CR>")
 vim.keymap.set("n", "<leader>ca", function()
   vim.lsp.buf.code_action()
 end, { noremap = true, silent = true })
+
+vim.keymap.set({ "n", "v" }, "<leader>f", function()
+  local conform = require("conform")
+  conform.format({ timeout_ms = 3000, lsp_fallback = true })
+end, { desc = "Format file or range" })

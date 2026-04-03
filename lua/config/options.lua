@@ -10,6 +10,7 @@ vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
+vim.opt.shiftround = true
 vim.opt.list = true
 vim.opt.listchars = {
   tab = "→ ",
@@ -17,14 +18,11 @@ vim.opt.listchars = {
   nbsp = "∘",
 }
 
-vim.opt.smartindent = true
+vim.opt.autoindent = true
 vim.opt.preserveindent = true
 vim.opt.copyindent = true
-vim.opt.autoindent = true
-vim.opt.formatoptions:remove({ "c", "r", "o" }) -- disables auto-comment indent
-vim.opt.fileignorecase = vim.opt.fileignorecase
-vim.opt.indentkeys = "0,{,o,O,]"
-vim.opt.startofline = true
+vim.opt.formatoptions:remove({ "c", "r", "o", "t" })
+vim.opt.textwidth = 0
 vim.opt.indentexpr = ""
 
 vim.opt.swapfile = false
@@ -75,6 +73,65 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.opt_local.tabstop = 4
     vim.opt_local.shiftwidth = 4
-    vim.opt_local.expandtab = false -- Go generally uses tabs, not spaces
+    vim.opt_local.expandtab = false
+  end,
+})
+
+-- Auto-detect indentation style per project
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "svelte",
+    "json",
+    "python",
+    "ruby",
+    "lua",
+  },
+  callback = function(args)
+    local buf = args.buf
+    vim.schedule(function()
+      if not vim.api.nvim_buf_is_valid(buf) then
+        return
+      end
+
+      local lines = vim.api.nvim_buf_get_lines(buf, 0, 100, false)
+      local tab_count = 0
+      local space_count = 0
+
+      for _, line in ipairs(lines) do
+        if line:match("^\t") then
+          tab_count = tab_count + 1
+        elseif line:match("^  ") then
+          space_count = space_count + 1
+        end
+      end
+
+      if tab_count > space_count then
+        vim.bo[buf].expandtab = false
+        vim.bo[buf].tabstop = 2
+        vim.bo[buf].softtabstop = 2
+        vim.bo[buf].shiftwidth = 2
+      else
+        vim.bo[buf].expandtab = true
+        vim.bo[buf].tabstop = 2
+        vim.bo[buf].softtabstop = 2
+        vim.bo[buf].shiftwidth = 2
+      end
+    end)
+  end,
+})
+
+-- Fix treesitter highlighter crash on undo after large format changes
+vim.api.nvim_create_autocmd("TextChanged", {
+  callback = function()
+    local ok, err = pcall(vim.treesitter.stop)
+    if not ok then
+      return
+    end
+    local ok2 = pcall(vim.treesitter.start)
   end,
 })
