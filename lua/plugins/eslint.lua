@@ -39,17 +39,7 @@ return {
         rulesCustomizations = {},
         run = "onType",
         problems = { shortenToSingleLine = false },
-        nodePath = function(bufnr)
-          return require("nvim-eslint").resolve_node_path()
-        end,
-        workingDirectory = { mode = "location" },
-        workspaceFolder = function(bufnr)
-          local git_dir = require("nvim-eslint").resolve_git_dir(bufnr)
-          return {
-            uri = vim.uri_from_fname(git_dir),
-            name = vim.fn.fnamemodify(git_dir, ":t"),
-          }
-        end,
+        workingDirectory = { mode = "auto" },
       },
     })
   end,
