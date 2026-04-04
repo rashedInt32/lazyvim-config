@@ -46,7 +46,18 @@ vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.breakindent = true
 
-vim.g.autoformat = false
+vim.g.autoformat = true
+
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+  callback = function(args)
+    local buf = args.buf
+    local path = vim.api.nvim_buf_get_name(buf)
+    local base_path = vim.fn.expand("~/Documents/codes/happydance/Base")
+    if path:find(base_path, 1, true) then
+      vim.b[buf].autoformat = false
+    end
+  end,
+})
 
 -- line number and relative line number
 vim.opt.number = false
