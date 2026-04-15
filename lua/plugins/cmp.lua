@@ -26,7 +26,7 @@ return {
       --   "fallback",
       -- },
       ["<C-f>"] = { "fallback" },
-      ["<Tab>"] = { "select_and_accept", "snippet_forward", "fallback" },
+      ["<Tab>"] = { "accept", "snippet_forward", "fallback" },
       ["<S-Tab>"] = { "snippet_backward", "fallback" },
       ["<CR>"] = { "fallback" },
     },
@@ -47,7 +47,6 @@ return {
         show_on_insert = false,
         show_on_backspace = false,
       },
-
 
       accept = {
         auto_brackets = {
@@ -77,7 +76,7 @@ return {
         buffer = { score_offset = 150 },
         path = { score_offset = 140 },
         snippets = {
-          score_offset = 260,
+          score_offset = 230,
           opts = {
             friendly_snippets = false,
             search_paths = { vim.fn.stdpath("config") .. "/snippets" },
