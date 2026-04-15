@@ -121,6 +121,10 @@ return {
             },
           },
           files = {
+            follow = true,
+            hidden = true,
+            ignored = true,
+            respect_gitignore = false,
             exclude = {
               "**/dist/**",
               "**/node_modules/**",
