@@ -52,8 +52,11 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
   callback = function(args)
     local buf = args.buf
     local path = vim.api.nvim_buf_get_name(buf)
-    local base_path = vim.fn.expand("~/Documents/codes/happydance/Base")
-    if path:find(base_path, 1, true) then
+    local excluded = {
+      vim.fn.expand("~/Documents/codes/happydance/Base"),
+      vim.fn.expand("~/Documents/codes/happydance/regeneron-careers-frontend"),
+    }
+    if vim.iter(excluded):any(function(p) return path:find(p, 1, true) end) then
       vim.b[buf].autoformat = false
     end
   end,
