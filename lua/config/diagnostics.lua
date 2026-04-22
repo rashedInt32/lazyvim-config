@@ -1,254 +1,25 @@
-local signs = {
-  Error = " ",
-  Warn = " ",
-  Info = " ",
-  Hint = "󰌵 ",
+local ts_errors = require("config.ts_errors")
+
+local icons = {
+  [vim.diagnostic.severity.ERROR] = "",
+  [vim.diagnostic.severity.WARN] = "",
+  [vim.diagnostic.severity.INFO] = "",
+  [vim.diagnostic.severity.HINT] = "󰌵",
 }
-
-for type, icon in pairs(signs) do
-  local hl = "DiagnosticSign" .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-end
-
-local function prettify_type(type_str)
-  if not type_str then
-    return type_str
-  end
-
-  type_str = type_str:gsub("import%(\"[^\"]+/node_modules/[^\"]+\"%)%.", "")
-  type_str = type_str:gsub("import%(\"[^\"]+\"%)%.([%w_]+)", "%1")
-  type_str = type_str:gsub("ParseResult%.", "")
-
-  return type_str
-end
-
-local function format_type_multiline(type_str, indent)
-  indent = indent or "│     "
-  type_str = prettify_type(type_str)
-  if not type_str then
-    return {}
-  end
-
-  local max_line_len = 70
-  local lines = {}
-  local brace_depth = 0
-  local current = ""
-
-  for i = 1, #type_str do
-    local char = type_str:sub(i, i)
-    current = current .. char
-
-    if char == "{" then
-      brace_depth = brace_depth + 1
-    elseif char == "}" then
-      brace_depth = brace_depth - 1
-    end
-
-    if char == ";" and brace_depth == 1 then
-      table.insert(lines, vim.trim(current))
-      current = ""
-    elseif #current >= max_line_len and char == " " then
-      table.insert(lines, vim.trim(current))
-      current = ""
-    end
-  end
-
-  if #vim.trim(current) > 0 then
-    table.insert(lines, vim.trim(current))
-  end
-
-  if #lines <= 1 then
-    return { type_str }
-  end
-
-  local result = {}
-  for idx, line in ipairs(lines) do
-    if idx == 1 then
-      table.insert(result, line)
-    else
-      table.insert(result, indent .. line)
-    end
-  end
-
-  return result
-end
-
-local function format_ts_artistic(diagnostic)
-  local msg = diagnostic.message
-  local code = diagnostic.code
-  local lines = {}
-
-  local base_msg = msg
-    :gsub("\n.*", "")
-    :gsub("%.%s+Property.-$", "")
-    :gsub(" with '[^']+': %w+%'.-$", "")
-    :gsub(" with '[^']+'.-$", "")
-
-  local got, expected = base_msg:match("Type '(.+)' is not assignable to type '(.+)'%.?$")
-  if not got then
-    got, expected = base_msg:match("Argument of type '(.+)' is not assignable to parameter of type '(.+)'%.?$")
-  end
-
-  if expected and got then
-    local got_lines = format_type_multiline(got, "│              ")
-    local expected_lines = format_type_multiline(expected, "│              ")
-    table.insert(lines, "╭─ ⊘ Type Mismatch")
-    table.insert(lines, "│")
-    table.insert(lines, "│  ✗ Got:      " .. (got_lines[1] or ""))
-    for i = 2, #got_lines do
-      table.insert(lines, got_lines[i])
-    end
-    table.insert(lines, "│  ✓ Expected: " .. (expected_lines[1] or ""))
-    for i = 2, #expected_lines do
-      table.insert(lines, expected_lines[i])
-    end
-
-    local missing_prop = msg:match("Property '([^']+)' is missing")
-    if missing_prop then
-      table.insert(lines, "│")
-      table.insert(lines, "│  ◈ Missing:  '" .. missing_prop .. "'")
-    end
-
-    table.insert(lines, "╰─")
-    return table.concat(lines, "\n")
-  end
-
-  local prop, in_type, req_type = msg:match("Property '(.-)' is missing in type '(.-)' but required in type '(.-)'")
-  if prop then
-    local in_lines = format_type_multiline(in_type, "│              ")
-    local req_lines = format_type_multiline(req_type, "│              ")
-    table.insert(lines, "╭─ ◈ Missing Property")
-    table.insert(lines, "│")
-    table.insert(lines, "│  ◈ Property:  '" .. prop .. "'")
-    table.insert(lines, "│  ◇ In:        " .. (in_lines[1] or ""))
-    for i = 2, #in_lines do
-      table.insert(lines, in_lines[i])
-    end
-    table.insert(lines, "│  ◆ Required:  " .. (req_lines[1] or ""))
-    for i = 2, #req_lines do
-      table.insert(lines, req_lines[i])
-    end
-    table.insert(lines, "╰─")
-    return table.concat(lines, "\n")
-  end
-
-  local missing_prop, on_type = msg:match("Property '(.-)' does not exist on type '(.-)'")
-  if missing_prop then
-    local on_lines = format_type_multiline(on_type, "│           ")
-    table.insert(lines, "╭─ ❓ Unknown Property")
-    table.insert(lines, "│")
-    table.insert(lines, "│  ✗ '" .. missing_prop .. "' not found")
-    table.insert(lines, "│  ◇ on type: " .. (on_lines[1] or ""))
-    for i = 2, #on_lines do
-      table.insert(lines, on_lines[i])
-    end
-    table.insert(lines, "╰─")
-    return table.concat(lines, "\n")
-  end
-
-  local name_not_found = msg:match("Cannot find name '(.-)'")
-  if name_not_found then
-    table.insert(lines, "╭─ ❓ Undefined Reference")
-    table.insert(lines, "│")
-    table.insert(lines, "│  ✗ '" .. name_not_found .. "' is not defined")
-    table.insert(lines, "╰─")
-    return table.concat(lines, "\n")
-  end
-
-  local module_path = msg:match("Cannot find module '(.-)' or its corresponding type declarations")
-  if module_path then
-    table.insert(lines, "╭─ 🔗 Module Not Found")
-    table.insert(lines, "│")
-    table.insert(lines, "│  ✗ '" .. module_path .. "'")
-    table.insert(lines, "│  ⚡ Check path or install types")
-    table.insert(lines, "╰─")
-    return table.concat(lines, "\n")
-  end
-
-  local no_export_module, no_export_member = msg:match("Module '\"(.-)\"' has no exported member '(.-)'")
-  if not no_export_module then
-    no_export_module, no_export_member = msg:match("Module '(.-)' has no exported member '(.-)'")
-  end
-  if no_export_module and no_export_member then
-    table.insert(lines, "╭─ 🔗 Export Not Found")
-    table.insert(lines, "│")
-    table.insert(lines, "│  ✗ '" .. no_export_member .. "'")
-    table.insert(lines, "│  ◇ not exported from '" .. no_export_module:gsub(".*/", "") .. "'")
-    table.insert(lines, "╰─")
-    return table.concat(lines, "\n")
-  end
-
-  local implicit_param = msg:match("Parameter '(.-)' implicitly has an 'any' type")
-  if implicit_param then
-    table.insert(lines, "╭─ 📝 Implicit Any")
-    table.insert(lines, "│")
-    table.insert(lines, "│  ⚠ '" .. implicit_param .. "' needs type annotation")
-    table.insert(lines, "╰─")
-    return table.concat(lines, "\n")
-  end
-
-  local var_used_before = msg:match("Variable '(.-)' is used before being assigned")
-  if var_used_before then
-    table.insert(lines, "╭─ ⚠ Uninitialized Variable")
-    table.insert(lines, "│")
-    table.insert(lines, "│  ✗ '" .. var_used_before .. "' used before assignment")
-    table.insert(lines, "╰─")
-    return table.concat(lines, "\n")
-  end
-
-  local obj_possibly = msg:match("Object is possibly '(.-)'")
-  if obj_possibly then
-    table.insert(lines, "╭─ ❓ Nullish Reference")
-    table.insert(lines, "│")
-    table.insert(lines, "│  ⚠ Object may be " .. obj_possibly)
-    table.insert(lines, "│  ⚡ Add optional chaining (?.) or null check")
-    table.insert(lines, "╰─")
-    return table.concat(lines, "\n")
-  end
-
-  local expect_args, got_args = msg:match("Expected (%d+) arguments?, but got (%d+)")
-  if expect_args then
-    table.insert(lines, "╭─ 🔢 Argument Count")
-    table.insert(lines, "│")
-    table.insert(lines, "│  ✗ Got " .. got_args .. " args, expected " .. expect_args)
-    table.insert(lines, "╰─")
-    return table.concat(lines, "\n")
-  end
-
-  local const_name = msg:match("Cannot assign to '(.-)' because it is a constant")
-  if const_name then
-    table.insert(lines, "╭─ 🔒 Constant Assignment")
-    table.insert(lines, "│")
-    table.insert(lines, "│  ✗ '" .. const_name .. "' is readonly")
-    table.insert(lines, "╰─")
-    return table.concat(lines, "\n")
-  end
-
-  if msg:match("has no call signatures") then
-    local type_name = msg:match("Type '(.-)' has no call signatures")
-    local type_lines = type_name and format_type_multiline(type_name, "│       ") or { "Expression" }
-    table.insert(lines, "╭─ ⊘ Not Callable")
-    table.insert(lines, "│")
-    table.insert(lines, "│  ✗ " .. (type_lines[1] or ""))
-    for i = 2, #type_lines do
-      table.insert(lines, type_lines[i])
-    end
-    table.insert(lines, "│    is not a function")
-    table.insert(lines, "╰─")
-    return table.concat(lines, "\n")
-  end
-
-  return nil
-end
 
 vim.diagnostic.config({
   update_in_insert = false,
   severity_sort = true,
-  signs = true,
   virtual_text = false,
-  underline = {
-    severity = { min = vim.diagnostic.severity.HINT },
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = icons[vim.diagnostic.severity.ERROR],
+      [vim.diagnostic.severity.WARN] = icons[vim.diagnostic.severity.WARN],
+      [vim.diagnostic.severity.INFO] = icons[vim.diagnostic.severity.INFO],
+      [vim.diagnostic.severity.HINT] = icons[vim.diagnostic.severity.HINT],
+    },
   },
+  underline = true,
 
   float = {
     border = "rounded",
@@ -265,89 +36,131 @@ vim.diagnostic.config({
     end,
 
     format = function(diagnostic)
-      local icon_map = {
-        [vim.diagnostic.severity.ERROR] = " ",
-        [vim.diagnostic.severity.WARN] = " ",
-        [vim.diagnostic.severity.INFO] = " ",
-        [vim.diagnostic.severity.HINT] = "󰌵 ",
-      }
+      local icon = icons[diagnostic.severity] or ""
+      local prefix = icon ~= "" and (icon .. " ") or ""
 
-      local icon = icon_map[diagnostic.severity] or ""
-
-      local source = diagnostic.source or ""
-      if source:match("typescript") or source:match("ts") or source:match("vtsls") then
-        local artistic = format_ts_artistic(diagnostic)
+      if ts_errors.is_ts_source(diagnostic.source) then
+        local artistic = ts_errors.render_artistic(diagnostic)
         if artistic then
-          return icon .. "\n" .. artistic
+          return artistic
         end
 
         local ok, formatter = pcall(require, "format-ts-errors")
         if ok and diagnostic.code then
           local format_func = formatter[diagnostic.code]
-          if format_func and type(format_func) == "function" then
+          if type(format_func) == "function" then
             local msg = format_func(diagnostic.message)
             if msg and msg ~= "" then
-              msg = msg:gsub("```typescript\n", ""):gsub("```ts\n", ""):gsub("\n```", "")
-              return icon .. "\n" .. msg
+              return prefix .. ts_errors.strip_fences(msg)
             end
           end
         end
       end
 
-      return icon .. diagnostic.message
+      return prefix .. diagnostic.message
     end,
   },
 })
 
-vim.api.nvim_set_hl(0, "DiagnosticHintItalic", { link = "DiagnosticHint", italic = true })
-
--- Subtle underlines - only show at specific positions with minimal styling
-vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { undercurl = true, sp = "#ff6c6b" })
-vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { undercurl = true, sp = "#ecbe7b" })
-vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { undercurl = true, sp = "#5699af" })
-vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { undercurl = true, sp = "#a9a1e1" })
-
--- Custom handler to show inline error indicators at exact positions
+-- Subtle single-char background at the exact diagnostic column.
 local ns = vim.api.nvim_create_namespace("diagnostic_inline_indicators")
 
--- Create subtle background highlight groups
-vim.api.nvim_set_hl(0, "DiagnosticSpotlightError", { bg = "#5a2a2a" })  -- subtle red background
-vim.api.nvim_set_hl(0, "DiagnosticSpotlightWarn", { bg = "#5a4a2a" })   -- subtle yellow background
-vim.api.nvim_set_hl(0, "DiagnosticSpotlightInfo", { bg = "#2a3d5a" })   -- subtle blue background
-vim.api.nvim_set_hl(0, "DiagnosticSpotlightHint", { bg = "#4a2a5a" })   -- subtle purple background
+local severity_name = { "Error", "Warn", "Info", "Hint" }
+
+local function scale_rgb(rgb, factor)
+  local r = math.floor(math.floor(rgb / 65536) % 256 * factor)
+  local g = math.floor(math.floor(rgb / 256) % 256 * factor)
+  local b = math.floor(rgb % 256 * factor)
+  return string.format("#%02x%02x%02x", r, g, b)
+end
+
+local function setup_diagnostic_highlights()
+  vim.api.nvim_set_hl(0, "DiagnosticHintItalic", { link = "DiagnosticHint", italic = true })
+
+  for _, name in ipairs(severity_name) do
+    local src = vim.api.nvim_get_hl(0, { name = "Diagnostic" .. name, link = false })
+    local fg = src and src.fg
+    if fg then
+      local hex = scale_rgb(fg, 1.0)
+      vim.api.nvim_set_hl(0, "DiagnosticUnderline" .. name, { undercurl = true, sp = hex })
+      vim.api.nvim_set_hl(0, "DiagnosticSpotlight" .. name, { bg = scale_rgb(fg, 0.25) })
+    end
+  end
+
+  -- Unused / deprecated: fade to a muted grey pulled from Comment fg.
+  local comment = vim.api.nvim_get_hl(0, { name = "Comment", link = false })
+  if comment and comment.fg then
+    vim.api.nvim_set_hl(0, "DiagnosticSpotlightUnnecessary", { bg = scale_rgb(comment.fg, 0.35) })
+  else
+    vim.api.nvim_set_hl(0, "DiagnosticSpotlightUnnecessary", {})
+  end
+end
+
+setup_diagnostic_highlights()
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+  callback = setup_diagnostic_highlights,
+})
+
+local function has_tag(diagnostic, tag)
+  if diagnostic._tags and diagnostic._tags[tag] then
+    return true
+  end
+  local lsp_tags = diagnostic.user_data
+    and diagnostic.user_data.lsp
+    and diagnostic.user_data.lsp.tags
+  if lsp_tags then
+    -- LSP DiagnosticTag: 1 = Unnecessary, 2 = Deprecated
+    local code = tag == "unnecessary" and 1 or (tag == "deprecated" and 2 or nil)
+    if code then
+      for _, t in ipairs(lsp_tags) do
+        if t == code then
+          return true
+        end
+      end
+    end
+  end
+  return false
+end
 
 local function show_inline_indicators(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) or vim.bo[bufnr].buftype ~= "" then
+    return
+  end
+
   vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
 
   local diagnostics = vim.diagnostic.get(bufnr)
-  -- Group diagnostics by line + column to avoid duplicate highlights
   local seen_positions = {}
 
-  -- Sort by severity (lowest number = highest severity)
   table.sort(diagnostics, function(a, b)
     return a.severity < b.severity
   end)
 
+  local line_cache = {}
   for _, diagnostic in ipairs(diagnostics) do
-    local hl_group = "DiagnosticSpotlight" .. ({ "Error", "Warn", "Info", "Hint" })[diagnostic.severity] or "DiagnosticSpotlightError"
-
-    -- Create unique key for position (line:col)
+    local hl_group
+    if has_tag(diagnostic, "unnecessary") or has_tag(diagnostic, "deprecated") then
+      hl_group = "DiagnosticSpotlightUnnecessary"
+    else
+      hl_group = "DiagnosticSpotlight" .. (severity_name[diagnostic.severity] or "Error")
+    end
     local pos_key = diagnostic.lnum .. ":" .. diagnostic.col
 
-    -- Only show one indicator per position (highest severity wins due to sorting)
     if not seen_positions[pos_key] then
       seen_positions[pos_key] = true
 
-      -- Apply subtle background highlight at the exact column
-      -- Get line length to ensure end_col doesn't exceed buffer
-      local line = vim.api.nvim_buf_get_lines(bufnr, diagnostic.lnum, diagnostic.lnum + 1, false)[1] or ""
+      local line = line_cache[diagnostic.lnum]
+      if line == nil then
+        line = vim.api.nvim_buf_get_lines(bufnr, diagnostic.lnum, diagnostic.lnum + 1, false)[1] or ""
+        line_cache[diagnostic.lnum] = line
+      end
       local line_len = #line
-      local end_col = math.min(diagnostic.col + 1, line_len)
 
-      -- Only apply if there's a valid character to highlight
       if diagnostic.col < line_len then
+        local end_col = math.min(diagnostic.col + 1, line_len)
         vim.api.nvim_buf_set_extmark(bufnr, ns, diagnostic.lnum, diagnostic.col, {
-          end_col = end_col,  -- Highlight just one character
+          end_col = end_col,
           hl_group = hl_group,
           priority = 100,
         })
@@ -356,16 +169,8 @@ local function show_inline_indicators(bufnr)
   end
 end
 
--- Update indicators on diagnostic changes
-vim.api.nvim_create_autocmd({ "DiagnosticChanged", "BufEnter" }, {
+vim.api.nvim_create_autocmd("DiagnosticChanged", {
   callback = function(args)
     show_inline_indicators(args.buf)
   end,
 })
-
--- Initial setup for existing buffers
-for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-  if vim.api.nvim_buf_is_loaded(bufnr) then
-    show_inline_indicators(bufnr)
-  end
-end
