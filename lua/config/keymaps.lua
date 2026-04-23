@@ -13,14 +13,8 @@ vim.keymap.set("v", "B", "^")
 vim.keymap.set("n", "E", "$") -- end of line
 vim.keymap.set("n", "B", "^") -- beginning of line (non-whitespace)
 
--- some comment
--- Another comment
-
--- safe delete and change
-vim.keymap.set("n", "<leader>d", '"_d', { noremap = true })
-vim.keymap.set("n", "<leader>c", '"_c', { noremap = true })
-vim.keymap.set("x", "<leader>d", '"_d', { noremap = true })
-vim.keymap.set("x", "<leader>c", '"_c', { noremap = true })
+-- safe delete and change (black-hole register)
+vim.keymap.set({ "n", "x" }, "<leader>c", '"_c', { noremap = true })
 
 -- Unmap <leader>l to prevent Lazy popup from interfering with <leader>ld
 -- Remap Lazy to <leader>L instead
@@ -74,9 +68,6 @@ end, { desc = "Move to right window from terminal" })
 -- Allow <C-w> window commands from terminal (e.g., <C-w>h/j/k/l/w)
 vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], { desc = "Window command from terminal", noremap = true })
 
--- vim.keymap.set("n", "<C-n>", ":bnext<CR>", { desc = "Next buffer" })
--- vim.keymap.set("n", "<C-p>", ":bprev<CR>", { desc = "Previous buffer" })
-
 vim.keymap.set("n", "<leader>vwm", function()
   require("vim-with-me").StartVimWithMe()
 end)
@@ -92,7 +83,6 @@ vim.keymap.set("n", "<leader>Y", [["+Y]])
 
 vim.keymap.set({ "n", "v" }, "<leader>d", '"_d')
 
---de This is going to get me cancelled
 vim.keymap.set("i", "<C-c>", "<Esc>")
 
 vim.keymap.set("n", "Q", "<nop>")
@@ -101,12 +91,6 @@ vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
 vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
 vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz")
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
-
--- saving files
--- vim.keymap.set({ "n", "i" }, "<C-s>", "<cmd>w<cr>", { desc = "Save file with <C-s>", noremap = true, silent = true })
-
---vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
---vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "Go to Definition" })
 
