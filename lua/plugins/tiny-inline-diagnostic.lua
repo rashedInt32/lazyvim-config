@@ -2,176 +2,59 @@ return {
   "rachartier/tiny-inline-diagnostic.nvim",
   event = "VeryLazy",
   priority = 1000,
-  config = function()
-    require("tiny-inline-diagnostic").setup({
-      -- Style preset for diagnostic messages
-      -- Available options: "modern", "classic", "minimal", "powerline", "ghost", "simple", "nonerdfont", "amongus"
-      preset = "modern",
+  opts = {
+    preset = "modern",
+    transparent_bg = false,
+    transparent_cursorline = true,
 
-      -- Set the background of the diagnostic to transparent
-      transparent_bg = false,
+    hi = {
+      error = "DiagnosticError",
+      warn = "DiagnosticWarn",
+      info = "DiagnosticInfo",
+      hint = "DiagnosticHint",
+      arrow = "NonText",
+      background = "None",
+      mixing_color = "Normal",
+    },
 
-      -- Set the background of the cursorline to transparent (only for the first diagnostic)
-      -- Default is true in the source code, not false as in the old README
-      transparent_cursorline = true,
+    options = {
+      show_source = { enabled = false, if_many = false },
+      use_icons_from_diagnostic = false,
+      set_arrow_to_diag_color = false,
+      add_messages = true,
+      throttle = 20,
+      softwrap = 40,
+      multilines = { enabled = false, always_show = false, trim_whitespaces = false, tabstop = 4 },
+      show_all_diags_on_cursorline = false,
+      enable_on_insert = false,
+      enable_on_select = false,
+      overflow = { mode = "oneline", padding = 0 },
+      break_line = { enabled = false, after = 30 },
 
-      hi = {
-        -- Highlight group for error messages
-        error = "DiagnosticError",
+      format = function(diagnostic)
+        local rendered = require("effect-error-pretty").inline_format(diagnostic)
+        if rendered then
+          return rendered
+        end
+        local msg = diagnostic.message:gsub("\n.*", "")
+        if #msg > 80 then
+          msg = msg:sub(1, 77) .. "…"
+        end
+        return msg
+      end,
 
-        -- Highlight group for warning messages
-        warn = "DiagnosticWarn",
+      virt_texts = { priority = 2048 },
 
-        -- Highlight group for informational messages
-        info = "DiagnosticInfo",
-
-        -- Highlight group for hint or suggestion messages
-        hint = "DiagnosticHint",
-
-        -- Highlight group for diagnostic arrows
-        arrow = "NonText",
-
-        -- Background color for diagnostics
-        -- Can be a highlight group or a hexadecimal color (#RRGGBB)
-        background = "None",
-
-        -- Color blending option for the diagnostic background
-        -- Use "None" or a hexadecimal color (#RRGGBB) to blend with another color
-        -- Default is "Normal" in the source code
-        mixing_color = "Normal",
+      severity = {
+        vim.diagnostic.severity.ERROR,
+        vim.diagnostic.severity.WARN,
+        vim.diagnostic.severity.INFO,
+        vim.diagnostic.severity.HINT,
       },
 
-      options = {
-        -- Display the source of the diagnostic (e.g., basedpyright, vsserver, lua_ls etc.)
-        show_source = {
-          enabled = false,
-          -- Show source only when multiple sources exist for the same diagnostic
-          if_many = false,
-        },
+      overwrite_events = nil,
+    },
 
-        -- Use icons defined in the diagnostic configuration instead of preset icons
-        use_icons_from_diagnostic = false,
-
-        -- Set the arrow icon to the same color as the first diagnostic severity
-        set_arrow_to_diag_color = false,
-
-        -- Add messages to diagnostics when multiline diagnostics are enabled
-        -- If set to false, only signs will be displayed
-        add_messages = true,
-
-        -- Time (in milliseconds) to throttle updates while moving the cursor
-        -- Increase this value for better performance on slow computers
-        -- Set to 0 for immediate updates and better visual feedback
-        throttle = 20,
-
-        -- Minimum message length before wrapping to a new line
-        softwrap = 40,
-
-        -- Configuration for multiline diagnostics
-        -- Can be a boolean or a table with detailed options
-        multilines = {
-          -- Enable multiline diagnostic messages
-          enabled = false,
-
-          -- Always show messages on all lines for multiline diagnostics
-          always_show = false,
-
-          -- Trim whitespaces from the start/end of each line
-          trim_whitespaces = false,
-
-          -- Replace tabs with this many spaces in multiline diagnostics
-          tabstop = 4,
-        },
-
-        -- Display all diagnostic messages on the cursor line, not just those under cursor
-        show_all_diags_on_cursorline = false,
-
-        -- Enable diagnostics in Insert mode
-        -- If enabled, consider setting throttle to 0 to avoid visual artifacts
-        enable_on_insert = false,
-
-        -- Enable diagnostics in Select mode (e.g., when auto-completing with Blink)
-        enable_on_select = false,
-
-        -- Manage how diagnostic messages handle overflow
-        overflow = {
-          -- Overflow handling mode:
-          -- "wrap" - Split long messages into multiple lines
-          -- "none" - Do not truncate messages
-          -- "oneline" - Keep the message on a single line, even if it's long
-          mode = "oneline",
-
-          -- Trigger wrapping this many characters earlier when mode == "wrap"
-          -- Increase if the last few characters of wrapped diagnostics are obscured
-          padding = 0,
-        },
-
-        -- Configuration for breaking long messages into separate lines
-        break_line = {
-          -- Enable breaking messages after a specific length
-          enabled = false,
-
-          -- Number of characters after which to break the line
-          after = 30,
-        },
-
-        format = function(diagnostic)
-          local ts_errors = require("config.ts_errors")
-          local msg = diagnostic.message
-
-          if ts_errors.is_ts_source(diagnostic.source) then
-            local short = ts_errors.render_short(diagnostic)
-            if short then
-              return short
-            end
-
-            local ok, formatter = pcall(require, "format-ts-errors")
-            if ok and diagnostic.code then
-              local format_func = formatter[diagnostic.code]
-              if type(format_func) == "function" then
-                local formatted = format_func(msg)
-                if formatted and formatted ~= "" then
-                  formatted = ts_errors.strip_fences(formatted):gsub("\n.*", "")
-                  if #formatted > 80 then
-                    formatted = formatted:sub(1, 77) .. "…"
-                  end
-                  return formatted
-                end
-              end
-            end
-          end
-
-          msg = msg:gsub("\n.*", "")
-          if #msg > 80 then
-            return msg:sub(1, 77) .. "…"
-          end
-          return msg
-        end,
-
-        -- Virtual text display configuration
-        virt_texts = {
-          -- Priority for virtual text display (higher values appear on top)
-          -- Increase if other plugins (like GitBlame) override diagnostics
-          priority = 2048,
-        },
-
-        -- Filter diagnostics by severity levels
-        -- Available severities: vim.diagnostic.severity.ERROR, WARN, INFO, HINT
-        severity = {
-          vim.diagnostic.severity.ERROR,
-          vim.diagnostic.severity.WARN,
-          vim.diagnostic.severity.INFO,
-          vim.diagnostic.severity.HINT,
-        },
-
-        -- Events to attach diagnostics to buffers
-        -- Default: { "LspAttach" }
-        -- Only change if the plugin doesn't work with your configuration
-        overwrite_events = nil,
-      },
-
-      -- List of filetypes to disable the plugin for
-      disabled_ft = {},
-    })
-  end,
+    disabled_ft = {},
+  },
 }

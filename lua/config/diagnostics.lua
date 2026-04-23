@@ -1,4 +1,4 @@
-local ts_errors = require("config.ts_errors")
+local pretty = require("effect-error-pretty")
 
 local icons = {
   [vim.diagnostic.severity.ERROR] = " ",
@@ -47,26 +47,16 @@ local function apply_diagnostic_config()
 
       format = function(diagnostic)
         local icon = icons[diagnostic.severity] or ""
-
-        if ts_errors.is_ts_source(diagnostic.source) then
-          local artistic = ts_errors.render_artistic(diagnostic)
-          if artistic then
-            return artistic
-          end
-
-          local ok, formatter = pcall(require, "format-ts-errors")
-          if ok and diagnostic.code then
-            local format_func = formatter[diagnostic.code]
-            if type(format_func) == "function" then
-              local msg = format_func(diagnostic.message)
-              if msg and msg ~= "" then
-                return icon .. ts_errors.strip_fences(msg)
-              end
-            end
-          end
+        local rendered = pretty.float_format(diagnostic)
+        if not rendered then
+          return icon .. diagnostic.message
         end
-
-        return icon .. diagnostic.message
+        -- Artistic boxes start with `╭` and render standalone; every other
+        -- path is plain text that should carry the severity icon.
+        if rendered:sub(1, #"╭") == "╭" then
+          return rendered
+        end
+        return icon .. rendered
       end,
     },
   })
