@@ -1,65 +1,84 @@
 local ts_errors = require("config.ts_errors")
 
 local icons = {
-  [vim.diagnostic.severity.ERROR] = "",
-  [vim.diagnostic.severity.WARN] = "",
-  [vim.diagnostic.severity.INFO] = "",
-  [vim.diagnostic.severity.HINT] = "󰌵",
+  [vim.diagnostic.severity.ERROR] = " ",
+  [vim.diagnostic.severity.WARN] = " ",
+  [vim.diagnostic.severity.INFO] = " ",
+  [vim.diagnostic.severity.HINT] = "󰌵 ",
 }
 
-vim.diagnostic.config({
-  update_in_insert = false,
-  severity_sort = true,
-  virtual_text = false,
-  signs = {
-    text = {
-      [vim.diagnostic.severity.ERROR] = icons[vim.diagnostic.severity.ERROR],
-      [vim.diagnostic.severity.WARN] = icons[vim.diagnostic.severity.WARN],
-      [vim.diagnostic.severity.INFO] = icons[vim.diagnostic.severity.INFO],
-      [vim.diagnostic.severity.HINT] = icons[vim.diagnostic.severity.HINT],
+-- Legacy sign_define path — reliable across all Neovim versions. The new
+-- `signs.text` API below is kept as belt-and-suspenders.
+local sign_names = { "Error", "Warn", "Info", "Hint" }
+for i, name in ipairs(sign_names) do
+  local hl = "DiagnosticSign" .. name
+  vim.fn.sign_define(hl, { text = icons[i], texthl = hl, numhl = "" })
+end
+
+local function apply_diagnostic_config()
+  vim.diagnostic.config({
+    update_in_insert = false,
+    severity_sort = true,
+    virtual_text = false,
+    signs = {
+      text = {
+        [vim.diagnostic.severity.ERROR] = icons[vim.diagnostic.severity.ERROR],
+        [vim.diagnostic.severity.WARN] = icons[vim.diagnostic.severity.WARN],
+        [vim.diagnostic.severity.INFO] = icons[vim.diagnostic.severity.INFO],
+        [vim.diagnostic.severity.HINT] = icons[vim.diagnostic.severity.HINT],
+      },
     },
-  },
-  underline = true,
+    underline = true,
 
-  float = {
-    border = "rounded",
-    source = true,
-    header = "",
-    prefix = "",
-    max_width = 100,
+    float = {
+      border = "rounded",
+      source = true,
+      header = "",
+      prefix = "",
+      max_width = 100,
 
-    suffix = function(diagnostic)
-      if diagnostic.code then
-        return string.format(" [%s]", diagnostic.code), "DiagnosticHintItalic"
-      end
-      return "", ""
-    end,
-
-    format = function(diagnostic)
-      local icon = icons[diagnostic.severity] or ""
-      local prefix = icon ~= "" and (icon .. " ") or ""
-
-      if ts_errors.is_ts_source(diagnostic.source) then
-        local artistic = ts_errors.render_artistic(diagnostic)
-        if artistic then
-          return artistic
+      suffix = function(diagnostic)
+        if not diagnostic.code then
+          return "", ""
         end
+        local sev_name = ({ "Error", "Warn", "Info", "Hint" })[diagnostic.severity] or "Hint"
+        return string.format(" [%s]", diagnostic.code), "Diagnostic" .. sev_name .. "Italic"
+      end,
 
-        local ok, formatter = pcall(require, "format-ts-errors")
-        if ok and diagnostic.code then
-          local format_func = formatter[diagnostic.code]
-          if type(format_func) == "function" then
-            local msg = format_func(diagnostic.message)
-            if msg and msg ~= "" then
-              return prefix .. ts_errors.strip_fences(msg)
+      format = function(diagnostic)
+        local icon = icons[diagnostic.severity] or ""
+
+        if ts_errors.is_ts_source(diagnostic.source) then
+          local artistic = ts_errors.render_artistic(diagnostic)
+          if artistic then
+            return artistic
+          end
+
+          local ok, formatter = pcall(require, "format-ts-errors")
+          if ok and diagnostic.code then
+            local format_func = formatter[diagnostic.code]
+            if type(format_func) == "function" then
+              local msg = format_func(diagnostic.message)
+              if msg and msg ~= "" then
+                return icon .. ts_errors.strip_fences(msg)
+              end
             end
           end
         end
-      end
 
-      return prefix .. diagnostic.message
-    end,
-  },
+        return icon .. diagnostic.message
+      end,
+    },
+  })
+end
+
+apply_diagnostic_config()
+
+-- LazyVim runs its own sign_define + vim.diagnostic.config during startup.
+-- Re-apply ours on LazyVimStarted / VeryLazy to guarantee we win.
+vim.api.nvim_create_autocmd("User", {
+  pattern = { "LazyVimStarted", "VeryLazy" },
+  callback = apply_diagnostic_config,
 })
 
 -- Subtle single-char background at the exact diagnostic column.
@@ -75,15 +94,18 @@ local function scale_rgb(rgb, factor)
 end
 
 local function setup_diagnostic_highlights()
-  vim.api.nvim_set_hl(0, "DiagnosticHintItalic", { link = "DiagnosticHint", italic = true })
-
   for _, name in ipairs(severity_name) do
+    vim.api.nvim_set_hl(0, "Diagnostic" .. name .. "Italic", {
+      link = "Diagnostic" .. name,
+      italic = true,
+    })
+
     local src = vim.api.nvim_get_hl(0, { name = "Diagnostic" .. name, link = false })
     local fg = src and src.fg
     if fg then
       local hex = scale_rgb(fg, 1.0)
       vim.api.nvim_set_hl(0, "DiagnosticUnderline" .. name, { undercurl = true, sp = hex })
-      vim.api.nvim_set_hl(0, "DiagnosticSpotlight" .. name, { bg = scale_rgb(fg, 0.25) })
+      vim.api.nvim_set_hl(0, "DiagnosticSpotlight" .. name, { bg = scale_rgb(fg, 0.35) })
     end
   end
 
@@ -106,9 +128,7 @@ local function has_tag(diagnostic, tag)
   if diagnostic._tags and diagnostic._tags[tag] then
     return true
   end
-  local lsp_tags = diagnostic.user_data
-    and diagnostic.user_data.lsp
-    and diagnostic.user_data.lsp.tags
+  local lsp_tags = diagnostic.user_data and diagnostic.user_data.lsp and diagnostic.user_data.lsp.tags
   if lsp_tags then
     -- LSP DiagnosticTag: 1 = Unnecessary, 2 = Deprecated
     local code = tag == "unnecessary" and 1 or (tag == "deprecated" and 2 or nil)
@@ -169,8 +189,19 @@ local function show_inline_indicators(bufnr)
   end
 end
 
+-- Debounce per-buffer so a flurry of DiagnosticChanged events during rapid
+-- edits only triggers one redraw.
+local pending = {}
 vim.api.nvim_create_autocmd("DiagnosticChanged", {
   callback = function(args)
-    show_inline_indicators(args.buf)
+    local buf = args.buf
+    if pending[buf] then
+      return
+    end
+    pending[buf] = true
+    vim.defer_fn(function()
+      pending[buf] = nil
+      show_inline_indicators(buf)
+    end, 50)
   end,
 })
