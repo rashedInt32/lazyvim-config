@@ -44,12 +44,12 @@ return {
         },
 
         lua_ls = {
-          enable = false,
           settings = {
             Lua = {
               runtime = { version = "LuaJIT" },
               workspace = { checkThirdParty = false },
               telemetry = { enable = false },
+              diagnostics = { globals = { "vim" } },
             },
           },
         },
@@ -153,7 +153,6 @@ return {
       -- Shared on_attach for all servers
       local on_attach = function(client, bufnr)
         -- Prevent unwanted LSPs on SQL buffers
-        --client.server_capabilities.semanticTokensProvider = nil
         local ft = vim.bo[bufnr].filetype
         if ft == "sql" and client.name ~= "postgres_lsp" and client.name ~= "sqls" and client.name ~= "copilot" then
           vim.schedule(function()
