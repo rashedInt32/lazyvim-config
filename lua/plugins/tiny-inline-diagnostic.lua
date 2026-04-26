@@ -31,18 +31,6 @@ return {
       overflow = { mode = "oneline", padding = 0 },
       break_line = { enabled = false, after = 30 },
 
-      format = function(diagnostic)
-        local rendered = require("effect-error-pretty").inline_format(diagnostic)
-        if rendered then
-          return rendered
-        end
-        local msg = diagnostic.message:gsub("\n.*", "")
-        if #msg > 80 then
-          msg = msg:sub(1, 77) .. "…"
-        end
-        return msg
-      end,
-
       virt_texts = { priority = 2048 },
 
       severity = {

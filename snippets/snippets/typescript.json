@@ -4,9 +4,18 @@
     "body": [
       "Effect.gen(function* () {",
       "  $0",
-      "}).pipe(Effect.withSpan($1));"
+      "});"
     ],
-    "description": "Effect.gen"
+    "description": "Effect.gen with withSpan"
+  },
+  "Effect.gen plain": {
+    "prefix": "geno",
+    "body": [
+      "Effect.gen(function* () {",
+      "  $0",
+      "})"
+    ],
+    "description": "Effect.gen (no span)"
   },
   "Effect.fn": {
     "prefix": "fn",
@@ -18,7 +27,7 @@
     "description": "Effect.fn"
   },
   "Effect.fnUntraced": {
-    "prefix": "fn",
+    "prefix": "fnu",
     "body": [
       "Effect.fnUntraced(function* ($1) {",
       "  $0",
@@ -26,22 +35,597 @@
     ],
     "description": "Effect.fnUntraced"
   },
-  "Context.Tag": {
-    "prefix": "Tag",
+
+  "Effect.succeed": {
+    "prefix": "suc",
+    "body": "Effect.succeed($1)",
+    "description": "Effect.succeed"
+  },
+  "Effect.fail": {
+    "prefix": "fail",
+    "body": "Effect.fail($1)",
+    "description": "Effect.fail"
+  },
+  "Effect.die": {
+    "prefix": "die",
+    "body": "Effect.die($1)",
+    "description": "Effect.die"
+  },
+  "Effect.sync": {
+    "prefix": "sync",
+    "body": "Effect.sync(() => $1)",
+    "description": "Effect.sync"
+  },
+  "Effect.try": {
+    "prefix": "try",
     "body": [
-      "class $1 extends Context.Tag($2)<$1, $3>() {}",
+      "Effect.try({",
+      "  try: () => $1,",
+      "  catch: (cause) => $0",
+      "})"
+    ],
+    "description": "Effect.try"
+  },
+  "Effect.tryPromise": {
+    "prefix": "tryp",
+    "body": [
+      "Effect.tryPromise({",
+      "  try: () => $1,",
+      "  catch: (cause) => $0",
+      "})"
+    ],
+    "description": "Effect.tryPromise"
+  },
+  "Effect.promise": {
+    "prefix": "prom",
+    "body": "Effect.promise(() => $1)",
+    "description": "Effect.promise"
+  },
+  "Effect.async": {
+    "prefix": "async",
+    "body": [
+      "Effect.async<$1, $2>((resume) => {",
+      "  $0",
+      "})"
+    ],
+    "description": "Effect.async"
+  },
+  "Effect.suspend": {
+    "prefix": "susp",
+    "body": "Effect.suspend(() => $1)",
+    "description": "Effect.suspend"
+  },
+  "Effect.void": {
+    "prefix": "evoid",
+    "body": "Effect.void",
+    "description": "Effect.void"
+  },
+  "Effect.never": {
+    "prefix": "enev",
+    "body": "Effect.never",
+    "description": "Effect.never"
+  },
+
+  "Effect.map": {
+    "prefix": "map",
+    "body": "Effect.map(($1) => $0)",
+    "description": "Effect.map"
+  },
+  "Effect.flatMap": {
+    "prefix": "flat",
+    "body": "Effect.flatMap(($1) => $0)",
+    "description": "Effect.flatMap"
+  },
+  "Effect.tap": {
+    "prefix": "tap",
+    "body": "Effect.tap(($1) => $0)",
+    "description": "Effect.tap"
+  },
+  "Effect.tapError": {
+    "prefix": "tape",
+    "body": "Effect.tapError((error) => $0)",
+    "description": "Effect.tapError"
+  },
+  "Effect.andThen": {
+    "prefix": "andt",
+    "body": "Effect.andThen($1)",
+    "description": "Effect.andThen"
+  },
+  "Effect.all": {
+    "prefix": "all",
+    "body": "Effect.all([$1], { concurrency: $2 })",
+    "description": "Effect.all"
+  },
+  "Effect.forEach": {
+    "prefix": "each",
+    "body": "Effect.forEach($1, (item) => $2, { concurrency: $3 })",
+    "description": "Effect.forEach"
+  },
+
+  "Effect.catchAll": {
+    "prefix": "cat",
+    "body": "Effect.catchAll((error) => $0)",
+    "description": "Effect.catchAll"
+  },
+  "Effect.catchTag": {
+    "prefix": "catt",
+    "body": "Effect.catchTag(\"$1\", (error) => $0)",
+    "description": "Effect.catchTag"
+  },
+  "Effect.catchTags": {
+    "prefix": "catts",
+    "body": [
+      "Effect.catchTags({",
+      "  $1: (error) => $0",
+      "})"
+    ],
+    "description": "Effect.catchTags"
+  },
+  "Effect.mapError": {
+    "prefix": "merr",
+    "body": "Effect.mapError((error) => $0)",
+    "description": "Effect.mapError"
+  },
+  "Effect.orElse": {
+    "prefix": "orel",
+    "body": "Effect.orElse(() => $0)",
+    "description": "Effect.orElse"
+  },
+  "Effect.retry": {
+    "prefix": "retry",
+    "body": "Effect.retry({ schedule: $1, times: $2 })",
+    "description": "Effect.retry"
+  },
+  "Effect.repeat": {
+    "prefix": "rep",
+    "body": "Effect.repeat($1)",
+    "description": "Effect.repeat"
+  },
+  "Effect.either": {
+    "prefix": "eith",
+    "body": "Effect.either($1)",
+    "description": "Effect.either"
+  },
+  "Effect.exit": {
+    "prefix": "exit",
+    "body": "Effect.exit($1)",
+    "description": "Effect.exit"
+  },
+
+  "Schema.TaggedError": {
+    "prefix": ["err", "Err"],
+    "body": [
+      "class $1 extends Schema.TaggedError<$1>()(\"$1\", {",
+      "  $0",
+      "}) {}"
+    ],
+    "description": "Schema.TaggedError class"
+  },
+  "Data.TaggedError": {
+    "prefix": "derr",
+    "body": [
+      "class $1 extends Data.TaggedError(\"$1\")<{",
+      "  $0",
+      "}> {}"
+    ],
+    "description": "Data.TaggedError class"
+  },
+  "Schema.TaggedClass": {
+    "prefix": "tcl",
+    "body": [
+      "class $1 extends Schema.TaggedClass<$1>()(\"$1\", {",
+      "  $0",
+      "}) {}"
+    ],
+    "description": "Schema.TaggedClass"
+  },
+  "Schema.TaggedRequest": {
+    "prefix": "treq",
+    "body": [
+      "class $1 extends Schema.TaggedRequest<$1>()(\"$1\", {",
+      "  failure: $2,",
+      "  success: $3,",
+      "  payload: {",
+      "    $0",
+      "  }",
+      "}) {}"
+    ],
+    "description": "Schema.TaggedRequest"
+  },
+
+  "Context.Tag": {
+    "prefix": ["tag", "Tag"],
+    "body": [
+      "class $1 extends Context.Tag(\"$1\")<$1, $2>() {}",
       "$0"
     ],
     "description": "Context.Tag"
   },
-  "Schema.TaggerError": {
-    "prefix": "Err",
+  "Context.GenericTag": {
+    "prefix": "gtag",
+    "body": "const $1 = Context.GenericTag<$2>(\"$1\");",
+    "description": "Context.GenericTag"
+  },
+  "Effect.Service": {
+    "prefix": "srv",
     "body": [
-      "class $1 extends Schema.TaggedError<$1>()($1, {",
-      "$0",
+      "class $1 extends Effect.Service<$1>()(\"$1\", {",
+      "  effect: Effect.gen(function* () {",
+      "    $0",
+      "  }),",
+      "  dependencies: [$2]",
       "}) {}"
     ],
-    "description": "Schema.TaggerError"
+    "description": "Effect.Service class"
+  },
+  "Layer.succeed": {
+    "prefix": "lsuc",
+    "body": "Layer.succeed($1, $2)",
+    "description": "Layer.succeed"
+  },
+  "Layer.effect": {
+    "prefix": "leff",
+    "body": [
+      "Layer.effect(",
+      "  $1,",
+      "  Effect.gen(function* () {",
+      "    $0",
+      "  })",
+      ")"
+    ],
+    "description": "Layer.effect"
+  },
+  "Layer.scoped": {
+    "prefix": "lscp",
+    "body": [
+      "Layer.scoped(",
+      "  $1,",
+      "  Effect.gen(function* () {",
+      "    $0",
+      "  })",
+      ")"
+    ],
+    "description": "Layer.scoped"
+  },
+  "Layer.mergeAll": {
+    "prefix": "lmrg",
+    "body": "Layer.mergeAll($1)",
+    "description": "Layer.mergeAll"
+  },
+  "Effect.provide": {
+    "prefix": "prov",
+    "body": "Effect.provide($1)",
+    "description": "Effect.provide"
+  },
+
+  "Schema.Struct": {
+    "prefix": "sst",
+    "body": [
+      "Schema.Struct({",
+      "  $0",
+      "})"
+    ],
+    "description": "Schema.Struct"
+  },
+  "Schema.Class": {
+    "prefix": "scl",
+    "body": [
+      "class $1 extends Schema.Class<$1>(\"$1\")({",
+      "  $0",
+      "}) {}"
+    ],
+    "description": "Schema.Class"
+  },
+  "Schema.Array": {
+    "prefix": "sarr",
+    "body": "Schema.Array($1)",
+    "description": "Schema.Array"
+  },
+  "Schema.Record": {
+    "prefix": "srec",
+    "body": "Schema.Record({ key: $1, value: $2 })",
+    "description": "Schema.Record"
+  },
+  "Schema.optional": {
+    "prefix": "sopt",
+    "body": "Schema.optional($1)",
+    "description": "Schema.optional"
+  },
+  "Schema.brand": {
+    "prefix": "sbr",
+    "body": "Schema.String.pipe(Schema.brand(\"$1\"))",
+    "description": "Schema branded string"
+  },
+  "Schema.transform": {
+    "prefix": "strn",
+    "body": [
+      "Schema.transform(",
+      "  $1,",
+      "  $2,",
+      "  {",
+      "    strict: true,",
+      "    decode: (input) => $3,",
+      "    encode: (output) => $0",
+      "  }",
+      ")"
+    ],
+    "description": "Schema.transform"
+  },
+  "Schema.decodeUnknown": {
+    "prefix": "sdec",
+    "body": "Schema.decodeUnknown($1)",
+    "description": "Schema.decodeUnknown"
+  },
+  "Schema.encode": {
+    "prefix": "senc",
+    "body": "Schema.encode($1)",
+    "description": "Schema.encode"
+  },
+
+  "Effect.acquireRelease": {
+    "prefix": "acq",
+    "body": [
+      "Effect.acquireRelease(",
+      "  $1,",
+      "  (resource) => $0",
+      ")"
+    ],
+    "description": "Effect.acquireRelease"
+  },
+  "Effect.acquireUseRelease": {
+    "prefix": "acqu",
+    "body": [
+      "Effect.acquireUseRelease(",
+      "  $1,",
+      "  (resource) => $2,",
+      "  (resource) => $0",
+      ")"
+    ],
+    "description": "Effect.acquireUseRelease"
+  },
+  "Effect.scoped": {
+    "prefix": "scop",
+    "body": "Effect.scoped($1)",
+    "description": "Effect.scoped"
+  },
+  "Effect.addFinalizer": {
+    "prefix": "fin",
+    "body": "Effect.addFinalizer((exit) => $0)",
+    "description": "Effect.addFinalizer"
+  },
+
+  "Effect.fork": {
+    "prefix": "fork",
+    "body": "Effect.fork($1)",
+    "description": "Effect.fork"
+  },
+  "Effect.forkDaemon": {
+    "prefix": "forkd",
+    "body": "Effect.forkDaemon($1)",
+    "description": "Effect.forkDaemon"
+  },
+  "Effect.forkScoped": {
+    "prefix": "forks",
+    "body": "Effect.forkScoped($1)",
+    "description": "Effect.forkScoped"
+  },
+  "Effect.race": {
+    "prefix": "race",
+    "body": "Effect.race($1, $2)",
+    "description": "Effect.race"
+  },
+  "Effect.raceAll": {
+    "prefix": "racea",
+    "body": "Effect.raceAll([$1])",
+    "description": "Effect.raceAll"
+  },
+  "Queue.bounded": {
+    "prefix": "qb",
+    "body": "Queue.bounded<$1>($2)",
+    "description": "Queue.bounded"
+  },
+  "PubSub.bounded": {
+    "prefix": "psb",
+    "body": "PubSub.bounded<$1>($2)",
+    "description": "PubSub.bounded"
+  },
+  "Deferred.make": {
+    "prefix": "def",
+    "body": "Deferred.make<$1, $2>()",
+    "description": "Deferred.make"
+  },
+  "Ref.make": {
+    "prefix": "ref",
+    "body": "Ref.make($1)",
+    "description": "Ref.make"
+  },
+
+  "Stream.make": {
+    "prefix": "smk",
+    "body": "Stream.make($1)",
+    "description": "Stream.make"
+  },
+  "Stream.fromIterable": {
+    "prefix": "sfi",
+    "body": "Stream.fromIterable($1)",
+    "description": "Stream.fromIterable"
+  },
+  "Stream.map": {
+    "prefix": "smap",
+    "body": "Stream.map(($1) => $0)",
+    "description": "Stream.map"
+  },
+  "Stream.filter": {
+    "prefix": "sflt",
+    "body": "Stream.filter(($1) => $0)",
+    "description": "Stream.filter"
+  },
+  "Stream.runCollect": {
+    "prefix": "srunc",
+    "body": "Stream.runCollect",
+    "description": "Stream.runCollect"
+  },
+  "Stream.runDrain": {
+    "prefix": "srund",
+    "body": "Stream.runDrain",
+    "description": "Stream.runDrain"
+  },
+
+  "Option.some": {
+    "prefix": "osom",
+    "body": "Option.some($1)",
+    "description": "Option.some"
+  },
+  "Option.none": {
+    "prefix": "onon",
+    "body": "Option.none()",
+    "description": "Option.none"
+  },
+  "Option.fromNullable": {
+    "prefix": "onul",
+    "body": "Option.fromNullable($1)",
+    "description": "Option.fromNullable"
+  },
+  "Either.right": {
+    "prefix": "eri",
+    "body": "Either.right($1)",
+    "description": "Either.right"
+  },
+  "Either.left": {
+    "prefix": "ele",
+    "body": "Either.left($1)",
+    "description": "Either.left"
+  },
+  "Exit.match": {
+    "prefix": "xmat",
+    "body": [
+      "Exit.match($1, {",
+      "  onFailure: (cause) => $2,",
+      "  onSuccess: (value) => $0",
+      "})"
+    ],
+    "description": "Exit.match"
+  },
+  "Chunk.of": {
+    "prefix": "cof",
+    "body": "Chunk.of($1)",
+    "description": "Chunk.of"
+  },
+
+  "Match.value": {
+    "prefix": "mv",
+    "body": [
+      "Match.value($1).pipe(",
+      "  Match.tag(\"$2\", () => $3),",
+      "  Match.exhaustive",
+      ")"
+    ],
+    "description": "Match.value with tag"
+  },
+  "Match.type": {
+    "prefix": "mt",
+    "body": [
+      "Match.type<$1>().pipe(",
+      "  $0",
+      ")"
+    ],
+    "description": "Match.type"
+  },
+
+  "Effect.runSync": {
+    "prefix": "run",
+    "body": "Effect.runSync($1)",
+    "description": "Effect.runSync"
+  },
+  "Effect.runPromise": {
+    "prefix": "runp",
+    "body": "Effect.runPromise($1)",
+    "description": "Effect.runPromise"
+  },
+  "Effect.runPromiseExit": {
+    "prefix": "runpx",
+    "body": "Effect.runPromiseExit($1)",
+    "description": "Effect.runPromiseExit"
+  },
+  "Effect.runFork": {
+    "prefix": "runf",
+    "body": "Effect.runFork($1)",
+    "description": "Effect.runFork"
+  },
+  "ManagedRuntime.make": {
+    "prefix": "mrt",
+    "body": "ManagedRuntime.make($1)",
+    "description": "ManagedRuntime.make"
+  },
+
+  "Effect.log": {
+    "prefix": "log",
+    "body": "Effect.log($1)",
+    "description": "Effect.log"
+  },
+  "Effect.logInfo": {
+    "prefix": "logi",
+    "body": "Effect.logInfo($1)",
+    "description": "Effect.logInfo"
+  },
+  "Effect.logWarning": {
+    "prefix": "logw",
+    "body": "Effect.logWarning($1)",
+    "description": "Effect.logWarning"
+  },
+  "Effect.logError": {
+    "prefix": "loge",
+    "body": "Effect.logError($1)",
+    "description": "Effect.logError"
+  },
+  "Effect.withSpan": {
+    "prefix": "span",
+    "body": "Effect.withSpan(\"$1\")",
+    "description": "Effect.withSpan"
+  },
+  "Effect.annotateLogs": {
+    "prefix": "annl",
+    "body": [
+      "Effect.annotateLogs({",
+      "  $0",
+      "})"
+    ],
+    "description": "Effect.annotateLogs"
+  },
+  "Effect.annotateSpans": {
+    "prefix": "anns",
+    "body": [
+      "Effect.annotateSpans({",
+      "  $0",
+      "})"
+    ],
+    "description": "Effect.annotateSpans"
+  },
+
+  "Effect.Effect<A, E, R>": {
+    "prefix": "eff",
+    "body": "Effect.Effect<$1, $2, $3>",
+    "description": "Effect.Effect<A, E, R>"
+  },
+  "Option.Option<A>": {
+    "prefix": "opt",
+    "body": "Option.Option<$1>",
+    "description": "Option.Option<A>"
+  },
+  "Layer.Layer<RIn, E, ROut>": {
+    "prefix": "lay",
+    "body": "Layer.Layer<$1, $2, $3>",
+    "description": "Layer.Layer<RIn, E, ROut>"
+  },
+  "Stream.Stream<A, E, R>": {
+    "prefix": "stm",
+    "body": "Stream.Stream<$1, $2, $3>",
+    "description": "Stream.Stream<A, E, R>"
+  },
+  "Schema.Schema<A, I, R>": {
+    "prefix": "sch",
+    "body": "Schema.Schema<$1, $2, $3>",
+    "description": "Schema.Schema<A, I, R>"
   },
   "Generic Effect fn": {
     "prefix": "<A",
@@ -51,19 +635,5 @@
       "}"
     ],
     "description": "Generic Effect fn"
-  },
-  "Effect.Effect<A, E, R>": {
-    "prefix": "Effect.E",
-    "body": [
-      "Effect.Effect<$1, $2, $3>"
-    ],
-    "description": "Effect.Effect<A, E, R>"
-  },
-  "Option.Option<A>": {
-    "prefix": "Option.O",
-    "body": [
-      "Option.Option<$1>"
-    ],
-    "description": "Option.Option<A>"
   }
 }
