@@ -35,6 +35,16 @@
     ],
     "description": "Effect.fnUntraced"
   },
+  "yield*": {
+    "prefix": "yld",
+    "body": "yield* $0",
+    "description": "yield* expression"
+  },
+  "const = yield*": {
+    "prefix": "cy",
+    "body": "const $1 = yield* $0",
+    "description": "const binding from yield*"
+  },
 
   "Effect.succeed": {
     "prefix": "suc",
