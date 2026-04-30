@@ -4,6 +4,15 @@ return {
     -- add any options here
     nes = { enabled = true },
     cli = {
+      tools = {
+        claude = {
+          cmd = { "claude", "--model", "claude-opus-4-7" },
+        },
+        claude_46 = {
+          cmd = { "claude", "--model", "claude-opus-4-6" },
+          url = "https://github.com/anthropics/claude-code",
+        },
+      },
       mux = {
         backend = "tmux",
         enabled = false,
@@ -108,6 +117,13 @@ return {
         require("sidekick.cli").toggle({ name = "claude", focus = true })
       end,
       desc = "Sidekick Toggle Claude",
+    },
+    {
+      "<leader>aco",
+      function()
+        require("sidekick.cli").toggle({ name = "claude_46", focus = true })
+      end,
+      desc = "Sidekick Toggle Claude (Opus 4.6)",
     },
   },
 }

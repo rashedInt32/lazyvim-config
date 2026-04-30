@@ -64,6 +64,7 @@ return {
       },
     },
     sources = {
+      min_keyword_length = 2,
       default = {
         "lsp", --[[ "copilot", ]]
         "buffer",
