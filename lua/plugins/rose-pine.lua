@@ -9,7 +9,7 @@ return {
 
     styles = {
       bold = true,
-      italic = false,
+      italic = true,
       transparency = true,
     },
 
@@ -51,8 +51,8 @@ return {
       ["@keyword.modifier"] = { fg = "#5fb3d9" },
       ["@keyword.conditional"] = { fg = "#5fb3d9" },
       ["@keyword.repeat"] = { fg = "#5fb3d9" },
-      ["@keyword.import"] = { fg = "#5fb3d9" },
-      ["@keyword.export"] = { fg = "#5fb3d9" },
+      ["@keyword.import"] = { fg = "#6fb1a0" },
+      ["@keyword.export"] = { fg = "#6fb1a0" },
       ["@keyword.return"] = { fg = "#5fb3d9" },
       ["@keyword.operator"] = { fg = "#5fb3d9" },
       ["@keyword.coroutine"] = { fg = "#5fb3d9" },
@@ -61,10 +61,9 @@ return {
       ["@keyword.storage"] = { fg = "#5fb3d9" },
       ["@keyword.sql"] = { fg = "#b5d98c", bold = true },
 
-      ["@operator"] = { fg = "#56738a" },
-      ["@punctuation.bracket"] = { fg = "#465f72" },
-      ["@punctuation.delimiter"] = { fg = "#465f72" },
-      ["@punctuation.special"] = { fg = "#465f72" },
+      ["@operator"] = { fg = "#4a6b80" },
+      ["@punctuation.bracket"] = { fg = "#6f94a6" },
+      ["@punctuation.delimiter"] = { fg = "#6f94a6" },
 
       --------------------------------------------------
       -- DEFINITIONS — most prominent. Bold reserved for declarations.
@@ -106,7 +105,7 @@ return {
 
       ["@variable"] = { fg = "#9bb5c7" },
       ["@variable.builtin"] = { fg = "#5fb3d9", bold = true },
-      ["@variable.parameter"] = { fg = "#b794f6" },
+      ["@variable.parameter"] = { fg = "#8bb4ff" },
       ["@variable.member"] = { fg = "#b794f6" },
       ["@property"] = { fg = "#b794f6" },
 
@@ -114,10 +113,10 @@ return {
       -- JSX / MARKUP
       --------------------------------------------------
 
-      ["@tag"] = { fg = "#e0af68" },
-      ["@tag.attribute"] = { fg = "#8bb4ff" },
-      ["@tag.delimiter"] = { fg = "#465f72" },
-      ["@_jsx_attribute"] = { fg = "#8bb4ff" },
+      ["@tag"] = { fg = "#c678dd" },
+      ["@tag.builtin"] = { fg = "#6fb1a0" },
+      ["@tag.attribute"] = { fg = "#5fb3d9" },
+      ["@_jsx_attribute"] = { fg = "#5fb3d9" },
 
       --------------------------------------------------
       -- COMMENTS
@@ -131,7 +130,7 @@ return {
       --------------------------------------------------
 
       CursorLine = { bg = "#061e33" },
-      Visual = { bg = "#3d6885" },
+      Visual = { bg = "#4a7c9e" },
       CursorLineNr = { fg = "#5fb3d9", bold = true },
 
       Error = { fg = "#e06c75", bold = true },
@@ -140,7 +139,7 @@ return {
       DiagnosticError = { fg = "#e06c75", bold = true },
       DiagnosticWarn = { fg = "#e0af68", bold = true },
       DiagnosticInfo = { fg = "#5fb3d9", bold = true },
-      DiagnosticHint = { fg = "#6a8e8e" },
+      DiagnosticHint = { fg = "#8fbf7f", bold = true },
 
       --------------------------------------------------
       -- CUSTOM
@@ -182,8 +181,8 @@ return {
           ["@lsp.type.enum"] = "@type",
           ["@lsp.type.type"] = "@type",
           ["@lsp.type.typeParameter"] = "@type",
-          ["@lsp.typemod.class.declaration"] = "@type.definition",
-          ["@lsp.typemod.class.definition"] = "@type.definition",
+          ["@lsp.typemod.class.declaration"] = "@variable.member",
+          ["@lsp.typemod.class.definition"] = "@variable.member",
           ["@lsp.typemod.interface.declaration"] = "@type.definition",
           ["@lsp.typemod.interface.definition"] = "@type.definition",
           ["@lsp.typemod.enum.declaration"] = "@type.definition",
