@@ -1,3 +1,43 @@
+local c = {
+  -- backgrounds
+  base = "#011627",
+  surface = "#0b2233",
+  overlay = "#102a3f",
+  cursorline_bg = "#061e33",
+  visual_bg = "#4a7c9e",
+
+  -- neutrals
+  subtle = "#7f9db2",
+  comment = "#7a9a9a",
+
+  -- rose-pine accents
+  foam = "#5fb3d9", -- variable.builtin, info, CursorLineNr, tag.attribute
+  gold = "#e0af68", -- types, regex, warn
+  iris = "#cbb4ff", -- functions
+  iris_bright = "#c8b6ff", -- function.definition
+  pine = "#6fb1a0", -- numbers, constants, imports, escapes
+  olive = "#8fbf7f", -- strings, hint
+  sql = "#b5d98c",
+  love = "#e06c75", -- errors
+  rose = "#c678dd", -- tags
+  mint = "#7aa2f7",
+
+  -- structural scaffolding
+  keyword = "#3e80a8",
+  operator = "#4a6b80",
+  operator_subtle = "#56738a",
+  punctuation = "#6f94a6",
+  module = "#a890c4",
+
+  -- identifiers
+  variable = "#9bb5c7",
+  parameter = "#8bb4ff",
+  member = "#b794f6",
+
+  -- custom
+  effect_gen = "#e09cb0",
+}
+
 return {
   "rose-pine/neovim",
   name = "rose-pine",
@@ -15,27 +55,27 @@ return {
 
     palette = {
       main = {
-        base = "#011627",
-        surface = "#0b2233",
-        overlay = "#102a3f",
+        base = c.base,
+        surface = c.surface,
+        overlay = c.overlay,
 
-        subtle = "#7f9db2",
-        comment = "#7a9a9a",
+        subtle = c.subtle,
+        comment = c.comment,
 
-        foam = "#5fb3d9",
-        gold = "#e0af68",
-        iris = "#cbb4ff",
+        foam = c.foam,
+        gold = c.gold,
+        iris = c.iris,
 
-        pine = "#6fb1a0",
-        olive = "#8fbf7f",
-        sql = "#b5d98c",
+        pine = c.pine,
+        olive = c.olive,
+        sql = c.sql,
 
-        love = "#e06c75",
-        keyword = "#5fb3d9",
-        operator = "#56738a",
+        love = c.love,
+        keyword = c.keyword,
+        operator = c.operator_subtle,
 
-        mint = "#7aa2f7",
-        rose = "#c678dd",
+        mint = c.mint,
+        rose = c.rose,
       },
     },
 
@@ -45,101 +85,101 @@ return {
       -- Keywords/operators/punctuation recede so verbs and data lead.
       --------------------------------------------------
 
-      ["@keyword"] = { fg = "#5fb3d9" },
-      ["@keyword.function"] = { fg = "#5fb3d9" },
-      ["@keyword.type"] = { fg = "#5fb3d9" },
-      ["@keyword.modifier"] = { fg = "#5fb3d9" },
-      ["@keyword.conditional"] = { fg = "#5fb3d9" },
-      ["@keyword.repeat"] = { fg = "#5fb3d9" },
-      ["@keyword.import"] = { fg = "#6fb1a0" },
-      ["@keyword.export"] = { fg = "#6fb1a0" },
-      ["@keyword.return"] = { fg = "#5fb3d9" },
-      ["@keyword.operator"] = { fg = "#5fb3d9" },
-      ["@keyword.coroutine"] = { fg = "#5fb3d9" },
-      ["@keyword.exception"] = { fg = "#5fb3d9" },
-      ["@keyword.control"] = { fg = "#5fb3d9" },
-      ["@keyword.storage"] = { fg = "#5fb3d9" },
-      ["@keyword.sql"] = { fg = "#b5d98c", bold = true },
+      ["@keyword"] = { fg = c.keyword },
+      ["@keyword.function"] = { fg = c.keyword },
+      ["@keyword.type"] = { fg = c.keyword },
+      ["@keyword.modifier"] = { fg = c.keyword },
+      ["@keyword.conditional"] = { fg = c.keyword },
+      ["@keyword.repeat"] = { fg = c.keyword },
+      ["@keyword.import"] = { fg = c.pine },
+      ["@keyword.export"] = { fg = c.pine },
+      ["@keyword.return"] = { fg = c.keyword },
+      ["@keyword.operator"] = { fg = c.keyword },
+      ["@keyword.coroutine"] = { fg = c.keyword },
+      ["@keyword.exception"] = { fg = c.keyword },
+      ["@keyword.control"] = { fg = c.keyword },
+      ["@keyword.storage"] = { fg = c.keyword },
+      ["@keyword.sql"] = { fg = c.sql, bold = true },
 
-      ["@operator"] = { fg = "#4a6b80" },
-      ["@punctuation.bracket"] = { fg = "#6f94a6" },
-      ["@punctuation.delimiter"] = { fg = "#6f94a6" },
+      ["@operator"] = { fg = c.operator },
+      ["@punctuation.bracket"] = { fg = c.punctuation },
+      ["@punctuation.delimiter"] = { fg = c.punctuation },
 
       --------------------------------------------------
       -- DEFINITIONS — most prominent. Bold reserved for declarations.
       --------------------------------------------------
 
-      ["@function"] = { fg = "#cbb4ff" },
-      ["@function.call"] = { fg = "#cbb4ff" },
-      ["@function.method"] = { fg = "#cbb4ff" },
-      ["@function.method.call"] = { fg = "#cbb4ff" },
-      ["@function.builtin"] = { fg = "#cbb4ff" },
-      ["@function.definition"] = { fg = "#c8b6ff", bold = true },
+      ["@function"] = { fg = c.iris },
+      ["@function.call"] = { fg = c.iris },
+      ["@function.method"] = { fg = c.iris },
+      ["@function.method.call"] = { fg = c.iris },
+      ["@function.builtin"] = { fg = c.iris },
+      ["@function.definition"] = { fg = c.iris_bright, bold = true },
 
-      ["@type"] = { fg = "#e0af68" },
-      ["@type.builtin"] = { fg = "#e0af68" },
-      ["@type.definition"] = { fg = "#e0af68", bold = true },
+      ["@type"] = { fg = c.gold },
+      ["@type.builtin"] = { fg = c.gold },
+      ["@type.definition"] = { fg = c.gold, bold = true },
 
       -- Namespaces are containers, not types — calmer mauve.
-      ["@module"] = { fg = "#a890c4" },
+      ["@module"] = { fg = c.module },
 
       --------------------------------------------------
       -- DATA / VALUES
       --------------------------------------------------
 
-      ["@string"] = { fg = "#8fbf7f" },
-      ["@string.regexp"] = { fg = "#e0af68" },
-      ["@string.escape"] = { fg = "#6fb1a0" },
-      ["@string.special"] = { fg = "#6fb1a0" },
+      ["@string"] = { fg = c.olive },
+      ["@string.regexp"] = { fg = c.gold },
+      ["@string.escape"] = { fg = c.pine },
+      ["@string.special"] = { fg = c.pine },
 
-      ["@number"] = { fg = "#6fb1a0" },
-      ["@number.float"] = { fg = "#6fb1a0" },
-      ["@boolean"] = { fg = "#6fb1a0" },
-      ["@constant"] = { fg = "#6fb1a0" },
-      ["@constant.builtin"] = { fg = "#6fb1a0" },
-      ["@constant.macro"] = { fg = "#6fb1a0" },
+      ["@number"] = { fg = c.pine },
+      ["@number.float"] = { fg = c.pine },
+      ["@boolean"] = { fg = c.pine },
+      ["@constant"] = { fg = c.pine },
+      ["@constant.builtin"] = { fg = c.pine },
+      ["@constant.macro"] = { fg = c.pine },
 
       --------------------------------------------------
       -- IDENTIFIERS
       --------------------------------------------------
 
-      ["@variable"] = { fg = "#9bb5c7" },
-      ["@variable.builtin"] = { fg = "#5fb3d9", bold = true },
-      ["@variable.parameter"] = { fg = "#8bb4ff" },
-      ["@variable.member"] = { fg = "#b794f6" },
-      ["@property"] = { fg = "#b794f6" },
+      ["@variable"] = { fg = c.variable },
+      ["@variable.builtin"] = { fg = c.foam, bold = true },
+      ["@variable.parameter"] = { fg = c.parameter },
+      ["@variable.member"] = { fg = c.member },
+      ["@property"] = { fg = c.member },
 
       --------------------------------------------------
       -- JSX / MARKUP
       --------------------------------------------------
 
-      ["@tag"] = { fg = "#c678dd" },
-      ["@tag.builtin"] = { fg = "#6fb1a0" },
-      ["@tag.attribute"] = { fg = "#5fb3d9" },
-      ["@_jsx_attribute"] = { fg = "#5fb3d9" },
+      ["@tag"] = { fg = c.rose },
+      ["@tag.builtin"] = { fg = c.pine },
+      ["@tag.attribute"] = { fg = c.foam },
+      ["@_jsx_attribute"] = { fg = c.foam },
 
       --------------------------------------------------
       -- COMMENTS
       --------------------------------------------------
 
-      ["@comment"] = { fg = "#7a9a9a", italic = true },
-      ["@comment.documentation"] = { fg = "#7a9a9a", italic = true },
+      ["@comment"] = { fg = c.comment, italic = true },
+      ["@comment.documentation"] = { fg = c.comment, italic = true },
 
       --------------------------------------------------
       -- UI
       --------------------------------------------------
 
-      CursorLine = { bg = "#061e33" },
-      Visual = { bg = "#4a7c9e" },
-      CursorLineNr = { fg = "#5fb3d9", bold = true },
+      CursorLine = { bg = c.cursorline_bg },
+      Visual = { bg = c.visual_bg },
+      CursorLineNr = { fg = c.foam, bold = true },
 
-      Error = { fg = "#e06c75", bold = true },
-      Warning = { fg = "#e0af68", bold = true },
+      Error = { fg = c.love, bold = true },
+      Warning = { fg = c.gold, bold = true },
 
-      DiagnosticError = { fg = "#e06c75", bold = true },
-      DiagnosticWarn = { fg = "#e0af68", bold = true },
-      DiagnosticInfo = { fg = "#5fb3d9", bold = true },
-      DiagnosticHint = { fg = "#8fbf7f", bold = true },
+      DiagnosticError = { fg = c.love, bold = true },
+      DiagnosticWarn = { fg = c.gold, bold = true },
+      DiagnosticInfo = { fg = c.foam, bold = true },
+      DiagnosticHint = { fg = c.olive, bold = true },
 
       --------------------------------------------------
       -- CUSTOM
@@ -148,7 +188,7 @@ return {
       -- Effect.gen is a program-opener — the "do-notation" of Effect.
       -- Warm rose-pink: cool-on-cool blends, warm advances against the
       -- deep teal base, so the marker leaps off the page.
-      EffectGen = { fg = "#e09cb0", bold = true },
+      EffectGen = { fg = c.effect_gen, bold = true },
     },
   },
 
