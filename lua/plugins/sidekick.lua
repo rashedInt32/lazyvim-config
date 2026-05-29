@@ -6,7 +6,7 @@ return {
     cli = {
       tools = {
         claude = {
-          cmd = { "claude", "--model", "claude-opus-4-7" },
+          cmd = { "claude", "--model", "claude-opus-4-8" },
         },
         claude_46 = {
           cmd = { "claude", "--model", "claude-opus-4-6" },
