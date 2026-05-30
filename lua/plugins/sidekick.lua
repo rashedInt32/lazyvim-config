@@ -19,6 +19,10 @@ return {
         create = "terminal",
       },
       win = {
+        -- Pin the terminal view to the bottom in normal mode. Without this the
+        -- global `scrolloff` (8) scrolls the Claude TUI up on every mode change,
+        -- making the input box render over the top border / shift out of place.
+        wo = { scrolloff = 0 },
         -- Double escape to exit terminal mode (like snacks terminal)
         keys = {
           term_normal = {
