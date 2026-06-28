@@ -152,9 +152,9 @@
     "description": "Effect.forEach"
   },
 
-  "Effect.catchAll": {
+  "Effect.catch": {
     "prefix": "cat",
-    "body": "Effect.catchAll((error) => $0)",
+    "body": "Effect.catch((error) => $0)",
     "description": "Effect.catchAll"
   },
   "Effect.catchTag": {
