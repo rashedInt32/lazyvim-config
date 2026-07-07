@@ -58,3 +58,4 @@ require("lazy").setup({
 -- right times. Only config.diagnostics needs a manual require because it isn't
 -- part of LazyVim's standard set.
 require("config.diagnostics")
+require("config.claude_mark")
