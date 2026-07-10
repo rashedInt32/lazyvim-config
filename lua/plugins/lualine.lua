@@ -159,6 +159,20 @@ return {
           always_visible = true,
         }
 
+        -- Every Claude agent on the machine, not just this nvim's sidekick.
+        -- Colors are baked into the string per status, so only the padding
+        -- background comes from here.
+        local claude = {
+          function()
+            return require("config.claude_sessions").status()
+          end,
+          cond = function()
+            return require("config.claude_sessions").has_sessions()
+          end,
+          color = { bg = "#01111d" },
+          padding = 1,
+        }
+
         local tmux_session = {
           function()
             local str = require("tmux-status").tmux_session()
@@ -197,7 +211,7 @@ return {
               filename,
               --filetype,
             },
-            lualine_x = {},
+            lualine_x = { claude },
             lualine_y = { macro },
             lualine_z = {
               diff,
@@ -221,6 +235,7 @@ return {
       end
 
       config_lualine(colors)
+      require("config.claude_sessions").setup()
       vim.o.laststatus = vim.g.lualine_laststatus
     end,
   },
