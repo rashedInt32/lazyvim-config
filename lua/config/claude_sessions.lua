@@ -47,7 +47,7 @@ local state = { waiting = {}, busy = {}, idle = {} }
 local frame = 1
 local rendered = ""
 local poll_timer, spin_timer
-local set_highlights -- forward decl; defined below, re-asserted on the draw path
+local set_highlights, ensure_highlights -- forward decls; defined below, run on the draw path
 
 --- A session file outlives an agent killed with SIGKILL, so a recycled PID can
 --- surface a phantom row. Signal 0 checks existence without delivering anything.
@@ -214,9 +214,7 @@ end
 --- on every draw, so re-asserting the groups when they've gone missing self-heals
 --- within a redraw instead of staying broken until the next ColorScheme.
 function M.status()
-  if next(vim.api.nvim_get_hl(0, { name = "ClaudeSessIdle" })) == nil then
-    set_highlights()
-  end
+  ensure_highlights()
   return rendered
 end
 
@@ -262,18 +260,40 @@ function M.pick()
   vim.system(cmd, { detach = true })
 end
 
-function set_highlights()
+-- Group name -> attrs, built from config. One source of truth so the setter and
+-- the self-heal check can't drift (an earlier heal checked only ClaudeSessIdle,
+-- so a wipe that spared idle but cleared busy left the busy ring rendering white).
+local function hl_specs()
   local c = M.config.colors
   local bg = "#01111d" -- the lualine section background used in plugins/lualine.lua
-  vim.api.nvim_set_hl(0, "ClaudeSessWaiting", { fg = c.waiting, bg = bg, bold = true })
-  vim.api.nvim_set_hl(0, "ClaudeSessBusy", { fg = c.busy, bg = bg })
-  vim.api.nvim_set_hl(0, "ClaudeSessIdle", { fg = c.idle, bg = bg })
-  vim.api.nvim_set_hl(0, "ClaudeSessMore", { fg = c.more, bg = bg })
-  -- Dimmed variants for your own session, blended toward the bar background.
   local a = M.config.dim_alpha
-  vim.api.nvim_set_hl(0, "ClaudeSessOwnWaiting", { fg = blend(c.waiting, bg, a), bg = bg })
-  vim.api.nvim_set_hl(0, "ClaudeSessOwnBusy", { fg = blend(c.busy, bg, a), bg = bg })
-  vim.api.nvim_set_hl(0, "ClaudeSessOwnIdle", { fg = blend(c.idle, bg, a), bg = bg })
+  return {
+    ClaudeSessWaiting = { fg = c.waiting, bg = bg, bold = true },
+    ClaudeSessBusy = { fg = c.busy, bg = bg },
+    ClaudeSessIdle = { fg = c.idle, bg = bg },
+    ClaudeSessMore = { fg = c.more, bg = bg },
+    -- Dimmed variants for your own session, blended toward the bar background.
+    ClaudeSessOwnWaiting = { fg = blend(c.waiting, bg, a), bg = bg },
+    ClaudeSessOwnBusy = { fg = blend(c.busy, bg, a), bg = bg },
+    ClaudeSessOwnIdle = { fg = blend(c.idle, bg, a), bg = bg },
+  }
+end
+
+function set_highlights()
+  for name, attrs in pairs(hl_specs()) do
+    vim.api.nvim_set_hl(0, name, attrs)
+  end
+end
+
+--- Re-assert all groups if any one has gone missing. Cheap: on the common path
+--- it's a handful of get_hl lookups and no writes.
+function ensure_highlights()
+  for name in pairs(hl_specs()) do
+    if next(vim.api.nvim_get_hl(0, { name = name })) == nil then
+      set_highlights()
+      return
+    end
+  end
 end
 
 function M.setup()
