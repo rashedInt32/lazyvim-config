@@ -160,14 +160,14 @@ return {
         }
 
         -- Every Claude agent on the machine, not just this nvim's sidekick.
-        -- Colors are baked into the string per status, so only the padding
-        -- background comes from here.
+        -- Requires lazily inside the functions so lualine can set up before
+        -- claude-sessions.nvim has loaded (lazy.nvim loads it on require).
         local claude = {
           function()
-            return require("config.claude_sessions").status()
+            return require("claude-sessions").status()
           end,
           cond = function()
-            return require("config.claude_sessions").has_sessions()
+            return require("claude-sessions").has_sessions()
           end,
           color = { bg = "#01111d" },
           padding = 1,
@@ -235,7 +235,6 @@ return {
       end
 
       config_lualine(colors)
-      require("config.claude_sessions").setup()
       vim.o.laststatus = vim.g.lualine_laststatus
     end,
   },
