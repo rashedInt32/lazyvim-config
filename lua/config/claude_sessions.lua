@@ -260,6 +260,77 @@ function M.pick()
   vim.system(cmd, { detach = true })
 end
 
+--- The sidekick CLI terminal hosting agent `pid`, or the sole live terminal when
+--- the pid can't be matched (the CLI was launched under a wrapper shell, so
+--- `term.pids` holds the shell rather than the agent). Shared by permit and
+--- preview: an agent embedded in nvim carries `NVIM=<servername>` in its env
+--- (sidekick sets it when it jobstarts the CLI), so the tmux picker reaches
+--- exactly this instance over the RPC socket, and this maps back to the terminal.
+---@param pid integer
+---@return table? terminal a sidekick.cli.Terminal
+local function find_terminal(pid)
+  local ok, term = pcall(require, "sidekick.cli.terminal")
+  if not ok then
+    return nil
+  end
+  local running = {}
+  for _, t in ipairs(term.sessions()) do
+    if t.job and t:is_running() then
+      running[#running + 1] = t
+      for _, p in ipairs(t.pids or {}) do
+        if p == pid then
+          return t
+        end
+      end
+    end
+  end
+  return #running == 1 and running[1] or nil
+end
+
+--- Answer a permission prompt in this nvim's sidekick Claude terminal without
+--- anyone having to focus it. Called over the RPC socket by the picker's
+--- permit.sh. `action` is a semantic token rather than a raw key so the shell
+--- side needn't know terminal encodings.
+---@param action "approve"|"reject"
+---@param pid integer
+---@return boolean sent
+function M.permit(action, pid)
+  -- Claude's permission prompt is a numbered menu; "1" is the affirmative option
+  -- and Esc cancels. chansend writes to the terminal's pty exactly as if typed.
+  local key = ({ approve = "1", reject = "\27" })[action]
+  local t = key and find_terminal(pid)
+  if not t then
+    return false
+  end
+  vim.fn.chansend(t.job, key)
+  return true
+end
+
+--- Tail of the sidekick terminal's buffer for agent `pid`, so the picker can
+--- preview the Claude conversation itself. For an embedded agent, capture-pane
+--- of its tmux pane only shows the editor hosting it (a code split plus the tail
+--- of the CLI split), never the conversation — the buffer text is the real view.
+--- Plain text: a terminal buffer's lines carry no ANSI, so color is lost, but the
+--- content is what matters here.
+---@param pid integer
+---@param lines? integer trailing lines to return (default 300)
+---@return string
+function M.preview(pid, lines)
+  local t = find_terminal(pid)
+  if not t or not t.buf or not vim.api.nvim_buf_is_valid(t.buf) then
+    return ""
+  end
+  -- Fetch just the tail via a negative offset rather than reading the whole
+  -- scrollback, then drop the blank grid rows the terminal pads the bottom with.
+  local total = vim.api.nvim_buf_line_count(t.buf)
+  local from = math.max(0, total - (lines or 300))
+  local out = vim.api.nvim_buf_get_lines(t.buf, from, -1, false)
+  while #out > 0 and out[#out]:match("^%s*$") do
+    table.remove(out)
+  end
+  return table.concat(out, "\n")
+end
+
 -- Group name -> attrs, built from config. One source of truth so the setter and
 -- the self-heal check can't drift (an earlier heal checked only ClaudeSessIdle,
 -- so a wipe that spared idle but cleared busy left the busy ring rendering white).
