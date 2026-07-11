@@ -49,34 +49,8 @@ return {
       },
     },
   },
-  config = function(_, opts)
-    require("sidekick").setup(opts)
-
-    -- Clear the ghost rows Claude's TUI leaves over the input box after a tmux
-    -- session switch. Ink erases old frames relative to where the previous frame
-    -- ended; the refocus resize/reflow desyncs that anchor, so erases hit the
-    -- wrong rows and stale input text stays painted (claude-code#62740). Ctrl-L
-    -- makes Ink drop the stale anchor and repaint from row 0, preserving the
-    -- typed prompt. Sent on FocusGained — the moment a switch-back would show the
-    -- ghost. The fullscreen renderer (/tui fullscreen) would fix this wholesale,
-    -- but it virtualizes scrollback inside Claude, breaking nvim-native
-    -- scrollback/yank of conversation history — Ctrl-L keeps the default
-    -- renderer and that workflow intact.
-    vim.api.nvim_create_autocmd("FocusGained", {
-      group = vim.api.nvim_create_augroup("sidekick_repaint", { clear = true }),
-      callback = function()
-        local ok, term = pcall(require, "sidekick.cli.terminal")
-        if not ok then
-          return
-        end
-        for _, t in ipairs(term.sessions()) do
-          if t.job and t:is_running() and t:win_valid() then
-            pcall(vim.api.nvim_chan_send, t.job, "\12") -- Ctrl-L
-          end
-        end
-      end,
-    })
-  end,
+  -- The FocusGained Ctrl-L ghost-repaint fix that used to live here moved into
+  -- claude-sessions.nvim (`repaint.enabled = true` in plugins/claude-sessions.lua).
   keys = {
     {
       "<tab>",
