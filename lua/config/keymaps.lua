@@ -47,7 +47,7 @@ end, { desc = "Launch tmux-sessionizer" })
 
 -- Jump to any running Claude agent (same popup as tmux `prefix+u`)
 vim.keymap.set("n", "<leader>au", function()
-  require("config.claude_sessions").pick()
+  require("claude-sessions").pick()
 end, { desc = "Pick Claude session" })
 
 vim.keymap.set("n", "J", "mzJ`z")
