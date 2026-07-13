@@ -173,10 +173,14 @@ return {
             on_attach(client, bufnr)
           end
           vim.keymap.set("n", "<leader>cd", function()
+            -- No `source` here: opts passed to open_float override the global
+            -- float config, and a source prefix is spliced onto the first line
+            -- *after* `format` runs, which shifts effect-error-pretty's box off
+            -- its own gutter. config/diagnostics.lua adds the source back to
+            -- plain messages inside `format`.
             vim.diagnostic.open_float(nil, {
               scope = "cursor",
               border = "rounded",
-              source = "always",
               focus = false,
               max_width = 100,
               max_height = 30,

@@ -15,6 +15,73 @@ for i, name in ipairs(sign_names) do
   vim.fn.sign_define(hl, { text = icons[i], texthl = hl, numhl = "" })
 end
 
+-- @effect/language-service tacks its rule name onto the end of the message
+-- ("… Effect errors.    effect(missingEffectError)") and then reports code = 1,
+-- which says nothing. Lift the rule into the code, where it belongs: the message
+-- reads clean and the suffix becomes [missingEffectError] instead of [1].
+local function normalize_effect_diagnostic(d)
+  local rule = d.message and d.message:match("%s+effect%((%w+)%)%s*$")
+  if rule then
+    d.message = (d.message:gsub("%s+effect%(%w+%)%s*$", ""))
+    d.code = rule
+  end
+  return d
+end
+
+-- @effect/language-service reports `missingEffectError` once per matching node,
+-- so one missing error arrives as five byte-identical diagnostics at the same
+-- range. Drop the copies as they come in — vtsls pushes diagnostics (it has no
+-- diagnosticProvider), so publishDiagnostics is the funnel for all of them.
+local function dedupe_lsp_diagnostics(diagnostics)
+  local seen, out = {}, {}
+  for _, d in ipairs(diagnostics) do
+    local r = d.range or {}
+    local s, e = r.start or {}, r["end"] or {}
+    local key = table.concat({
+      s.line or -1,
+      s.character or -1,
+      e.line or -1,
+      e.character or -1,
+      d.severity or 0,
+      tostring(d.code),
+      d.source or "",
+      d.message or "",
+    }, "\0")
+    if not seen[key] then
+      seen[key] = true
+      out[#out + 1] = d
+    end
+  end
+  return out
+end
+
+local original_publish = vim.lsp.handlers["textDocument/publishDiagnostics"]
+vim.lsp.handlers["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
+  if result and result.diagnostics then
+    -- Normalize before deduping: the dedupe key includes message and code, so
+    -- the copies have to be identical by the time we compare them.
+    result.diagnostics = dedupe_lsp_diagnostics(vim.tbl_map(normalize_effect_diagnostic, result.diagnostics))
+  end
+  return original_publish(err, result, ctx, config)
+end
+
+-- effect-error-pretty renders a multi-line box; anything vim.diagnostic splices
+-- onto the first or last line (source prefix, code suffix) breaks its alignment.
+local function is_box(rendered)
+  return rendered:sub(1, #"╭") == "╭"
+end
+
+-- `suffix` runs *after* `format`, so by the time it is called the diagnostic's
+-- message has already been replaced by the rendered box. Check that directly —
+-- re-running float_format here would parse the box text and find nothing.
+local function is_boxed(diagnostic)
+  return is_box(diagnostic.message or "")
+end
+
+local function source_prefix(diagnostic)
+  return diagnostic.source and (diagnostic.source .. ": ") or ""
+end
+
 local function apply_diagnostic_config()
   vim.diagnostic.config({
     update_in_insert = false,
@@ -32,13 +99,18 @@ local function apply_diagnostic_config()
 
     float = {
       border = "rounded",
-      source = true,
+      -- Deliberately off. open_float applies `format` first and only then
+      -- prepends the source, so `source = true` shifts a rendered box's first
+      -- line right by #"ts: " while leaving the gutter below it in place. The
+      -- source is added back for plain messages in `format` instead.
+      source = false,
       header = "",
       prefix = "",
       max_width = 100,
 
       suffix = function(diagnostic)
-        if not diagnostic.code then
+        -- Same story at the other end: a suffix lands after the box's `╰─`.
+        if not diagnostic.code or is_boxed(diagnostic) then
           return "", ""
         end
         local sev_name = ({ "Error", "Warn", "Info", "Hint" })[diagnostic.severity] or "Hint"
@@ -49,14 +121,14 @@ local function apply_diagnostic_config()
         local icon = icons[diagnostic.severity] or ""
         local rendered = pretty.float_format(diagnostic)
         if not rendered then
-          return icon .. diagnostic.message
+          return icon .. source_prefix(diagnostic) .. diagnostic.message
         end
         -- Artistic boxes start with `╭` and render standalone; every other
-        -- path is plain text that should carry the severity icon.
-        if rendered:sub(1, #"╭") == "╭" then
+        -- path is plain text that should carry the severity icon and source.
+        if is_box(rendered) then
           return rendered
         end
-        return icon .. rendered
+        return icon .. source_prefix(diagnostic) .. rendered
       end,
     },
   })

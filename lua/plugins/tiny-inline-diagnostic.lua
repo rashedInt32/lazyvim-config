@@ -18,6 +18,12 @@ return {
     },
 
     options = {
+      -- Without this the inline virtual text shows the raw TS message — the
+      -- wall of `Effect<A, E, R>` text the float already renders as a box.
+      format = function(diagnostic)
+        return require("effect-error-pretty").inline_format(diagnostic) or diagnostic.message
+      end,
+
       show_source = { enabled = false, if_many = false },
       use_icons_from_diagnostic = false,
       set_arrow_to_diag_color = false,
