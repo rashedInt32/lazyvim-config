@@ -1,3 +1,14 @@
+-- fuzzy-find across the whole project from oil; in the picker, <C-e> toggles
+-- back to oil and <C-h>/<C-l> walk the tree
+local function fzf_search()
+  require("oil").close()
+  -- let the float finish closing, else its frame ghosts under the picker
+  vim.schedule(function()
+    vim.cmd("redraw")
+    require("fzf-oil").browse(vim.fn.getcwd(), true)
+  end)
+end
+
 return {
   {
     "stevearc/oil.nvim",
@@ -44,6 +55,7 @@ return {
         ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
         ["gs"] = { "actions.change_sort", mode = "n" },
         ["gx"] = "actions.open_external",
+        ["<C-f>"] = { callback = fzf_search, mode = "n", desc = "Find files in project" },
         ["g."] = { "actions.toggle_hidden", mode = "n" },
         ["g\\"] = { "actions.toggle_trash", mode = "n" },
       },
@@ -58,14 +70,8 @@ return {
         win_options = {
           winblend = 0,
         },
-        override = function(conf)
-          conf.anchor = "SW"
-          conf.row = vim.o.lines - 2
-          conf.col = 1
-          conf.width = vim.o.columns - 4
-          conf.height = math.floor(vim.o.lines * 0.4)
-          return conf
-        end,
+        -- geometry (the bottom bar) is installed by fzf-oil in plugins/fzf-oil.lua,
+        -- so this float and the fzf picker share one rect and toggling swaps in place
       },
     },
     config = function(_, opts)
