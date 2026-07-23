@@ -8,13 +8,8 @@ return {
         claude = {
           cmd = { "claude", "--model", "claude-opus-4-8" },
         },
-        claude_46 = {
-          cmd = { "claude", "--model", "claude-opus-4-6" },
-          url = "https://github.com/anthropics/claude-code",
-        },
         claude_fable = {
           cmd = { "claude", "--model", "claude-fable-5" },
-          url = "https://github.com/anthropics/claude-code",
         },
       },
       mux = {

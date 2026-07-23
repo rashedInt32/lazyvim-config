@@ -4,7 +4,7 @@ local c = {
   surface = "#0b2233",
   overlay = "#102a3f",
   cursorline_bg = "#061e33",
-  visual_bg = "#4a7c9e",
+  visual_bg = "#2d5a7e",
 
   -- neutrals
   subtle = "#7f9db2",
@@ -170,7 +170,9 @@ return {
       --------------------------------------------------
 
       CursorLine = { bg = c.cursorline_bg },
-      Visual = { bg = c.visual_bg },
+      -- inherit = false: rose-pine's default Visual has blend = 15, which
+      -- would dilute this bg to near-invisibility against the base.
+      Visual = { bg = c.visual_bg, inherit = false },
       CursorLineNr = { fg = c.foam, bold = true },
 
       Error = { fg = c.love, bold = true },
