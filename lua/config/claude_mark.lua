@@ -1,33 +1,20 @@
--- Edit-preview markers driven by Claude Code over the running instance's RPC
--- socket ($NVIM). Claude opens a target file in a normal window, jumps to the
--- range it is about to change, and highlights those lines so the edit site is
--- visible before any change is applied. Manual use: :ClaudeMark / :ClaudeMarkClear.
-
 local ns = vim.api.nvim_create_namespace("claude_mark")
 
--- The one window we own for previews. Tracked so repeated marks reuse a single
--- split instead of spawning more — and so we never adopt (and clobber) an
--- unrelated window like the dashboard, which also reports buftype == "".
 local preview_winid = nil
 
 local function preview_win()
   if preview_winid and vim.api.nvim_win_is_valid(preview_winid) then
     return preview_winid
   end
-  -- Always a dedicated split on the far right, full height.
   vim.cmd("botright vsplit")
   preview_winid = vim.api.nvim_get_current_win()
   return preview_winid
 end
 
--- Highlight lines [first, last] of `file`, parking the cursor on the first line.
--- Returns a "file:first-last" summary string (echoed back to Claude over RPC).
 local function mark(file, first, last, label)
   first = tonumber(first) or 1
   last = tonumber(last) or first
 
-  -- Remember where the user is (their Claude terminal) so we can hand focus
-  -- back — marking must not yank them out of the prompt.
   local origin = vim.api.nvim_get_current_win()
 
   local win = preview_win()
