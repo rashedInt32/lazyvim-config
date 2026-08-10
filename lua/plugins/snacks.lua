@@ -585,13 +585,9 @@ return {
         end,
         desc = "Colorschemes",
       },
-      {
-        "<leader>z",
-        function()
-          Snacks.zen()
-        end,
-        desc = "Toggle Zen Mode",
-      },
+      -- <leader>z is the zen workspace from sidekick-zen.nvim (see
+      -- plugins/sidekick-zen.lua). Plain Snacks.zen() stays available
+      -- via :lua Snacks.zen()
       {
         "<leader>Z",
         function()
