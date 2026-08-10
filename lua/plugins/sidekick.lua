@@ -6,6 +6,9 @@ return {
     cli = {
       tools = {
         claude = {
+          cmd = { "claude", "--model", "claude-opus-5" },
+        },
+        claude_4_8 = {
           cmd = { "claude", "--model", "claude-opus-4-8" },
         },
         claude_fable = {
@@ -44,6 +47,22 @@ return {
       },
     },
   },
+  config = function(_, opts)
+    require("sidekick").setup(opts)
+    -- Sidekick paints its terminal with SidekickChat (default-linked to
+    -- NormalFloat), so Claude's unstyled body text ignores Ghostty's dimmed
+    -- foreground. Redefine it with the same fg as the terminal (a4b6ca) so
+    -- inline-code highlights (#b7d6fb) and bold stand out here too. The
+    -- plugin's `default = true` link never overrides this explicit definition.
+    local function dim_chat_text()
+      local float = vim.api.nvim_get_hl(0, { name = "NormalFloat", link = false })
+      vim.api.nvim_set_hl(0, "SidekickChat", { fg = "#a4b6ca", bg = float.bg })
+    end
+    dim_chat_text()
+    vim.api.nvim_create_autocmd("ColorScheme", { callback = dim_chat_text })
+    -- Zen workspace (sidekick-zen.nvim, plugins/sidekick-zen.lua) is on
+    -- <leader>z and adopts these terminals when toggled.
+  end,
   -- The FocusGained Ctrl-L ghost-repaint fix that used to live here moved into
   -- claude-sessions.nvim (`repaint.enabled = true` in plugins/claude-sessions.lua).
   keys = {
