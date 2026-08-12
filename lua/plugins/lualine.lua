@@ -14,11 +14,16 @@ return {
       local colors = require("oldworld.palette")
       local bar_bg = "#01111d"
 
+      -- oldworld's purple (#aca1cf) and cyan (#85b5ba) are too muted for the
+      -- mode segment; the cyan also collides with the branch green.
+      local mode_purple = "#bb9af7"
+      local mode_cyan = "#74c7ec"
+
       local modecolor = {
         n = colors.red,
-        i = colors.cyan,
-        v = colors.purple,
-        ["\22"] = colors.purple,
+        i = mode_cyan,
+        v = mode_purple,
+        ["\22"] = mode_purple,
         V = colors.red,
         c = colors.yellow,
         no = colors.red,
@@ -26,12 +31,12 @@ return {
         S = colors.yellow,
         ic = colors.yellow,
         R = colors.green,
-        Rv = colors.purple,
+        Rv = mode_purple,
         cv = colors.red,
         ce = colors.red,
-        r = colors.cyan,
-        rm = colors.cyan,
-        ["r?"] = colors.cyan,
+        r = mode_cyan,
+        rm = mode_cyan,
+        ["r?"] = mode_cyan,
         ["!"] = colors.red,
         t = colors.blue,
       }
