@@ -5,21 +5,10 @@ return {
   },
 
   {
-    "christopher-francisco/tmux-status.nvim",
-    lazy = true,
-    opts = {
-      colors = {
-        session = { fg = "#005f00" },
-      },
-    },
-  },
-
-  {
     "nvim-lualine/lualine.nvim",
     dependencies = {
       "nvim-tree/nvim-web-devicons",
       "dgox16/oldworld.nvim",
-      "christopher-francisco/tmux-status.nvim",
     },
     config = function()
       local colors = require("oldworld.palette")
@@ -87,15 +76,6 @@ return {
           separator = { left = "", right = "" },
         }
 
-        local filetype = {
-          "filetype",
-          icon_only = true,
-          colored = true,
-
-          color = { fg = colors.blue, gui = "italic,bold" },
-          icon = { align = "right" },
-        }
-
         local branch = {
           "branch",
           icon = " ",
@@ -114,7 +94,6 @@ return {
           color = { bg = colors.gray2, fg = colors.bg, gui = "bold" },
           separator = { left = "", right = "" },
           symbols = { added = " ", modified = " ", removed = " " },
-          --symbols = { added = " ", modified = " ", removed = " " },
           colored = true,
 
           diff_color = {
@@ -176,18 +155,6 @@ return {
           padding = 1,
         }
 
-        local tmux_session = {
-          function()
-            local str = require("tmux-status").tmux_session()
-            return str:gsub("%%#.-#", "")
-          end,
-          cond = function()
-            return require("tmux-status").show()
-          end,
-          color = { fg = "#005f00", bg = "#01111d" },
-          separator = { left = "", right = "" },
-        }
-
         require("lualine").setup({
           options = {
             disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter", "snacks_dashboard" } },
@@ -195,10 +162,7 @@ return {
             theme = theme,
             component_separators = { left = "", right = "" },
             section_separators = { left = "", right = "" },
-            ignore_focus = {},
-            --always_divide_middle = true,
             globalstatus = true,
-            component_padding = 0,
           },
 
           sections = {
@@ -212,7 +176,6 @@ return {
               branch,
               space,
               filename,
-              --filetype,
             },
             lualine_x = { claude },
             lualine_y = { macro },
@@ -222,7 +185,6 @@ return {
               location,
               space,
               dia,
-              --tmux_session,
             },
           },
 
