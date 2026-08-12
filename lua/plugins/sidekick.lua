@@ -8,9 +8,6 @@ return {
         claude = {
           cmd = { "claude", "--model", "claude-opus-5" },
         },
-        claude_4_8 = {
-          cmd = { "claude", "--model", "claude-opus-4-8" },
-        },
         claude_fable = {
           cmd = { "claude", "--model", "claude-fable-5" },
         },
