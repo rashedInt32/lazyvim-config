@@ -33,7 +33,7 @@ return {
         rm = colors.cyan,
         ["r?"] = colors.cyan,
         ["!"] = colors.red,
-        t = colors.red,
+        t = colors.blue,
       }
 
       -- Only section a varies by mode; b/c/z are shared.
