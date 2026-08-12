@@ -59,3 +59,4 @@ require("lazy").setup({
 -- part of LazyVim's standard set.
 require("config.diagnostics")
 require("config.claude_mark")
+require("config.tmux")
