@@ -96,7 +96,10 @@ return {
         "mode",
         color = function()
           -- mode(1) so the multi-char keys (no, ic, Rv, ...) can actually match.
-          return { bg = modecolor[vim.fn.mode(1)] or colors.blue, fg = colors.bg_dark, gui = "bold" }
+          -- Unlisted long modes (nt, niI, Rc, ...) fall back to their first char.
+          local m = vim.fn.mode(1)
+          local bg = modecolor[m] or modecolor[m:sub(1, 1)] or colors.blue
+          return { bg = bg, fg = colors.bg_dark, gui = "bold" }
         end,
         separator = { left = "", right = "" },
       }
