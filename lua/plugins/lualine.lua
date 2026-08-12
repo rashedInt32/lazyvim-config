@@ -29,7 +29,7 @@ return {
           n = colors.red,
           i = colors.cyan,
           v = colors.purple,
-          [""] = colors.purple,
+          ["\22"] = colors.purple,
           V = colors.red,
           c = colors.yellow,
           no = colors.red,
@@ -44,33 +44,33 @@ return {
           rm = colors.cyan,
           ["r?"] = colors.cyan,
           ["!"] = colors.red,
-          t = colors.bright_red,
+          t = colors.red,
         }
 
         local theme = {
           normal = {
             a = { fg = colors.bg_dark, bg = colors.blue },
-            b = { fg = colors.blue, bg = colors.white },
-            c = { fg = colors.white, bg = "#01111d" },
-            z = { fg = colors.white, bg = "#01111d" },
+            b = { fg = colors.blue, bg = colors.fg },
+            c = { fg = colors.fg, bg = "#01111d" },
+            z = { fg = colors.fg, bg = "#01111d" },
           },
           insert = {
             a = { fg = colors.bg_dark, bg = colors.orange },
-            b = { fg = colors.blue, bg = colors.white },
-            c = { fg = colors.white, bg = "#01111d" },
-            z = { fg = colors.white, bg = "#01111d" },
+            b = { fg = colors.blue, bg = colors.fg },
+            c = { fg = colors.fg, bg = "#01111d" },
+            z = { fg = colors.fg, bg = "#01111d" },
           },
           visual = {
             a = { fg = colors.bg_dark, bg = colors.green },
-            b = { fg = colors.blue, bg = colors.white },
-            c = { fg = colors.white, bg = "#01111d" },
-            z = { fg = colors.white, bg = "#01111d" },
+            b = { fg = colors.blue, bg = colors.fg },
+            c = { fg = colors.fg, bg = "#01111d" },
+            z = { fg = colors.fg, bg = "#01111d" },
           },
           replace = {
             a = { fg = colors.bg_dark, bg = colors.green },
-            b = { fg = colors.blue, bg = colors.white },
-            c = { fg = colors.white, bg = "#01111d" },
-            z = { fg = colors.white, bg = "#01111d" },
+            b = { fg = colors.blue, bg = colors.fg },
+            c = { fg = colors.fg, bg = "#01111d" },
+            z = { fg = colors.fg, bg = "#01111d" },
           },
         }
 
@@ -127,19 +127,22 @@ return {
         local modes = {
           "mode",
           color = function()
-            local mode_color = modecolor
-            return { bg = mode_color[vim.fn.mode()], fg = colors.bg_dark, gui = "bold" }
+            -- mode(1) so the multi-char keys (no, ic, Rv, ...) can actually match.
+            return { bg = modecolor[vim.fn.mode(1)] or colors.blue, fg = colors.bg_dark, gui = "bold" }
           end,
           separator = { left = "", right = "" },
         }
 
         local macro = {
           function()
+            -- Extract "@x" from "recording @x"; noice can report other modes.
             local mode = require("noice").api.status.mode.get()
-            -- Extract "@x" from "recording @x"
-            return mode and (" " .. mode:match("@%w"))
+            local reg = mode and mode:match("@%w")
+            return reg and (" " .. reg) or ""
           end,
-          cond = require("noice").api.status.mode.has,
+          cond = function()
+            return require("noice").api.status.mode.has()
+          end,
           color = { fg = colors.red, bg = "#01111d", gui = "italic,bold" },
         }
 
