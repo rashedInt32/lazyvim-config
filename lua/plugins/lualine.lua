@@ -15,9 +15,11 @@ return {
       local bar_bg = "#01111d"
 
       -- oldworld's purple (#aca1cf) and cyan (#85b5ba) are too muted for the
-      -- mode segment; the cyan also collides with the branch green.
+      -- mode segment; the cyan also collides with the branch green, and the
+      -- blue with the lavender claude pill.
       local mode_purple = "#bb9af7"
       local mode_cyan = "#74c7ec"
+      local mode_blue = "#82aaff"
 
       local modecolor = {
         n = colors.red,
@@ -38,7 +40,7 @@ return {
         rm = mode_cyan,
         ["r?"] = mode_cyan,
         ["!"] = colors.red,
-        t = colors.blue,
+        t = mode_blue,
       }
 
       -- Only section a varies by mode; b/c/z are shared.
@@ -103,7 +105,7 @@ return {
           -- mode(1) so the multi-char keys (no, ic, Rv, ...) can actually match.
           -- Unlisted long modes (nt, niI, Rc, ...) fall back to their first char.
           local m = vim.fn.mode(1)
-          local bg = modecolor[m] or modecolor[m:sub(1, 1)] or colors.blue
+          local bg = modecolor[m] or modecolor[m:sub(1, 1)] or mode_blue
           return { bg = bg, fg = colors.bg_dark, gui = "bold" }
         end,
         separator = { left = "", right = "" },
