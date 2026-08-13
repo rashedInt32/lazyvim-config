@@ -20,6 +20,7 @@ return {
       local mode_purple = "#bb9af7"
       local mode_cyan = "#74c7ec"
       local mode_blue = "#82aaff"
+      local mode_gold = "#f5c97b"
 
       local modecolor = {
         n = colors.red,
@@ -27,11 +28,11 @@ return {
         v = mode_purple,
         ["\22"] = mode_purple,
         V = colors.red,
-        c = colors.yellow,
+        c = mode_gold,
         no = colors.red,
-        s = colors.yellow,
-        S = colors.yellow,
-        ic = colors.yellow,
+        s = mode_gold,
+        S = mode_gold,
+        ic = mode_gold,
         R = colors.green,
         Rv = mode_purple,
         cv = colors.red,
