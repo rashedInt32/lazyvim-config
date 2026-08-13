@@ -3,7 +3,11 @@
 -- sidekick-embedded agents. Extracted from lua/config/claude_sessions.lua into
 -- a real plugin.
 return {
-  "rashedInt32/claude-sessions.nvim",
+  -- https://github.com/rashedInt32/claude-sessions.nvim — swap `dir` for
+  -- "rashedInt32/claude-sessions.nvim" to consume the GitHub version instead.
+  --"rashedInt32/claude-sessions.nvim"
+  dir = "~/Documents/codes/packages/claude-sessions.nvim",
+  name = "claude-sessions.nvim",
   event = "VeryLazy",
   opts = {
     -- Match the lualine section background so the dimmed "own agent" dots
