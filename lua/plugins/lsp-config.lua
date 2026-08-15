@@ -22,13 +22,13 @@ return {
             "svelte",
             "vue",
           },
-          root_dir = require("lspconfig.util").root_pattern(
+          root_markers = {
             "tailwind.config.js",
             "tailwind.config.ts",
             "postcss.config.js",
             "package.json",
-            ".git"
-          ),
+            ".git",
+          },
           on_attach = function(client, bufnr)
             if vim.bo[bufnr].filetype == "sql" then
               client.stop()
@@ -40,7 +40,14 @@ return {
         },
         postgres_lsp = {
           filetypes = { "sql" },
-          root_dir = require("lspconfig.util").root_pattern("*.sql", ".git"),
+          -- The old root_pattern("*.sql", ".git") matched a glob. root_markers
+          -- compares exact filenames and cannot express that, so keep the glob
+          -- as a predicate, with the same .git fallback as before.
+          root_dir = function(bufnr, on_dir)
+            on_dir(vim.fs.root(bufnr, function(name)
+              return name:match("%.sql$") ~= nil
+            end) or vim.fs.root(bufnr, { ".git" }))
+          end,
         },
 
         lua_ls = {
@@ -56,7 +63,7 @@ return {
         elixirls = {
           cmd = { vim.fn.stdpath("data") .. "/mason/packages/elixir-ls/language_server.sh" },
           filetypes = { "elixir", "eelixir", "heex" },
-          root_dir = require("lspconfig.util").root_pattern("mix.exs", ".git"),
+          root_markers = { "mix.exs", ".git" },
           settings = {
             elixirLS = {
               dialyzerEnabled = false,
@@ -89,8 +96,8 @@ return {
         },
         vtsls = {
           filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
-          single_file_support = false,
-          root_dir = require("lspconfig.util").root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git"),
+          workspace_required = true, -- was single_file_support = false
+          root_markers = { "package.json", "tsconfig.json", "jsconfig.json", ".git" },
           settings = {
             typescript = {
               suggest = {
@@ -210,20 +217,88 @@ return {
         end,
       })
 
-      -- Get lspconfig safely
-      local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
-      if not lspconfig_ok then
-        vim.notify("Failed to load lspconfig", vim.log.levels.ERROR)
-        return
+      -- lspconfig[name].setup() is the pre-0.11 framework. On this Nvim it
+      -- launches clients through lspconfig's own registry, out of reach of
+      -- vim.lsp.start, so nothing started elsewhere can ever be reused.
+      -- Register through vim.lsp.config instead.
+      --
+      -- Assign by index rather than calling vim.lsp.config(name, cfg). The call
+      -- form merges into the config shipped at lsp/<name>.lua, and that merge
+      -- is not the one lspconfig performed: it reordered root markers and
+      -- pulled in upstream setting defaults. Assigning redefines, which leaves
+      -- the merge under our control.
+      --
+      -- LazyVim merges more into opts.servers than we declare: extras add
+      -- jsonls/gopls/bashls, a "*" entry of shared capabilities, and tool names
+      -- such as stylua. The old loop indexed lspconfig[name] and skipped
+      -- anything it did not recognise, which is where the "config not found"
+      -- startup warnings came from. Keep that set, deliberately this time.
+      local NOT_A_SERVER = { ["*"] = true, stylua = true }
+
+      -- lspconfig injected its own default capabilities into every server it
+      -- set up. Nothing does that here, so clients would advertise far less
+      -- than they used to (no snippet support, no completion item resolve).
+      -- Register the shared set once, which is what "*" is for, and fold in
+      -- LazyVim's own "*" entry since the old loop threw it away.
+      vim.lsp.config("*", { capabilities = vim.lsp.protocol.make_client_capabilities() })
+
+      -- lspconfig tried each marker in turn and its configs listed the project
+      -- file before ".git". Several shipped lsp/<name>.lua configs list ".git"
+      -- first, which roots a server at the repo top instead of the project dir
+      -- (intelephense lands on the repo rather than the composer.json folder).
+      -- Demote ".git" to last so today's roots survive.
+      local function project_markers_first(markers)
+        local rest, git = {}, nil
+        for _, m in ipairs(markers) do
+          if m == ".git" then
+            git = m
+          else
+            rest[#rest + 1] = m
+          end
+        end
+        if git then
+          rest[#rest + 1] = git
+        end
+        return rest
       end
 
+      local enable = {}
       for server_name, server_opts in pairs(opts.servers) do
-        local server = lspconfig[server_name]
-        if server and server.setup then
-          local full_opts = vim.tbl_deep_extend("force", { on_attach = on_attach }, server_opts)
-          server.setup(full_opts)
+        local base = not NOT_A_SERVER[server_name] and vim.lsp.config[server_name] or nil
+        if base then
+          local merged = vim.tbl_deep_extend("force", base, { on_attach = on_attach }, server_opts)
+
+          -- tbl_deep_extend merges arrays element-wise, which would splice our
+          -- lists into the shipped ones. Replace outright where we declare one.
+          for _, key in ipairs({ "filetypes", "cmd", "root_markers" }) do
+            if server_opts[key] then
+              merged[key] = server_opts[key]
+            end
+          end
+
+          -- root_dir outranks root_markers, and assigning nil cannot unset a
+          -- field inherited from the shipped lsp/<name>.lua config: the merge
+          -- reads nil as "no override", so its resolver keeps winning and our
+          -- markers are silently ignored. Express declared markers as a
+          -- resolver instead, which does override. on_dir(nil) means "do not
+          -- activate", which is also how workspace_required behaves.
+          if server_opts.root_dir then
+            merged.root_dir, merged.root_markers = server_opts.root_dir, nil
+          elseif server_opts.root_markers then
+            local markers = server_opts.root_markers
+            merged.root_dir = function(bufnr, on_dir)
+              on_dir(vim.fs.root(bufnr, markers))
+            end
+          elseif merged.root_markers then
+            merged.root_markers = project_markers_first(merged.root_markers)
+          end
+
+          vim.lsp.config[server_name] = merged
+          enable[#enable + 1] = server_name
         end
       end
+
+      vim.lsp.enable(enable)
     end,
   },
 }
