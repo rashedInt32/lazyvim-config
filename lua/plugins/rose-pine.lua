@@ -254,6 +254,15 @@ return {
     vim.api.nvim_create_autocmd("BufEnter", {
       pattern = { "*.ts", "*.tsx" },
       callback = function()
+        -- matchadd appends unconditionally and matches are window-local, so an
+        -- unguarded hook stacks a duplicate pattern on every buffer entry and
+        -- each copy is re-evaluated on redraw. Scan rather than cache a flag:
+        -- the list stays at one entry, and it self-corrects if matches are cleared.
+        for _, m in ipairs(vim.fn.getmatches()) do
+          if m.group == "EffectGen" then
+            return
+          end
+        end
         vim.fn.matchadd("EffectGen", [[\<Effect\.\(gen\|fn\)\>]], 95)
       end,
     })
