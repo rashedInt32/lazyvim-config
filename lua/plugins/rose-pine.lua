@@ -195,8 +195,9 @@ return {
   },
 
   config = function(_, opts)
+    -- No `colorscheme` call here. LazyVim applies it (see config/lazy.lua), and
+    -- doing it in both places fires every ColorScheme autocmd twice.
     require("rose-pine").setup(opts)
-    vim.cmd("colorscheme rose-pine")
 
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function()
