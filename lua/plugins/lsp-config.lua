@@ -164,14 +164,19 @@ return {
         client.server_capabilities.documentHighlightProvider = false
       end
 
-      -- LspAttach keymap
+      -- LspAttach keymap.
+      --
+      -- No on_attach call here: it is already passed into each server's config
+      -- below, and lspconfig invokes it itself, so calling it again ran the
+      -- whole thing twice per client. LspAttach also fires once per client, and
+      -- the map is identical for all of them, so guard it per buffer.
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
-          local client = vim.lsp.get_client_by_id(args.data.client_id)
           local bufnr = args.buf
-          if client then
-            on_attach(client, bufnr)
+          if vim.b[bufnr].diagnostic_float_mapped then
+            return
           end
+          vim.b[bufnr].diagnostic_float_mapped = true
           vim.keymap.set("n", "<leader>cd", function()
             -- No `source` here: opts passed to open_float override the global
             -- float config, and a source prefix is spliced onto the first line
