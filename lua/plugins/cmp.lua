@@ -4,7 +4,7 @@ return {
     "rafamadriz/friendly-snippets",
     -- "fang2hou/blink-copilot",
   },
-  event = "InsertEnter",
+  event = { "InsertEnter", "CmdlineEnter" },
   opts = {
     keymap = {
       ["<C-l>"] = { "show", "show_documentation", "hide_documentation" },
@@ -64,7 +64,10 @@ return {
       },
     },
     sources = {
-      min_keyword_length = 2,
+      -- 2 chars before the menu opens in insert mode; cmdline completes from the first char
+      min_keyword_length = function(ctx)
+        return ctx.mode == "cmdline" and 0 or 2
+      end,
       default = {
         "lsp", --[[ "copilot", ]]
         "buffer",
@@ -83,6 +86,12 @@ return {
             search_paths = { vim.fn.stdpath("config") .. "/snippets" },
           },
         },
+      },
+    },
+    cmdline = {
+      keymap = { preset = "inherit" },
+      completion = {
+        menu = { auto_show = true },
       },
     },
   },
