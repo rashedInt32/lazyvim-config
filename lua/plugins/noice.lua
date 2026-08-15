@@ -141,24 +141,8 @@ return {
       -- Refresh Noice on window resize for dynamic sizing
       vim.api.nvim_create_autocmd("VimResized", {
         callback = function()
-          -- Use the correct Noice API to dismiss all messages
-          pcall(function()
-            -- Try different approaches to dismiss Noice windows
-            local noice = require("noice")
-
-            -- Method 1: Use the command directly
-            vim.cmd("Noice dismiss")
-
-            -- Method 2: Alternatively, use the API if available
-            if noice.api and noice.api.dismiss then
-              noice.api.dismiss()
-            end
-
-            -- Method 3: Clear all messages
-            if noice.message then
-              noice.message.clear()
-            end
-          end)
+          -- One dismiss is enough; this used to run the same clear three ways.
+          pcall(vim.cmd, "Noice dismiss")
         end,
       })
     end,
