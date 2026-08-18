@@ -22,8 +22,8 @@ return {
     indent = {
       enable = true,
     },
-    injections = {
-      enable = true,
-    },
+    -- No `injections` key: LazyVim's main-branch spec only reads highlight,
+    -- indent and folds, so it was inert. Injections come from the queries in
+    -- after/queries/, which need no opt-in.
   },
 }

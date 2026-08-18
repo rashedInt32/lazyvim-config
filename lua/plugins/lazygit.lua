@@ -6,10 +6,7 @@ return {
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
-  config = function()
-    local ok, telescope = pcall(require, "telescope")
-    if ok then
-      telescope.load_extension("lazygit")
-    end
-  end,
+  -- No config here. It used to pcall-require telescope and load an extension;
+  -- telescope is not installed (Snacks.picker replaced it), so the pcall always
+  -- failed and the block did nothing.
 }

@@ -1,10 +1,11 @@
 -- Options are automatically loaded before lazy.nvim startup
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
-vim.opt.guicursor = ""
-
-vim.opt.nu = true
-vim.opt.relativenumber = true
+-- guicursor is set once, further down, where the per-mode shapes live. It used
+-- to be cleared to "" here first, which the later assignment simply undid.
+--
+-- `nu` / `relativenumber` were also set true here and then set false further
+-- down, so the pair below was the only one that ever took effect.
 
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
@@ -27,8 +28,10 @@ vim.opt.indentexpr = ""
 
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
+-- undodir is owned by plugins/undotree.lua's `init`, which runs after this file
+-- and pointed it at stdpath("data").."/undo". The ~/.vim/undodir line that used
+-- to sit here was overwritten before it ever took effect.
 
 vim.opt.hlsearch = false
 vim.opt.incsearch = true

@@ -4,5 +4,3 @@ return {
     ft = { "blade" },
   },
 }
-
--- add some comment here sfdf

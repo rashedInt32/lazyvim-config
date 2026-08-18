@@ -2,16 +2,21 @@ return {
   -- Copilot Lua
   {
     "zbirenbaum/copilot.lua",
+    -- `init` used to be a key of this dependencies list, where lazy never reads
+    -- it, so copilot_nes_debounce was never set. It belongs on the dep spec.
     dependencies = {
-      "copilotlsp-nvim/copilot-lsp", -- (optional) for NES functionality
-      init = function()
-        vim.g.copilot_nes_debounce = 500
-      end,
+      {
+        "copilotlsp-nvim/copilot-lsp", -- (optional) for NES functionality
+        init = function()
+          vim.g.copilot_nes_debounce = 500
+        end,
+      },
     },
     cmd = "Copilot",
     enabled = false,
     event = "InsertEnter",
-    copilot_model = "claude-opus-4.5",
+    -- `copilot_model` was a top-level spec key, which lazy does not recognise.
+    -- The model belongs in opts if this is ever re-enabled.
     opts = {
       suggestion = {
         enabled = true, -- Disable to avoid conflicts with blink-cmp-copilot

@@ -75,12 +75,8 @@ end, { desc = "Move to right window from terminal" })
 -- Allow <C-w> window commands from terminal (e.g., <C-w>h/j/k/l/w)
 vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], { desc = "Window command from terminal", noremap = true })
 
-vim.keymap.set("n", "<leader>vwm", function()
-  require("vim-with-me").StartVimWithMe()
-end)
-vim.keymap.set("n", "<leader>svwm", function()
-  require("vim-with-me").StopVimWithMe()
-end)
+-- <leader>vwm / <leader>svwm required "vim-with-me", which is not in
+-- lazy-lock.json and not installed, so both keys threw on press.
 
 -- greatest remap ever (black hole paste) is configured in yanky.lua to avoid conflicts
 
