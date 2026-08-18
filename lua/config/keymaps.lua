@@ -56,7 +56,9 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "=ap", "ma=ap'a")
-vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>")
+-- <leader>rl, not <leader>zig: <leader>z is the zen workspace toggle, so the
+-- old key made both wait out timeoutlen. <leader>r* was a free prefix.
+vim.keymap.set("n", "<leader>rl", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
 
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
@@ -99,13 +101,9 @@ vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz")
 
 vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "Go to Definition" })
 
-vim.keymap.set("n", "<leader>ee", "oif err != nil {<CR>}<Esc>Oreturn err<Esc>")
-
-vim.keymap.set("n", "<leader>ea", 'oassert.NoError(err, "")<Esc>F";a')
-
-vim.keymap.set("n", "<leader>ef", 'oif err != nil {<CR>}<Esc>Olog.Fatalf("error: %s\\n", err.Error())<Esc>jj')
-
-vim.keymap.set("n", "<leader>el", 'oif err != nil {<CR>}<Esc>O.logger.Error("error", "error", err)<Esc>F.;i')
+-- The Go error-handling snippets (<leader>ee/ea/ef/el) lived here. <leader>e is
+-- the Snacks explorer, a complete mapping, so all four sat behind timeoutlen —
+-- and so did the explorer. Removed rather than re-homed.
 
 vim.keymap.set("n", "]c", function()
   if vim.wo.diff then

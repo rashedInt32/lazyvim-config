@@ -195,20 +195,9 @@ return {
       --   end,
       --   desc = "LSP Symbols",
       -- },
-      {
-        "<leader>sm",
-        function()
-          Snacks.picker.marks()
-        end,
-        desc = "Marks",
-      },
-      {
-        "<leader>sj",
-        function()
-          Snacks.picker.jumps()
-        end,
-        desc = "Jumps",
-      },
+      -- <leader>sm / <leader>sj / <leader>sb used to be declared twice each,
+      -- here and again down in the search block. Identical both times, so the
+      -- copies only made the list harder to read. Kept the later ones.
       {
         "<leader><space>",
         function()
@@ -256,13 +245,9 @@ return {
         end,
         desc = "Command History",
       },
-      {
-        "<leader>n",
-        function()
-          Snacks.picker.notifications()
-        end,
-        desc = "Notification History",
-      },
+      -- <leader>n was declared twice with *different* actions: this
+      -- Snacks.picker.notifications() and Snacks.notifier.show_history()
+      -- further down. lazy keeps the last one, so this copy never ran.
       {
         "<leader>e",
         function()
@@ -333,8 +318,10 @@ return {
         end,
         desc = "Git Log Line",
       },
+      -- <leader>gt, not <leader>gs: config/keymaps.lua binds <leader>gs to
+      -- Gitsigns stage_hunk and loads later, so this picker was unreachable.
       {
-        "<leader>gs",
+        "<leader>gt",
         function()
           Snacks.picker.git_status()
         end,
@@ -347,8 +334,10 @@ return {
         end,
         desc = "Git Stash",
       },
+      -- <leader>gh, not <leader>gd: config/keymaps.lua binds <leader>gd to
+      -- vim.lsp.buf.definition and loads later, so this picker was unreachable.
       {
-        "<leader>gd",
+        "<leader>gh",
         function()
           Snacks.picker.git_diff()
         end,

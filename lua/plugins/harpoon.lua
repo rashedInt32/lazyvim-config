@@ -14,8 +14,11 @@ return {
       end,
       desc = "Toggle Harpoon Menu",
     },
+    -- <leader>A, not <leader>a. As a complete mapping, <leader>a shadowed the
+    -- whole sidekick group (<leader>aa/ac/af/ap/as/at/au/av), so every one of
+    -- them sat waiting out timeoutlen before firing.
     {
-      "<leader>a",
+      "<leader>A",
       function()
         require("harpoon"):list():add()
       end,
