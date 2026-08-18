@@ -351,13 +351,6 @@ return {
         desc = "Git Log File",
       },
       {
-        "<leader>sb",
-        function()
-          Snacks.picker.lines()
-        end,
-        desc = "Buffer Lines",
-      },
-      {
         "<leader>sB",
         function()
           Snacks.picker.grep_buffers()
