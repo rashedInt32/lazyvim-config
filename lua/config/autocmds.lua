@@ -1,11 +1,10 @@
--- ~/.config/nvim/lua/autocmd.lua
-
-vim.api.nvim_create_autocmd("User", {
-  pattern = "BlinkLoaded",
-  callback = function()
-    vim.api.nvim_del_keymap("i", "<C-F>")
-  end,
-})
-
--- Theme switching lived here, but rose-pine is now the only colorscheme.
--- Snacks.picker.colorschemes() (snacks.lua) covers ad-hoc switching.
+-- Autocmds are automatically loaded on the VeryLazy event.
+--
+-- The "BlinkLoaded" User autocmd that used to live here deleted the insert-mode
+-- <C-F> map. blink.cmp never fires that event (its User patterns are all
+-- BlinkCmp*), so the callback never ran. It would have thrown E31 anyway:
+-- <C-F> came from copilot.lua, which is enabled = false in
+-- plugins/github-copilot.lua, so the mapping does not exist.
+--
+-- Theme switching also lived here, but rose-pine is now the only colorscheme.
+-- Snacks.picker.colorschemes() (plugins/snacks.lua) covers ad-hoc switching.

@@ -139,12 +139,15 @@ return {
       end,
       desc = "Sidekick Toggle Claude",
     },
+    -- Was <leader>aco -> tool "claude_46", which cli.tools above never defined,
+    -- so the key errored. Point it at the second tool that *is* defined, and
+    -- move it off the <leader>ac prefix so neither key waits on timeoutlen.
     {
-      "<leader>aco",
+      "<leader>aF",
       function()
-        require("sidekick.cli").toggle({ name = "claude_46", focus = true })
+        require("sidekick.cli").toggle({ name = "claude_fable", focus = true })
       end,
-      desc = "Sidekick Toggle Claude (Opus 4.6)",
+      desc = "Sidekick Toggle Claude (Fable 5)",
     },
   },
 }

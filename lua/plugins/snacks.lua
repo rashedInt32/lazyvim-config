@@ -669,22 +669,10 @@ return {
         desc = "Toggle Terminal",
         mode = { "n", "t" },
       },
-      {
-        "]]",
-        function()
-          Snacks.words.jump(vim.v.count1)
-        end,
-        desc = "Next Reference",
-        mode = { "n", "t" },
-      },
-      {
-        "[[",
-        function()
-          Snacks.words.jump(-vim.v.count1)
-        end,
-        desc = "Prev Reference",
-        mode = { "n", "t" },
-      },
+      -- ]] / [[ used to call Snacks.words.jump. `words` is disabled above and
+      -- lsp-config.lua clears documentHighlightProvider on every client, so
+      -- there were never any references to jump between: the keys did nothing
+      -- and shadowed Vim's own section motions. Removed so ]] / [[ work again.
       {
         "<leader>N",
         desc = "Neovim News",

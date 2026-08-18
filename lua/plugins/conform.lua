@@ -23,9 +23,11 @@ return {
       stylua = {
         command = "stylua",
         stdin = true,
-        filter = function(buf)
-          local filename = vim.api.nvim_buf_get_name(buf)
-          return not filename:match("autocmds%.lua$")
+        -- `filter` is not a job-formatter key (conform only reads it under
+        -- lsp_format opts), so the old version of this never skipped anything.
+        -- `condition` is the real hook, and conform calls it as (self, ctx).
+        condition = function(_, ctx)
+          return not ctx.filename:match("autocmds%.lua$")
         end,
       },
 
@@ -94,13 +96,13 @@ return {
           end
         end,
         stdin = true,
-        condition = function(ctx)
+        -- conform calls condition as (self, ctx). Declaring it as (ctx) bound
+        -- `self` to the first argument, so ctx.filename was nil, the pcall
+        -- failed, and this 200KB guard silently passed everything through.
+        condition = function(_, ctx)
           local max_size = 200 * 1024
-          local ok, stats = pcall(vim.loop.fs_stat, ctx.filename)
-          if ok and stats and stats.size > max_size then
-            return false
-          end
-          return true
+          local stats = (vim.uv or vim.loop).fs_stat(ctx.filename)
+          return not (stats and stats.size > max_size)
         end,
       },
 

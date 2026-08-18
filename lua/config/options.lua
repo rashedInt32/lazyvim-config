@@ -139,13 +139,31 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Fix treesitter highlighter crash on undo after large format changes
+-- Recover the treesitter highlighter when a large change kills it (undo after a
+-- big format used to do this).
+--
+-- This used to stop *and* restart treesitter on every TextChanged, in every
+-- buffer, which forced a full reparse per edit and fought LazyVim's own
+-- vim.treesitter.start on FileType. Only act once the highlighter has actually
+-- gone away, and only for buffers that had one, so nothing gets treesitter
+-- turned on behind LazyVim's back.
+local ts_highlighted = {}
+
 vim.api.nvim_create_autocmd("TextChanged", {
-  callback = function()
-    local ok, err = pcall(vim.treesitter.stop)
-    if not ok then
-      return
+  desc = "Restart the treesitter highlighter only if a change killed it",
+  callback = function(args)
+    local buf = args.buf
+    if vim.treesitter.highlighter.active[buf] then
+      ts_highlighted[buf] = true
+    elseif ts_highlighted[buf] and not pcall(vim.treesitter.start, buf) then
+      ts_highlighted[buf] = nil
     end
-    local ok2 = pcall(vim.treesitter.start)
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
+  desc = "Forget treesitter highlighter state for gone buffers",
+  callback = function(args)
+    ts_highlighted[args.buf] = nil
   end,
 })

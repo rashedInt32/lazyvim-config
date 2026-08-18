@@ -10,28 +10,13 @@ return {
     ignored_next_char = "",
     fast_wrap = {},
   },
-  config = function(_, opts)
-    local npairs = require("nvim-autopairs")
-    npairs.setup(opts)
-
-    local has_blink, blink = pcall(require, "blink.cmp")
-    if has_blink then
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "BlinkCmpCompleteDone",
-        callback = function(event)
-          npairs.on_confirm_done()(event)
-        end,
-      })
-    end
-
-    vim.api.nvim_create_autocmd("InsertEnter", {
-      callback = function()
-        vim.defer_fn(function()
-          if not npairs then
-            npairs = require("nvim-autopairs")
-          end
-        end, 10)
-      end,
-    })
-  end,
+  -- No completion hook here. The old one listened for "BlinkCmpCompleteDone",
+  -- which blink.cmp never emits (its accept event is "BlinkCmpAccept"), so it
+  -- was dead. Repointing it is not the fix either: on_confirm_done expects
+  -- nvim-cmp's entry object and would error on blink's payload, and it exists
+  -- to add brackets after a completion — which cmp.lua deliberately turns off
+  -- via completion.accept.auto_brackets.enabled = false.
+  --
+  -- The InsertEnter block that followed it only re-required an already-loaded
+  -- module, so it went too.
 }
