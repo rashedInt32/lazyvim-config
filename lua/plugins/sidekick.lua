@@ -5,11 +5,14 @@ return {
     nes = { enabled = true },
     cli = {
       tools = {
+        -- claude-hl (~/.local/bin, github.com/rashedInt32/claude-hl) wraps the
+        -- real CLI in a PTY and colours shell commands in its output; every
+        -- arg passes through unchanged. Swap back to "claude" to bypass it.
         claude = {
-          cmd = { "claude", "--model", "claude-opus-5" },
+          cmd = { "claude-hl", "--model", "claude-opus-5" },
         },
         claude_fable = {
-          cmd = { "claude", "--model", "claude-fable-5" },
+          cmd = { "claude-hl", "--model", "claude-fable-5" },
         },
       },
       mux = {
