@@ -8,11 +8,13 @@ return {
         -- claude-hl (~/.local/bin, github.com/rashedInt32/claude-hl) wraps the
         -- real CLI in a PTY and colours shell commands in its output; every
         -- arg passes through unchanged. Swap back to "claude" to bypass it.
+        -- --allow-dangerously-skip-permissions ARMS bypass mode in the
+        -- Shift+Tab cycle without activating it (same as the zshrc alias).
         claude = {
-          cmd = { "claude-hl", "--model", "claude-opus-5" },
+          cmd = { "claude-hl", "--allow-dangerously-skip-permissions", "--model", "claude-opus-5" },
         },
         claude_fable = {
-          cmd = { "claude-hl", "--model", "claude-fable-5" },
+          cmd = { "claude-hl", "--allow-dangerously-skip-permissions", "--model", "claude-fable-5" },
         },
       },
       mux = {
