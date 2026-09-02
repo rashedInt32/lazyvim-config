@@ -16,6 +16,9 @@ return {
         claude_fable = {
           cmd = { "claude-hl", "--allow-dangerously-skip-permissions", "--model", "claude-fable-5" },
         },
+        claude_fable_51 = {
+          cmd = { "claude-hl", "--allow-dangerously-skip-permissions", "--model", "claude-fable-5-1" },
+        },
       },
       mux = {
         backend = "tmux",
