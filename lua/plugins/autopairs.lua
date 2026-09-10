@@ -3,7 +3,7 @@ return {
   event = "InsertEnter",
   opts = {
     check_ts = true,
-    disable_filetype = { "TelescopePrompt", "vim" },
+    disable_filetype = { "TelescopePrompt", "vim", "switcheroo" },
     map_cr = false,
     map_bs = true,
     enable_check_bracket_line = false,
