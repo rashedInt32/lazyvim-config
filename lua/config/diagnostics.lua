@@ -32,16 +32,21 @@ end
 -- so one missing error arrives as five byte-identical diagnostics at the same
 -- range. Drop the copies as they come in — vtsls pushes diagnostics (it has no
 -- diagnosticProvider), so publishDiagnostics is the funnel for all of them.
+local function start_key(d)
+  local s = (d.range or {}).start or {}
+  return table.concat({ s.line or -1, s.character or -1 }, "\0")
+end
+
+local function range_key(d)
+  local e = (d.range or {})["end"] or {}
+  return table.concat({ start_key(d), e.line or -1, e.character or -1 }, "\0")
+end
+
 local function dedupe_lsp_diagnostics(diagnostics)
   local seen, out = {}, {}
   for _, d in ipairs(diagnostics) do
-    local r = d.range or {}
-    local s, e = r.start or {}, r["end"] or {}
     local key = table.concat({
-      s.line or -1,
-      s.character or -1,
-      e.line or -1,
-      e.character or -1,
+      range_key(d),
       d.severity or 0,
       tostring(d.code),
       d.source or "",
@@ -55,12 +60,39 @@ local function dedupe_lsp_diagnostics(diagnostics)
   return out
 end
 
+-- tsserver and @effect/language-service both report the same assignability
+-- failure on the same node: TS2375 "Type 'Effect<…>' is not assignable …"
+-- next to effect's "Missing 'NotFound' in the expected Effect errors." That is
+-- two boxes in the float and two lines of inline virtual text for one mistake.
+-- Drop the language-service copy where tsc already reports from the same start
+-- position, and keep it everywhere tsc is silent — the Effect-only rules have
+-- no TS twin. Start only: on `const script: T = flaky(2)` tsc underlines the
+-- identifier while effect underlines the whole declarator, so ends differ.
+local TS_SOURCES = { typescript = true, ts = true, vtsls = true }
+
+local function drop_effect_duplicates(diagnostics)
+  local covered = {}
+  for _, d in ipairs(diagnostics) do
+    if TS_SOURCES[d.source or ""] then
+      covered[start_key(d)] = true
+    end
+  end
+  local out = {}
+  for _, d in ipairs(diagnostics) do
+    if not (d.source == "effect" and covered[start_key(d)]) then
+      out[#out + 1] = d
+    end
+  end
+  return out
+end
+
 local original_publish = vim.lsp.handlers["textDocument/publishDiagnostics"]
 vim.lsp.handlers["textDocument/publishDiagnostics"] = function(err, result, ctx, config)
   if result and result.diagnostics then
     -- Normalize before deduping: the dedupe key includes message and code, so
     -- the copies have to be identical by the time we compare them.
-    result.diagnostics = dedupe_lsp_diagnostics(vim.tbl_map(normalize_effect_diagnostic, result.diagnostics))
+    local ds = dedupe_lsp_diagnostics(vim.tbl_map(normalize_effect_diagnostic, result.diagnostics))
+    result.diagnostics = drop_effect_duplicates(ds)
   end
   return original_publish(err, result, ctx, config)
 end

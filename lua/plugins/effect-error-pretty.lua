@@ -10,6 +10,9 @@ return {
     opts = {
       effect = true,
       format_ts_errors_fallback = true,
+      -- `effect` stays enabled: config/diagnostics.lua drops the language-service
+      -- copy at publishDiagnostics when tsc already covers the same range, so
+      -- what reaches here is only the Effect-only reports, which deserve a box.
       -- float = false: diagnostics.lua wires the format function manually
       -- so it can layer our icons + suffix on top.
     },

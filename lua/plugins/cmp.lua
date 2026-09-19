@@ -81,6 +81,15 @@ return {
         path = { score_offset = 140 },
         snippets = {
           score_offset = 260,
+          -- no snippet items inside strings / comments
+          should_show_items = function()
+            local ok, node = pcall(vim.treesitter.get_node)
+            if not ok or not node then
+              return true
+            end
+            local t = node:type()
+            return not (t == "string" or t == "string_fragment" or t == "template_string" or t == "comment")
+          end,
           opts = {
             friendly_snippets = false,
             search_paths = { vim.fn.stdpath("config") .. "/snippets" },

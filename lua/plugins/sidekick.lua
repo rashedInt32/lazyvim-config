@@ -54,14 +54,29 @@ return {
   },
   config = function(_, opts)
     require("sidekick").setup(opts)
+    -- Session discovery runs synchronously before the terminal window is even
+    -- created, and it queries every registered backend. Profiled at 212ms per
+    -- open: 95ms in the opencode backend (a system-wide `lsof -iTCP`) and
+    -- 100ms in tmux (`ps -u $USER -ww` plus `lsof -d cwd` per Claude pane,
+    -- ~35ms each, so it grows with the number of live sessions).
+    -- Neither backend is wanted here: opencode is unused, and `mux.enabled`
+    -- above is false, which session/init.lua ignores when registering. Dropping
+    -- both takes discovery to <1ms and stops the tmux panes turning
+    -- <leader>ac into a picker. External tmux agents stay discoverable through
+    -- claude-sessions.nvim, which reads sidekick's terminal list directly.
+    local Session = require("sidekick.cli.session")
+    Session.setup() -- loads the tools; backends self-register during this call
+    Session.backends.opencode = nil
+    Session.backends.tmux = nil
     -- Sidekick paints its terminal with SidekickChat (default-linked to
     -- NormalFloat), so Claude's unstyled body text ignores Ghostty's dimmed
-    -- foreground. Redefine it with the same fg as the terminal (a4b6ca) so
+    -- foreground. Redefine it with the same fg as the terminal (94a4b6, Ghostty's
+    -- `foreground`; keep the two in sync) so
     -- inline-code highlights (#b7d6fb) and bold stand out here too. The
     -- plugin's `default = true` link never overrides this explicit definition.
     local function dim_chat_text()
       local float = vim.api.nvim_get_hl(0, { name = "NormalFloat", link = false })
-      vim.api.nvim_set_hl(0, "SidekickChat", { fg = "#a4b6ca", bg = float.bg })
+      vim.api.nvim_set_hl(0, "SidekickChat", { fg = "#94a4b6", bg = float.bg })
     end
     dim_chat_text()
     vim.api.nvim_create_autocmd("ColorScheme", { callback = dim_chat_text })

@@ -121,6 +121,11 @@
     "body": "Effect.map(($1) => $0)",
     "description": "Effect.map"
   },
+  "Effect.as": {
+    "prefix": "as",
+    "body": "Effect.as($0)",
+    "description": "Effect.as"
+  },
   "Effect.flatMap": {
     "prefix": "flat",
     "body": "Effect.flatMap(($1) => $0)",
