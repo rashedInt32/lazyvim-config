@@ -140,7 +140,19 @@ return {
     },
 
     config = function(_, opts)
-      -- Configure LSP hover and signature help with borders
+      -- This `config` replaces LazyVim's, and LazyVim applied its LSP keymaps
+      -- (gd, gr, gI, gy, <leader>cr, <leader>co, ...) from inside that
+      -- function: they live in opts.servers["*"].keys and per-server `keys`.
+      -- Without this loop none of them exist in an LSP buffer.
+      local names = vim.tbl_keys(opts.servers)
+      table.sort(names)
+      for _, server in ipairs(names) do
+        local server_opts = opts.servers[server]
+        if type(server_opts) == "table" and server_opts.keys then
+          require("lazyvim.plugins.lsp.keymaps").set({ name = server ~= "*" and server or nil }, server_opts.keys)
+        end
+      end
+
       -- Ensure Mason is set up first
       require("mason").setup()
       require("mason-lspconfig").setup({
@@ -194,7 +206,6 @@ return {
               scope = "cursor",
               border = "rounded",
               focus = false,
-              max_width = 100,
               max_height = 30,
             })
           end, { buffer = bufnr, desc = "Open floating diagnostics" })

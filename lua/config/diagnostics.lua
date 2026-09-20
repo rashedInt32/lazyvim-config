@@ -7,14 +7,6 @@ local icons = {
   [vim.diagnostic.severity.HINT] = "󰌵 ",
 }
 
--- Legacy sign_define path — reliable across all Neovim versions. The new
--- `signs.text` API below is kept as belt-and-suspenders.
-local sign_names = { "Error", "Warn", "Info", "Hint" }
-for i, name in ipairs(sign_names) do
-  local hl = "DiagnosticSign" .. name
-  vim.fn.sign_define(hl, { text = icons[i], texthl = hl, numhl = "" })
-end
-
 -- @effect/language-service tacks its rule name onto the end of the message
 -- ("… Effect errors.    effect(missingEffectError)") and then reports code = 1,
 -- which says nothing. Lift the rule into the code, where it belongs: the message
@@ -168,11 +160,32 @@ end
 
 apply_diagnostic_config()
 
--- LazyVim runs its own sign_define + vim.diagnostic.config during startup.
--- Re-apply ours on LazyVimStarted / VeryLazy to guarantee we win.
+-- vim.diagnostic.config() shallow-assigns top-level keys, so any plugin that
+-- runs `config({ float = ... })` during startup replaces the whole float table
+-- and drops `format`. LazyVim's own call is out of the picture (lsp-config.lua
+-- supplies its own `config`, which replaces LazyVim's), but re-apply after the
+-- startup events anyway so nothing else gets the last word.
 vim.api.nvim_create_autocmd("User", {
   pattern = { "LazyVimStarted", "VeryLazy" },
   callback = apply_diagnostic_config,
+})
+
+-- The dedupe above only sees diagnostics that arrive by push. A server that
+-- advertises `diagnosticProvider` is pulled through textDocument/diagnostic
+-- instead and bypasses the handler. vtsls does not advertise it today; if a
+-- TS server ever does, say so rather than let duplicates creep back quietly.
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and TS_SOURCES[client.name] and client.server_capabilities.diagnosticProvider then
+      vim.notify(
+        ("[diagnostics] %s now uses pull diagnostics; the ts/effect dedupe in config/diagnostics.lua no longer applies"):format(
+          client.name
+        ),
+        vim.log.levels.WARN
+      )
+    end
+  end,
 })
 
 -- Subtle single-char background at the exact diagnostic column.
@@ -197,8 +210,7 @@ local function setup_diagnostic_highlights()
     local src = vim.api.nvim_get_hl(0, { name = "Diagnostic" .. name, link = false })
     local fg = src and src.fg
     if fg then
-      local hex = scale_rgb(fg, 1.0)
-      vim.api.nvim_set_hl(0, "DiagnosticUnderline" .. name, { undercurl = true, sp = hex })
+      vim.api.nvim_set_hl(0, "DiagnosticUnderline" .. name, { undercurl = true, sp = fg })
       vim.api.nvim_set_hl(0, "DiagnosticSpotlight" .. name, { bg = scale_rgb(fg, 0.35) })
     end
   end

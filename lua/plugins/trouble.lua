@@ -4,7 +4,6 @@ return {
     opts = {
 
       multiline = true, -- show diagnostics in multiple lines
-      indent_lines = true,
       auto_open = false,
       auto_close = false,
     },

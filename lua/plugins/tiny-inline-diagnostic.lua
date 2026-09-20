@@ -39,11 +39,12 @@ return {
 
       virt_texts = { priority = 2048 },
 
+      -- Errors and warnings only. TS files unused imports and variables as
+      -- HINT, so every one of them became a line of inline text. Hints and
+      -- infos still show as signs and in the float.
       severity = {
         vim.diagnostic.severity.ERROR,
         vim.diagnostic.severity.WARN,
-        vim.diagnostic.severity.INFO,
-        vim.diagnostic.severity.HINT,
       },
 
       overwrite_events = nil,
