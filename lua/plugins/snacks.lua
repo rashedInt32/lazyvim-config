@@ -634,23 +634,9 @@ return {
         end,
         desc = "Dismiss All Notifications",
       },
-      {
-        "<c-/>",
-        function()
-          Snacks.terminal(nil, { env = { NVIM_TERMINAL = "1" } })
-        end,
-        desc = "Toggle Terminal",
-        mode = { "n", "t", "i", "v" },
-      },
-      -- { "<c-_>", ... } -- left commented as you had it
-      {
-        "<c-\\>",
-        function()
-          Snacks.terminal(nil, { env = { NVIM_TERMINAL = "1" } })
-        end,
-        desc = "Toggle Terminal",
-        mode = { "n", "t" },
-      },
+      -- <c-/> and <c-\> now open loom (plugins/loom.lua), the tabbed and
+      -- split floating terminal. Restore these two entries to go back to
+      -- Snacks.terminal.
       -- ]] / [[ used to call Snacks.words.jump. `words` is disabled above and
       -- lsp-config.lua clears documentHighlightProvider on every client, so
       -- there were never any references to jump between: the keys did nothing
