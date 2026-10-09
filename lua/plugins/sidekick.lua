@@ -10,14 +10,22 @@ return {
         -- arg passes through unchanged. Swap back to "claude" to bypass it.
         -- --allow-dangerously-skip-permissions ARMS bypass mode in the
         -- Shift+Tab cycle without activating it (same as the zshrc alias).
+        -- 2026-10-02: glass (the Claude Code mod, rashedInt32/glass) is
+        -- switched off for these sessions only, so sidekick shows claude-hl
+        -- alone for an A/B against `claude` in a plain terminal, which shows
+        -- glass alone. Drop the --settings pair to stack both again.
         claude = {
-          cmd = { "claude-hl", "--allow-dangerously-skip-permissions", "--model", "claude-opus-5-5" },
-        },
-        claude_fable = {
-          cmd = { "claude-hl", "--allow-dangerously-skip-permissions", "--model", "claude-fable-5" },
+          cmd = { "claude", "--allow-dangerously-skip-permissions", "--model", "claude-opus-5-5" },
         },
         claude_fable_51 = {
-          cmd = { "claude-hl", "--allow-dangerously-skip-permissions", "--model", "claude-fable-5-1" },
+          cmd = {
+            "claude",
+            "--allow-dangerously-skip-permissions",
+            "--settings",
+            '{"enabledPlugins":{"glass@glass":false}}',
+            "--model",
+            "claude-fable-5-1",
+          },
         },
       },
       mux = {
@@ -26,6 +34,26 @@ return {
         create = "terminal",
       },
       win = {
+        -- Every new session lands in the zen workspace (sidekick-zen.nvim)
+        -- instead of the right split. Sidekick calls this once per new
+        -- terminal, before it starts, so the hand-off waits until the split
+        -- exists. Focusing the split first makes zen adopt this session, not
+        -- the most recently used one. A zen already open on another session
+        -- is closed first so show() does not raise the old CLI.
+        -- Re-showing a hidden session (<leader>aa) still uses the split.
+        config = function(terminal)
+          vim.schedule(function()
+            if not terminal:win_valid() or not terminal:is_running() then
+              return
+            end
+            local zen = require("sidekick-zen")
+            if zen.is_active() then
+              zen.exit()
+            end
+            vim.api.nvim_set_current_win(terminal.win)
+            zen.show("cli")
+          end)
+        end,
         -- Pin the terminal view to the bottom in normal mode. Without this the
         -- global `scrolloff` (8) scrolls the Claude TUI up on every mode change,
         -- making the input box render over the top border / shift out of place.
