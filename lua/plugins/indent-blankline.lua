@@ -48,18 +48,20 @@ return {
         },
       }
 
-      vim.api.nvim_set_hl(0, "RainbowDelimiterRed", { fg = "#e06c75" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterYellow", { fg = "#e5c07b" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterBlue", { fg = "#61afef" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterOrange", { fg = "#d19a66" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterGreen", { fg = "#98c379" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterViolet", { fg = "#c678dd" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterCyan", { fg = "#56b6c2" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterPink", { fg = "#ff79c6" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterLime", { fg = "#50fa7b" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterTeal", { fg = "#1abc9c" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterCoral", { fg = "#ff6b6b" })
-      vim.api.nvim_set_hl(0, "RainbowDelimiterLavender", { fg = "#bd93f9" })
+      -- Off: the plugin's built-in colors are the preferred look. These were
+      -- never visible under tidepool before, because `:colorscheme` cleared them.
+      -- vim.api.nvim_set_hl(0, "RainbowDelimiterRed", { fg = "#e06c75" })
+      -- vim.api.nvim_set_hl(0, "RainbowDelimiterYellow", { fg = "#e5c07b" })
+      -- vim.api.nvim_set_hl(0, "RainbowDelimiterBlue", { fg = "#61afef" })
+      -- vim.api.nvim_set_hl(0, "RainbowDelimiterOrange", { fg = "#d19a66" })
+      -- vim.api.nvim_set_hl(0, "RainbowDelimiterGreen", { fg = "#98c379" })
+      -- vim.api.nvim_set_hl(0, "RainbowDelimiterViolet", { fg = "#c678dd" })
+      -- vim.api.nvim_set_hl(0, "RainbowDelimiterCyan", { fg = "#56b6c2" })
+      -- vim.api.nvim_set_hl(0, "RainbowDelimiterPink", { fg = "#ff79c6" })
+      -- vim.api.nvim_set_hl(0, "RainbowDelimiterLime", { fg = "#50fa7b" })
+      -- vim.api.nvim_set_hl(0, "RainbowDelimiterTeal", { fg = "#1abc9c" })
+      -- vim.api.nvim_set_hl(0, "RainbowDelimiterCoral", { fg = "#ff6b6b" })
+      -- vim.api.nvim_set_hl(0, "RainbowDelimiterLavender", { fg = "#bd93f9" })
     end,
   },
 }

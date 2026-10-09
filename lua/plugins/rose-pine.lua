@@ -201,6 +201,12 @@ return {
 
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function()
+        -- Only when rose-pine is active: this fires on every buffer's LSP
+        -- attach and would clobber other themes' @lsp links (tidepool
+        -- defines its own statically).
+        if vim.g.colors_name ~= "rose-pine" then
+          return
+        end
         local map = {
           -- Functions
           ["@lsp.type.function"] = "@function",

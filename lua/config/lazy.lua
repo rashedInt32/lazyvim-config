@@ -17,9 +17,9 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   spec = {
     -- add LazyVim and import its plugins
-    -- LazyVim's default colorscheme is tokyonight. Point it at rose-pine so
+    -- LazyVim's default colorscheme is tokyonight. Point it at tidepool so
     -- exactly one thing applies a theme at startup.
-    { "LazyVim/LazyVim", import = "lazyvim.plugins", opts = { colorscheme = "rose-pine" } },
+    { "LazyVim/LazyVim", import = "lazyvim.plugins", opts = { colorscheme = "tidepool" } },
     -- import/override with your plugins
     { import = "plugins" },
   },
@@ -33,7 +33,7 @@ require("lazy").setup({
     version = false, -- always use the latest git commit
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
-  install = { colorscheme = { "rose-pine", "habamax" } },
+  install = { colorscheme = { "tidepool", "rose-pine", "habamax" } },
   checker = {
     enabled = false,
   },
