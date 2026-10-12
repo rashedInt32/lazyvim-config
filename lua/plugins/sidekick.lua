@@ -5,15 +5,10 @@ return {
     nes = { enabled = true },
     cli = {
       tools = {
-        -- claude-hl (~/.local/bin, github.com/rashedInt32/claude-hl) wraps the
-        -- real CLI in a PTY and colours shell commands in its output; every
-        -- arg passes through unchanged. Swap back to "claude" to bypass it.
         -- --allow-dangerously-skip-permissions ARMS bypass mode in the
-        -- Shift+Tab cycle without activating it (same as the zshrc alias).
-        -- 2026-10-02: glass (the Claude Code mod, rashedInt32/glass) is
-        -- switched off for these sessions only, so sidekick shows claude-hl
-        -- alone for an A/B against `claude` in a plain terminal, which shows
-        -- glass alone. Drop the --settings pair to stack both again.
+        -- Shift+Tab cycle without activating it (same as the zshrc function).
+        -- The Fable session turns glass (the Claude Code mod,
+        -- rashedInt32/glass) off with --settings; drop that pair to turn it on.
         claude = {
           cmd = { "claude", "--allow-dangerously-skip-permissions", "--model", "claude-opus-5-5" },
         },
