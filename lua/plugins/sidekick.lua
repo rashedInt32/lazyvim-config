@@ -1,3 +1,10 @@
+-- Hide the outer tmux from embedded Claude. With TMUX set, Claude thinks tmux
+-- is its terminal and wraps every mouse-select copy in a tmux OSC 52
+-- passthrough; through nvim that came back as "52;c;<base64>" in the prompt.
+-- Its real terminal is nvim, and pbcopy still does the copy. Keep TMUX_PANE:
+-- tmux-claude-session-manager pairs agents to panes with it.
+local claude_env = { TMUX = false }
+
 return {
   "folke/sidekick.nvim",
   opts = {
@@ -11,6 +18,7 @@ return {
         -- rashedInt32/glass) off with --settings; drop that pair to turn it on.
         claude = {
           cmd = { "claude", "--allow-dangerously-skip-permissions", "--model", "claude-opus-5-5" },
+          env = claude_env,
         },
         claude_fable_51 = {
           cmd = {
@@ -21,6 +29,7 @@ return {
             "--model",
             "claude-fable-5-1",
           },
+          env = claude_env,
         },
       },
       mux = {
